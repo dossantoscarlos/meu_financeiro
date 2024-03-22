@@ -10,10 +10,8 @@ use Illuminate\Support\Facades\Auth;
 
 class DispesaObserver
 {
-    /**
-     * Handle the Dispesa "created" event.
-     */
-    public function saved(Dispesa $dispesa): void
+
+    private function controleCusto(): void 
     {
         $authId = Auth::user()->getAuthIdentifier();
         $receita = Receita::whereUserId($authId)->first();
@@ -39,9 +37,16 @@ class DispesaObserver
 
                 $receita->custo = strval($receita->saldo - $total);
                 $receita->update();
-                $receita->save();
             }
         }
+    }
+
+    /**
+     * Handle the Dispesa "created" event.
+     */
+    public function saved(Dispesa $dispesa): void
+    {
+        $this->controleCusto();
     }
 
     /**
@@ -49,7 +54,7 @@ class DispesaObserver
      */
     public function updated(Dispesa $dispesa): void
     {
-        //
+        $this->controleCusto();
     }
 
     /**
@@ -57,7 +62,7 @@ class DispesaObserver
      */
     public function deleted(Dispesa $dispesa): void
     {
-        //
+        $this->controleCusto();
     }
 
     /**

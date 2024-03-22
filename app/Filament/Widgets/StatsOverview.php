@@ -38,7 +38,7 @@ class StatsOverview extends BaseWidget
             return [
                 Stat::make('Renda inicial', "R$ ".number_format(floatval($receita->saldo), 2, ',', '.')),
                 Stat::make('Custo mensal',"R$ ".number_format(floatval($total), 2, ',', '.')),
-                Stat::make('Renda final', 'R$ '.number_format(floatval($receita->custo), 2, ',', '.')),
+                Stat::make('Renda atual', 'R$ '.number_format(floatval($receita->custo), 2, ',', '.')),
             ]; 
         }
 
