@@ -31,7 +31,7 @@ class ReceitaResource extends Resource
                         'user', 'name', 
                         fn($query) => $query->whereId(Auth::user()->getAuthIdentifier()))
                     ->required(),
-                Money::make('saldo')
+                Money::make('Renda')
                     ->required()
             ]);
     }
@@ -44,8 +44,10 @@ class ReceitaResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('saldo')
+                    ->label('Renda Inicial')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('custo')
+                    ->label('Renda Atual')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
