@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Dispesa;
+use App\Models\Receita;
+use App\Observers\DispesaObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -25,7 +28,8 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Dispesa::observe(DispesaObserver::class);
+
     }
 
     /**

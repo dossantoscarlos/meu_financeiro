@@ -2,7 +2,6 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Dispesa;
 use App\Models\Plano;
 use App\Models\Receita;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -17,13 +16,9 @@ class StatsOverview extends BaseWidget
         $authId = Auth::user()->getAuthIdentifier();
         $receita = Receita::whereUserId($authId)->first();
         $date = Carbon::now();
-        $mes ='';
+        
+        $mes = ($date->month >= 1 && $date->month <= 9) ? strval("0".$date->month) : $date->month;
         $ano = $date->year;
-
-        if ($date->month >= 1 && $date->month <= 9) {
-            $mes = strval("0".$date->month);
-        }   
-
         $mesAno = "{$mes}/{$ano}";
         
         $dispesas = Plano::with('dispesa')->where([
@@ -32,29 +27,18 @@ class StatsOverview extends BaseWidget
             ])->first()->toArray();
 
         if (!empty($receita)) { 
-            
             $total = 0.0;
-            $custo = 0.0;
-            
             if (!empty($dispesas)) {
                 foreach($dispesas['dispesa'] as $dispesa) {
                     $total += (float) $dispesa['valor_documento'];
                 }
-
-                $custo = $receita->saldo - $total;
-
                 $total = strval($total);
-                $custo = strval($custo);
-
-                $receita->custo = $custo;
-                $receita->update();
-                $receita->save();
             }
 
             return [
                 Stat::make('Renda inicial', "R$ ".number_format(floatval($receita->saldo), 2, ',', '.')),
                 Stat::make('Custo mensal',"R$ ".number_format(floatval($total), 2, ',', '.')),
-                Stat::make('Renda final', 'R$ '.number_format(floatval($custo), 2, ',', '.')),
+                Stat::make('Renda final', 'R$ '.number_format(floatval($receita->custo), 2, ',', '.')),
             ]; 
         }
 
