@@ -23,18 +23,21 @@ class PlanoResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('user_id')
-                    ->label('Perfil')
-                    ->relationship('user', 'name')
+                Forms\Components\Select::make(name:'user_id')
+                    ->label(label: 'Perfil')
+                    ->relationship(
+                        name:'user', 
+                        titleAttribute:'name'
+                    )
                     ->required(),
-                Forms\Components\TextInput::make('mes_ano')
-                    ->label('Mes e Ano')
-                    ->placeholder('01/2023')
-                    ->mask('99/9999')
+                Forms\Components\TextInput::make(name:'mes_ano')
+                    ->label(label:'Mes e Ano')
+                    ->placeholder(placeholder:'01/2023')
+                    ->mask(mask:'99/9999')
                     ->required(),
-                Forms\Components\TextInput::make('descricao_simples')
+                Forms\Components\TextInput::make(name:'descricao_simples')
                     ->columnSpanfull()
-                    ->placeholder('Ex.: Controle do mês de janeiro')
+                    ->placeholder(placeholder: 'Ex.: Controle do mês de janeiro')
                     ->required(),
             ]);
     }
@@ -43,22 +46,22 @@ class PlanoResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('descricao_simples')
+                Tables\Columns\TextColumn::make(name: 'descricao_simples')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('mes_ano')
+                Tables\Columns\TextColumn::make(name: 'mes_ano')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('user.name')
+                Tables\Columns\TextColumn::make(name: 'user.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('deleted_at')
+                Tables\Columns\TextColumn::make(name: 'deleted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
+                Tables\Columns\TextColumn::make(name: 'created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                Tables\Columns\TextColumn::make(name: 'updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

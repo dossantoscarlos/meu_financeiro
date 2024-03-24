@@ -4,10 +4,12 @@ namespace App\Filament\Widgets;
 
 use App\Models\Plano;
 use App\Models\Receita;
+use Exception;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Nette\Schema\Expect;
 
 class StatsOverview extends BaseWidget
 {
@@ -22,9 +24,14 @@ class StatsOverview extends BaseWidget
         $mesAno = "{$mes}/{$ano}";
         
         $dispesas = Plano::with('dispesa')->where([
-                ['user_id', '=', $authId],
-                ['mes_ano', '=', $mesAno]
-            ])->first()->toArray();
+            ['user_id', '=', $authId],
+            ['mes_ano', '>=', $mesAno]
+        ])->first();
+       
+        if ($dispesas!== null )
+            $dispesas = $dispesas->toArray();
+        else 
+            $dispesas = [];
 
         if (!empty($receita)) { 
             $total = 0.0;
@@ -37,15 +44,15 @@ class StatsOverview extends BaseWidget
 
             return [
                 Stat::make('Renda inicial', "R$ ".number_format(floatval($receita->saldo), 2, ',', '.')),
-                Stat::make('Custo mensal',"R$ ".number_format(floatval($total), 2, ',', '.')),
+                Stat::make('Custo previsto',"R$ ".number_format(floatval($total), 2, ',', '.')),
                 Stat::make('Renda atual', 'R$ '.number_format(floatval($receita->custo ?? $receita->saldo), 2, ',', '.')),
             ]; 
         }
 
         return [
             Stat::make('Salario', "Salario não registrado."),
-            Stat::make('Custo mensal',"R$ 0,00"),
-            Stat::make('Renda atual', $receita->saldo),
+            Stat::make('Custo previsto',"R$ 0,00"),
+            Stat::make('Renda atual', $receita->saldo ?? "R$ 0,00"),
         ];
 
     }

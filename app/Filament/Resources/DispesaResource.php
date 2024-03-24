@@ -33,31 +33,31 @@ class DispesaResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('descricao')
+                Forms\Components\TextInput::make(name: 'descricao')
                     ->required(),
-                Forms\Components\DatePicker::make('data_vencimento')
-                    ->label('Data de vencimento')
+                Forms\Components\DatePicker::make(name: 'data_vencimento')
+                    ->label(label: 'Data de vencimento')
                     ->required(),
-                Forms\Components\Select::make('plano_id')
-                    ->label('plano mensal')
+                Forms\Components\Select::make(name: 'plano_id')
+                    ->label(label: 'plano mensal')
                     ->relationship(
-                        'plano', 
-                        'mes_ano',
-                        fn($query) => $query->whereUserId(Auth::user()->id))
-                    ->searchable(['mes_ano'])
+                        name: 'plano', 
+                        titleAttribute: 'mes_ano',
+                        modifyQueryUsing: fn($query) => $query->whereUserId(Auth::user()->id))
+                    ->native(condition: false)
                     ->required(),
-                Forms\Components\Select::make('status_dispesa_id')
-                    ->label('Status')
-                    ->relationship('statusDispesa', 'nome')
-                    ->searchable()
+                Forms\Components\Select::make(name: 'status_dispesa_id')
+                    ->label(label: 'Status')
+                    ->relationship(name: 'statusDispesa', titleAttribute:'nome')
+                    ->native(condition:false)
                     ->required(),
-                Forms\Components\Select::make('tipo_dispesa_id')
-                    ->label("Categoria")
-                    ->relationship('tipoDispesa', 'nome')
-                    ->searchable()
+                Forms\Components\Select::make(name: 'tipo_dispesa_id')
+                    ->label(label: "Categoria")
+                    ->relationship(name: 'tipoDispesa', titleAttribute:'nome')
+                    ->native(condition:false)
                     ->required(),
-                Money::make('valor_documento')
-                    ->label('Valor do documento')
+                Money::make(name: 'valor_documento')
+                    ->label(label: 'Valor do documento')
                     ->required(),
             ]);
     }
@@ -66,29 +66,29 @@ class DispesaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('descricao')
+                Tables\Columns\TextColumn::make(name: 'descricao')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('statusDispesa.nome')
+                Tables\Columns\TextColumn::make(name: 'statusDispesa.nome')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('tipoDispesa.nome')
+                Tables\Columns\TextColumn::make(name: 'tipoDispesa.nome')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('data_vencimento')
+                Tables\Columns\TextColumn::make(name: 'data_vencimento')
                     ->label('Data de vencimento')
-                    ->date('d/m/y')
+                    ->date('d/m/Y')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('valor_documento')
-                    ->label('Valor do documento')
+                Tables\Columns\TextColumn::make(name: 'valor_documento')
+                    ->label(label: 'Valor do documento')
                     ->formatStateUsing(fn(?string $state): string => "R$ ".number_format(floatval($state), 2, ',', '.'))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('deleted_at')
+                Tables\Columns\TextColumn::make(name: 'deleted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
+                Tables\Columns\TextColumn::make(name: 'created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                Tables\Columns\TextColumn::make(name: 'updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Dispesa;
 use App\Models\Plano;
 use App\Models\Receita;
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,14 +19,16 @@ class DispesaObserver
         $date = Carbon::now();
         $mes = ($date->month >= 1 && $date->month <= 9) ? strval("0".$date->month) : $date->month  ;
         $mesAno = "{$mes}/{$date->year}";
-        
+        try {
         $dispesas = Plano::with('dispesa')->where([
                 ['user_id', '=', $authId],
-                ['mes_ano', '=', $mesAno]
+                ['mes_ano', '>=', $mesAno]
             ])
             ->first()
             ->toArray();
-
+        } catch(Exception $ex) {
+            $dispesas = [];
+        }
         if (!empty($receita)) { 
             
             $total = 0.0;
