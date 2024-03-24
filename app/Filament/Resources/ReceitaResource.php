@@ -28,10 +28,13 @@ class ReceitaResource extends Resource
             ->schema([
                 Forms\Components\Select::make('user_id')
                     ->relationship(
-                        'user', 'name', 
-                        fn($query) => $query->whereId(Auth::user()->getAuthIdentifier()))
+                        name:'user', 
+                        titleAttribute: 'name', 
+                        modifyQueryUsing:fn($query) => $query->whereId(Auth::user()->getAuthIdentifier()))
+                    ->native(false)
                     ->required(),
-                Money::make('Renda')
+                Money::make('saldo')
+                    ->label('Renda')
                     ->required()
             ]);
     }
@@ -45,9 +48,11 @@ class ReceitaResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('saldo')
                     ->label('Renda Inicial')
+                    ->formatStateUsing(fn(?string $state): string => "R$ ". number_format(floatval($state), 2, ',' ,'.')) 
                     ->searchable(),
                 Tables\Columns\TextColumn::make('custo')
                     ->label('Renda Atual')
+                    ->formatStateUsing(fn(?string $state): string => "R$ ". number_format(floatval($state), 2, ',' ,'.'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()

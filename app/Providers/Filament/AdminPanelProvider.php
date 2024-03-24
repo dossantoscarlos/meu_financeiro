@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Resources\DispesaResource;
+use App\Filament\Resources\PlanoResource;
 use App\Filament\Resources\ReceitaResource;
 use App\Filament\Resources\StatusDispesaResource;
 use App\Filament\Resources\TipoDispesaResource;
@@ -47,8 +48,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+               
             ])
         
             ->middleware([
@@ -76,6 +76,7 @@ class AdminPanelProvider extends PanelProvider
                     ->items([
                         ...ReceitaResource::getNavigationItems(),
                         ...DispesaResource::getNavigationItems(),
+                        ...PlanoResource::getNavigationItems(),
                     ])->collapsed(false),
                 NavigationGroup::make('Configuração de tipos e status')
                     ->items([
