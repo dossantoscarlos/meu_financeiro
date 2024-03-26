@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Gasto;
 use App\Models\Plano;
 use App\Models\Receita;
 use Exception;
@@ -23,24 +24,16 @@ class StatsOverview extends BaseWidget
         $ano = $date->year;
         $mesAno = "{$mes}/{$ano}";
         
-        $dispesas = Plano::with('dispesa')->where([
+        $gasto = Plano::with('gastos')->where([
             ['user_id', '=', $authId],
             ['mes_ano', '>=', $mesAno]
         ])->first();
        
-        if ($dispesas!== null )
-            $dispesas = $dispesas->toArray();
-        else 
-            $dispesas = [];
+        if ($gasto !== null )
+            $gasto = $gasto->toArray();
 
         if (!empty($receita)) { 
-            $total = 0.0;
-            if (!empty($dispesas)) {
-                foreach($dispesas['dispesa'] as $dispesa) {
-                    $total += (float) $dispesa['valor_documento'];
-                }
-                $total = strval($total);
-            }
+            $total = strval($gasto['gastos']['valor']) ?? 0.0;
 
             return [
                 Stat::make('Renda inicial', "R$ ".number_format(floatval($receita->saldo), 2, ',', '.')),
@@ -54,6 +47,5 @@ class StatsOverview extends BaseWidget
             Stat::make('Custo previsto',"R$ 0,00"),
             Stat::make('Renda atual', $receita->saldo ?? "R$ 0,00"),
         ];
-
     }
 }
