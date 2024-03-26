@@ -20,8 +20,10 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\DispesaResource\Pages\EditDispesa;
 use App\Filament\Resources\DispesaResource\Pages\ListDispesas;
 use App\Filament\Resources\DispesaResource\Pages\CreateDispesa;
+use App\Livewire\Components\MyMoney;
 use Illuminate\Support\Facades\Auth;
 use Leandrocfe\FilamentPtbrFormFields\Money;
+use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 
 class DispesaResource extends Resource
 {
@@ -56,7 +58,7 @@ class DispesaResource extends Resource
                     ->relationship(name: 'tipoDispesa', titleAttribute:'nome')
                     ->native(condition:false)
                     ->required(),
-                Money::make(name: 'valor_documento')
+                MyMoney::make(name: 'valor_documento')
                     ->label(label: 'Valor do documento')
                     ->required(),
             ]);
