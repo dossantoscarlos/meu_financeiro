@@ -27,15 +27,15 @@ class StatsOverview extends BaseWidget
         $plano = Plano::with('gastos')->where([
             ['user_id', '=', $authId],
             ['mes_ano', '>=', $mesAno]
-        ])->first()->toArray();
+        ])->first()?->toArray() ?? [];
        
         $stat =  [
-            Stat::make('Renda Inicial', $receita->saldo),
+            Stat::make('Renda Inicial', $receita->saldo ?? "R$ 0,00"),
             Stat::make('Custo previsto',"R$ 0,00"),
             Stat::make('Renda atual', $receita->saldo ?? "R$ 0,00"),
         ];
        
-        if ($plano['gastos'] === null )
+        if (!array_key_exists('gastos', $plano) || $plano['gastos'] == null )
             return $stat;
 
         if (!empty($receita)) { 
