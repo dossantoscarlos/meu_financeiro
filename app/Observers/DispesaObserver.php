@@ -59,7 +59,6 @@ class DispesaObserver
                     $gasto->valor=$total;
                     $gasto->update();
                 }
-                
             }
         }
     }
