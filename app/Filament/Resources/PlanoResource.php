@@ -29,6 +29,7 @@ class PlanoResource extends Resource
                         name:'user', 
                         titleAttribute:'name'
                     )
+                    ->native(false)
                     ->required(),
                 Forms\Components\TextInput::make(name:'mes_ano')
                     ->label(label:'Mes e Ano')

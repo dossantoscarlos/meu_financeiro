@@ -24,16 +24,23 @@ class StatsOverview extends BaseWidget
         $ano = $date->year;
         $mesAno = "{$mes}/{$ano}";
         
-        $gasto = Plano::with('gastos')->where([
+        $plano = Plano::with('gastos')->where([
             ['user_id', '=', $authId],
             ['mes_ano', '>=', $mesAno]
-        ])->first();
+        ])->first()->toArray();
        
-        if ($gasto !== null )
-            $gasto = $gasto->toArray();
+        $stat =  [
+            Stat::make('Renda Inicial', $receita->saldo),
+            Stat::make('Custo previsto',"R$ 0,00"),
+            Stat::make('Renda atual', $receita->saldo ?? "R$ 0,00"),
+        ];
+       
+        if ($plano['gastos'] === null )
+            return $stat;
 
         if (!empty($receita)) { 
-            $total = strval($gasto['gastos']['valor']) ?? 0.0;
+            
+            $total = strval($plano['gastos']['valor']) ?? 0.0;
 
             return [
                 Stat::make('Renda inicial', "R$ ".number_format(floatval($receita->saldo), 2, ',', '.')),
@@ -42,10 +49,6 @@ class StatsOverview extends BaseWidget
             ]; 
         }
 
-        return [
-            Stat::make('Salario', "Salario não registrado."),
-            Stat::make('Custo previsto',"R$ 0,00"),
-            Stat::make('Renda atual', $receita->saldo ?? "R$ 0,00"),
-        ];
+        return $stat;
     }
 }

@@ -30,7 +30,7 @@ class ReceitaResource extends Resource
                     ->relationship(
                         name:'user', 
                         titleAttribute: 'name', 
-                        modifyQueryUsing:fn($query) => $query->whereId(Auth::user()->getAuthIdentifier()))
+                        modifyQueryUsing:fn(Builder $query): Builder => $query->whereId(Auth::user()->getAuthIdentifier()))
                     ->native(false)
                     ->required(),
                 Money::make('saldo')
