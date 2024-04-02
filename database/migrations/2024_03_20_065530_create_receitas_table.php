@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('receitas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId("user_id");
-            $table->string("saldo");
-            $table->string("custo")->default(0);
+            $table->foreignId('user_id');
+            $table->string('saldo');
+            $table->string('custo')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

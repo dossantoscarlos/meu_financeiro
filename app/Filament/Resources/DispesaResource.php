@@ -2,28 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
-use Filament\Tables;
-use App\Models\Dispesa;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
-use Filament\Forms\Components\Select;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use App\Filament\Resources\DispesaResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\DispesaResource\Pages\CreateDispesa;
 use App\Filament\Resources\DispesaResource\Pages\EditDispesa;
 use App\Filament\Resources\DispesaResource\Pages\ListDispesas;
-use App\Filament\Resources\DispesaResource\Pages\CreateDispesa;
 use App\Livewire\Components\MyMoney;
+use App\Models\Dispesa;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
-use Leandrocfe\FilamentPtbrFormFields\Money;
-use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 
 class DispesaResource extends Resource
 {
@@ -33,6 +22,7 @@ class DispesaResource extends Resource
 
     public static function form(Form $form): Form
     {
+
         return $form
             ->schema([
                 Forms\Components\TextInput::make(name: 'descricao')
@@ -43,20 +33,20 @@ class DispesaResource extends Resource
                 Forms\Components\Select::make(name: 'plano_id')
                     ->label(label: 'plano mensal')
                     ->relationship(
-                        name: 'plano', 
+                        name: 'plano',
                         titleAttribute: 'mes_ano',
-                        modifyQueryUsing: fn($query) => $query->whereUserId(Auth::user()->id))
+                        modifyQueryUsing: fn ($query) => $query->whereUserId(Auth::user()->id))
                     ->native(condition: false)
                     ->required(),
                 Forms\Components\Select::make(name: 'status_dispesa_id')
                     ->label(label: 'Status')
-                    ->relationship(name: 'statusDispesa', titleAttribute:'nome')
-                    ->native(condition:false)
+                    ->relationship(name: 'statusDispesa', titleAttribute: 'nome')
+                    ->native(condition: false)
                     ->required(),
                 Forms\Components\Select::make(name: 'tipo_dispesa_id')
-                    ->label(label: "Categoria")
-                    ->relationship(name: 'tipoDispesa', titleAttribute:'nome')
-                    ->native(condition:false)
+                    ->label(label: 'Categoria')
+                    ->relationship(name: 'tipoDispesa', titleAttribute: 'nome')
+                    ->native(condition: false)
                     ->required(),
                 MyMoney::make(name: 'valor_documento')
                     ->label(label: 'Valor do documento')
@@ -80,7 +70,7 @@ class DispesaResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make(name: 'valor_documento')
                     ->label(label: 'Valor do documento')
-                    ->formatStateUsing(fn(?string $state): string => "R$ ".number_format(floatval($state), 2, ',', '.'))
+                    ->formatStateUsing(fn (?string $state): string => 'R$ '.number_format(floatval($state), 2, ',', '.'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make(name: 'deleted_at')
                     ->dateTime()
@@ -108,15 +98,12 @@ class DispesaResource extends Resource
             ]);
     }
 
-   
-
     public static function getRelations(): array
     {
         return [
-            
+
         ];
     }
-
 
     public static function getPages(): array
     {

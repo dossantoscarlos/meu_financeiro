@@ -3,18 +3,17 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReceitaResource\Pages;
-use App\Filament\Resources\ReceitaResource\RelationManagers;
+use App\Livewire\Components\MyMoney;
 use App\Models\Receita;
-use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
-use Leandrocfe\FilamentPtbrFormFields\Money;
+use Illuminate\Support\Facades\Log;
+
 
 class ReceitaResource extends Resource
 {
@@ -24,18 +23,19 @@ class ReceitaResource extends Resource
 
     public static function form(Form $form): Form
     {
+        
         return $form
             ->schema([
                 Forms\Components\Select::make('user_id')
                     ->relationship(
-                        name:'user', 
-                        titleAttribute: 'name', 
-                        modifyQueryUsing:fn(Builder $query): Builder => $query->whereId(Auth::user()->getAuthIdentifier()))
+                        name: 'user',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn (Builder $query): Builder => $query->whereId(Auth::user()->getAuthIdentifier()))
                     ->native(false)
                     ->required(),
-                Money::make('saldo')
+                MyMoney::make('saldo')
                     ->label('Renda')
-                    ->required()
+                    ->required(),
             ]);
     }
 
@@ -48,11 +48,11 @@ class ReceitaResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('saldo')
                     ->label('Renda Inicial')
-                    ->formatStateUsing(fn(?string $state): string => "R$ ". number_format(floatval($state), 2, ',' ,'.')) 
+                    ->formatStateUsing(fn (?string $state): string => 'R$ '.number_format(floatval($state), 2, ',', '.'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('custo')
                     ->label('Renda Atual')
-                    ->formatStateUsing(fn(?string $state): string => "R$ ". number_format(floatval($state), 2, ',' ,'.'))
+                    ->formatStateUsing(fn (?string $state): string => 'R$ '.number_format(floatval($state), 2, ',', '.'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()

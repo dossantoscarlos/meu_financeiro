@@ -14,28 +14,27 @@ class Plano extends Model
     use HasFactory;
     use SoftDeletes;
 
-
-    protected $table = "planos";
+    protected $table = 'planos';
 
     protected $primaryKey = 'id';
 
-    protected $fillable= array(
+    protected $fillable = [
         'descricao_simples',
         'mes_ano',
-        'user_id'
-    );
+        'user_id',
+    ];
 
-    public function dispesa() : HasMany 
+    public function dispesa(): HasMany
     {
         return $this->hasMany(Dispesa::class);
     }
 
-    public function user():BelongsTo 
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function gastos() : HasOne 
+    public function gastos(): HasOne
     {
         return $this->hasOne(Gasto::class);
     }

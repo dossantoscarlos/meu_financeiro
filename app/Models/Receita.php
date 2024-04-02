@@ -12,16 +12,14 @@ class Receita extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $table="receitas";
+    protected $table = 'receitas';
 
-    protected $primaryKey="id";
+    protected $primaryKey = 'id';
 
-    protected $fillable = array('saldo','custo', 'user_id');
-
+    protected $fillable = ['saldo', 'custo', 'user_id'];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    } 
-
+    }
 }

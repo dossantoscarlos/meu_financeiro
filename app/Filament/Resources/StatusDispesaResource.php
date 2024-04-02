@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\StatusDispesaResource\Pages;
-use App\Filament\Resources\StatusDispesaResource\RelationManagers;
 use App\Filament\Resources\StatusDispesaResource\RelationManagers\DispesasRelationManager;
 use App\Models\StatusDispesa;
 use Filament\Forms;
@@ -11,8 +10,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class StatusDispesaResource extends Resource
 {
@@ -66,7 +63,7 @@ class StatusDispesaResource extends Resource
     {
         return [
             DispesasRelationManager::class,
-        ];   
+        ];
     }
 
     public static function getPages(): array
