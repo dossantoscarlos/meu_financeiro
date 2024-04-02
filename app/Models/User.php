@@ -45,7 +45,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function plano() : HasMany
+    public function plano(): HasMany
     {
         return $this->hasMany(Plano::class);
     }
@@ -54,7 +54,4 @@ class User extends Authenticatable
     {
         return $this->hasOne(Receita::class);
     }
-
-
-
 }

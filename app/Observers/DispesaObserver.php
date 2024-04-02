@@ -12,51 +12,50 @@ use Illuminate\Support\Facades\Auth;
 
 class DispesaObserver
 {
-
-    private function controleCusto(): void 
+    private function controleCusto(): void
     {
         $authId = Auth::user()->getAuthIdentifier();
         $receita = Receita::whereUserId($authId)->first();
         $date = Carbon::now();
-        $mes = ($date->month >= 1 && $date->month <= 9) ? strval("0".$date->month) : $date->month  ;
+        $mes = ($date->month >= 1 && $date->month <= 9) ? strval('0'.$date->month) : $date->month;
         $mesAno = "{$mes}/{$date->year}";
         try {
             $dispesas = Plano::with('dispesa')->where([
                 ['user_id', '=', $authId],
-                ['mes_ano', '>=', $mesAno]
+                ['mes_ano', '>=', $mesAno],
             ])
-            ->first()
-            ->toArray();
-            
+                ->first()
+                ->toArray();
+
             $planoId = $dispesas['id'];
-        
-        } catch(Exception $ex) {
+
+        } catch (Exception $ex) {
             $dispesas = [];
         }
 
-        if (!empty($receita)) { 
-            
+        if (! empty($receita)) {
+
             $total = 0.0;
-            
-            if (!empty($dispesas)) {
-                foreach($dispesas['dispesa'] as $dispesa) {
+
+            if (! empty($dispesas)) {
+                foreach ($dispesas['dispesa'] as $dispesa) {
                     $total += (float) $dispesa['valor_documento'];
                 }
 
                 $receita->custo = strval($receita->saldo - $total);
                 $receita->update();
 
-                $gasto = Gasto::where('plano_id','=',$planoId)->first();
+                $gasto = Gasto::where('plano_id', '=', $planoId)->first();
                 
-                if (empty($gasto->toArray())) {
-                    
+                if (empty($gasto)) {
+
                     Gasto::create([
                         'plano_id' => $planoId,
                         'valor' => $total,
                     ]);
 
-                }else {     
-                    $gasto->valor=$total;
+                } else {
+                    $gasto->valor = $total;
                     $gasto->update();
                 }
             }

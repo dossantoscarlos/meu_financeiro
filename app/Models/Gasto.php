@@ -9,13 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Gasto extends Model
 {
     use HasFactory;
-    protected $table= 'gastos';
+
+    protected $table = 'gastos';
 
     protected $primaryKey = 'id';
 
     protected $fillable = ['plano_id', 'valor'];
 
-    public function plano() : BelongsTo 
+    public function plano(): BelongsTo
     {
         return $this->belongsTo(Plano::class);
     }

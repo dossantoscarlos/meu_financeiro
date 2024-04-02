@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('dispesas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string("descricao");
-            $table->string("data_vencimento");
+            $table->string('descricao');
+            $table->string('data_vencimento');
             $table->foreignId('status_dispesa_id');
             $table->foreignId('tipo_dispesa_id');
             $table->foreignId('plano_id');
-            $table->string("valor_documento");
+            $table->string('valor_documento');
             $table->softDeletes();
             $table->timestamps();
         });

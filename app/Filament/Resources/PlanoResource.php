@@ -3,15 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PlanoResource\Pages;
-use App\Filament\Resources\PlanoResource\RelationManagers;
 use App\Models\Plano;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PlanoResource extends Resource
 {
@@ -23,20 +20,20 @@ class PlanoResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make(name:'user_id')
+                Forms\Components\Select::make(name: 'user_id')
                     ->label(label: 'Perfil')
                     ->relationship(
-                        name:'user', 
-                        titleAttribute:'name'
+                        name: 'user',
+                        titleAttribute: 'name'
                     )
                     ->native(false)
                     ->required(),
-                Forms\Components\TextInput::make(name:'mes_ano')
-                    ->label(label:'Mes e Ano')
-                    ->placeholder(placeholder:'01/2023')
-                    ->mask(mask:'99/9999')
+                Forms\Components\TextInput::make(name: 'mes_ano')
+                    ->label(label: 'Mes e Ano')
+                    ->placeholder(placeholder: '01/2023')
+                    ->mask(mask: '99/9999')
                     ->required(),
-                Forms\Components\TextInput::make(name:'descricao_simples')
+                Forms\Components\TextInput::make(name: 'descricao_simples')
                     ->columnSpanfull()
                     ->placeholder(placeholder: 'Ex.: Controle do mês de janeiro')
                     ->required(),

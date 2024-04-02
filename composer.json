@@ -13,14 +13,18 @@
         "filament/filament": "^3.2",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^11.0",
+        "laravel/horizon": "^5.23",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.8",
-        "leandrocfe/filament-ptbr-form-fields": "^3.0"
+        "leandrocfe/filament-ptbr-form-fields": "^3.0",
+        "stephenjude/filament-debugger": "^3.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
+        "laradumps/laradumps": "^3.0",
         "laravel/pint": "^1.0",
-        "laravel/sail": "^1.18",
+        "laravel/sail": "^1.29",
+        "laravel/telescope": "^5.0",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.1",
         "phpunit/phpunit": "^10.1",
@@ -56,7 +60,7 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": ["laravel/telescope"]
         }
     },
     "config": {
