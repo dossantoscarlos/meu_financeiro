@@ -8,10 +8,12 @@ use App\Filament\Resources\DispesaResource\Pages\ListDispesas;
 use App\Livewire\Components\MyMoney;
 use App\Models\Dispesa;
 use Filament\Forms;
+use Filament\Forms\Components\Builder;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class DispesaResource extends Resource
@@ -64,6 +66,9 @@ class DispesaResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make(name: 'tipoDispesa.nome')
                     ->sortable(),
+                Tables\Columns\TextColumn::make(name:'plano.mes_ano')
+                    ->tooltip(fn (Model $record): string => "{$record->plano->descricao_simples}")
+                    ->searchable(),                
                 Tables\Columns\TextColumn::make(name: 'data_vencimento')
                     ->label('Data de vencimento')
                     ->date('d/m/Y')
