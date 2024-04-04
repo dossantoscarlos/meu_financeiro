@@ -54,7 +54,7 @@ class ManutencaoPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                DebuggerPlugin::make()
+                DebuggerPlugin::make(),
             ]);
     }
 }

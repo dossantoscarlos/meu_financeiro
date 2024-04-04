@@ -15,14 +15,14 @@ class ReceitaObserver
     {
         $receita->custo = $receita->saldo;
         $receita->update();
-     }
+    }
 
     /**
      * Handle the Receita "updated" event.
      */
     public function updated(Receita $receita): void
     {
-    
+
     }
 
     /**
@@ -30,7 +30,7 @@ class ReceitaObserver
      */
     public function deleted(Receita $receita): void
     {
-    
+
     }
 
     /**

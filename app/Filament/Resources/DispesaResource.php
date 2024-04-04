@@ -8,7 +8,6 @@ use App\Filament\Resources\DispesaResource\Pages\ListDispesas;
 use App\Livewire\Components\MyMoney;
 use App\Models\Dispesa;
 use Filament\Forms;
-use Filament\Forms\Components\Builder;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -33,7 +32,7 @@ class DispesaResource extends Resource
                     ->label(label: 'Data de vencimento')
                     ->required(),
                 Forms\Components\Select::make(name: 'plano_id')
-                    ->label(label: 'plano mensal')
+                    ->label(label: 'Plano mensal')
                     ->relationship(
                         name: 'plano',
                         titleAttribute: 'mes_ano',
@@ -66,9 +65,9 @@ class DispesaResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make(name: 'tipoDispesa.nome')
                     ->sortable(),
-                Tables\Columns\TextColumn::make(name:'plano.mes_ano')
+                Tables\Columns\TextColumn::make(name: 'plano.mes_ano')
                     ->tooltip(fn (Model $record): string => "{$record->plano->descricao_simples}")
-                    ->searchable(),                
+                    ->searchable(),
                 Tables\Columns\TextColumn::make(name: 'data_vencimento')
                     ->label('Data de vencimento')
                     ->date('d/m/Y')

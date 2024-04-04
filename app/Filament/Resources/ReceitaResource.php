@@ -12,8 +12,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
 
 class ReceitaResource extends Resource
 {
@@ -23,7 +21,7 @@ class ReceitaResource extends Resource
 
     public static function form(Form $form): Form
     {
-        
+
         return $form
             ->schema([
                 Forms\Components\Select::make('user_id')
