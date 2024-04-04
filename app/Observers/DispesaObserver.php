@@ -46,7 +46,7 @@ class DispesaObserver
                 $receita->update();
 
                 $gasto = Gasto::where('plano_id', '=', $planoId)->first();
-                
+
                 if (empty($gasto)) {
 
                     Gasto::create([

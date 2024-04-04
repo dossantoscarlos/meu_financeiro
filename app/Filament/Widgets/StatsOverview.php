@@ -39,7 +39,8 @@ class StatsOverview extends BaseWidget
         if (!empty($receita)) {
 
             $total = strval($plano['gastos']['valor']) ?? 0.0;
-            ds('total de gastos: ',$total);
+            ds('total de gastos: ', $total);
+
             return [
                 Stat::make('Renda inicial', 'R$ '.number_format(floatval($receita->saldo), 2, ',', '.')),
                 Stat::make('Custo previsto', 'R$ '.number_format(floatval($total), 2, ',', '.')),

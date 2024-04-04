@@ -34,7 +34,7 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            
+
             ->default()
             ->id('admin')
             ->path('admin')
@@ -52,9 +52,6 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
 
             ])
-            ->plugins([
-                DebuggerPlugin::make()
-            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -69,8 +66,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->navigation(fn (NavigationBuilder $builder): NavigationBuilder => 
-            $builder->groups([
+            ->navigation(fn (NavigationBuilder $builder): NavigationBuilder => $builder->groups([
                 NavigationGroup::make('Dashboard')
                     ->items([
                         ...Pages\Dashboard::getNavigationItems(),
@@ -88,7 +84,7 @@ class AdminPanelProvider extends PanelProvider
                         ...TipoDispesaResource::getNavigationItems(),
                     ])
                     ->collapsed(false),
-                NavigationGroup::make("Metrica") 
+                NavigationGroup::make('Metrica')
                     ->items([
                         NavigationItem::make()
                             ->visible(self::authorized(config('filament-debugger.permissions.telescope')))
@@ -101,10 +97,10 @@ class AdminPanelProvider extends PanelProvider
                             ->group(config('filament-debugger.group'))
                             ->icon('heroicon-o-globe-europe-africa')
                             ->url(url: url()->to(config('filament-debugger.url.horizon')), shouldOpenInNewTab: true)
-                            ->label('Horizon')
-                    ])
+                            ->label('Horizon'),
+                    ]),
             ])
-        );
+            );
     }
 
     protected function mutateFormDataBeforeFill(array $data): array
@@ -113,7 +109,6 @@ class AdminPanelProvider extends PanelProvider
 
         return $data;
     }
-
 
     private static function authorized(string $ability): bool
     {
