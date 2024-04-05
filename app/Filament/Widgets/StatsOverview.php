@@ -8,6 +8,7 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class StatsOverview extends BaseWidget
 {
@@ -26,7 +27,7 @@ class StatsOverview extends BaseWidget
             ['mes_ano', '>=', $mesAno],
         ])->first()?->toArray() ?? [];
 
-        ds($plano);
+        Log::critical($plano);
 
         $stat = [
             Stat::make('Renda Inicial', $receita->saldo ?? 'R$ 0,00'),
