@@ -46,11 +46,11 @@ class ReceitaResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('saldo')
                     ->label('Renda Inicial')
-                    ->formatStateUsing(fn (?string $state): string => 'R$ '.number_format(floatval($state), 2, ',', '.'))
+                    ->money(currency: 'BRL', locale: 'pt_BR')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('custo')
                     ->label('Renda Atual')
-                    ->formatStateUsing(fn (?string $state): string => 'R$ '.number_format(floatval($state), 2, ',', '.'))
+                    ->money(currency: 'BRL', locale: 'pt_BR')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()

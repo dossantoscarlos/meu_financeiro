@@ -38,15 +38,21 @@ class DispesaResource extends Resource
                         titleAttribute: 'mes_ano',
                         modifyQueryUsing: fn ($query) => $query->whereUserId(Auth::user()->id))
                     ->native(condition: false)
+
                     ->required(),
                 Forms\Components\Select::make(name: 'status_dispesa_id')
                     ->label(label: 'Status')
                     ->relationship(name: 'statusDispesa', titleAttribute: 'nome')
+                    ->searchable(condition: true)
+                    ->searchDebounce(100)
+                    ->noSearchResultsMessage('Busca nao retornou resultado')
                     ->native(condition: false)
                     ->required(),
                 Forms\Components\Select::make(name: 'tipo_dispesa_id')
                     ->label(label: 'Categoria')
                     ->relationship(name: 'tipoDispesa', titleAttribute: 'nome')
+                    ->searchable()
+                    ->searchDebounce(100)
                     ->native(condition: false)
                     ->required(),
                 MyMoney::make(name: 'valor_documento')
@@ -74,7 +80,7 @@ class DispesaResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make(name: 'valor_documento')
                     ->label(label: 'Valor do documento')
-                    ->formatStateUsing(fn (?string $state): string => 'R$ '.number_format(floatval($state), 2, ',', '.'))
+                    ->money(currency: 'BRL', locale: 'pt_BR')
                     ->searchable(),
                 Tables\Columns\TextColumn::make(name: 'deleted_at')
                     ->dateTime()
