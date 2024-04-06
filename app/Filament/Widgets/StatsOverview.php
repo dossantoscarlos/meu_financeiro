@@ -27,8 +27,6 @@ class StatsOverview extends BaseWidget
             ['mes_ano', '>=', $mesAno],
         ])->first()?->toArray() ?? [];
 
-        Log::critical($plano);
-
         $stat = [
             Stat::make('Renda Inicial', $receita->saldo ?? 'R$ 0,00'),
             Stat::make('Custo previsto', 'R$ 0,00'),
@@ -36,6 +34,7 @@ class StatsOverview extends BaseWidget
         ];
 
         if (empty($plano) || $plano['gastos'] == null) {
+            Log::debug('array de plano esta vazio '.now(), $plano);
             return $stat;
         }
 
