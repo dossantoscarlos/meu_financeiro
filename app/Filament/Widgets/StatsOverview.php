@@ -34,15 +34,15 @@ class StatsOverview extends BaseWidget
         ];
 
         if (empty($plano) || $plano['gastos'] == null) {
-            Log::debug('array de plano esta vazio '.now(), $plano);
-
+            $date = now();
+            Log::info("{$date} - Array de plano esta vazio ", $plano);
             return $stat;
         }
 
         if (! empty($receita)) {
 
             $total = strval($plano['gastos']['valor']) ?? 0.0;
-            ds('total de gastos: ', $total);
+            Log::debug("total de gastos: {$total}");
 
             return [
                 Stat::make('Renda inicial', 'R$ '.number_format(floatval($receita->saldo), 2, ',', '.')),

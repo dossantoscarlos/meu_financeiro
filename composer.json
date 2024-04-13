@@ -14,6 +14,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^11.0",
         "laravel/horizon": "^5.23",
+        "laravel/octane": "^2.3",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.8",
         "leandrocfe/filament-ptbr-form-fields": "^3.0",
