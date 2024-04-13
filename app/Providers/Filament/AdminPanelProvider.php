@@ -6,6 +6,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Resources\DispesaResource;
 use App\Filament\Resources\PlanoResource;
+use App\Filament\Resources\ProdutoResource;
 use App\Filament\Resources\ReceitaResource;
 use App\Filament\Resources\StatusDispesaResource;
 use App\Filament\Resources\TipoDispesaResource;
@@ -18,7 +19,6 @@ use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Resources\Pages\Page;
 use Filament\Support\Colors\Color;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -27,14 +27,12 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Stephenjude\FilamentDebugger\DebuggerPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-
             ->default()
             ->id('admin')
             ->path('admin')
@@ -77,11 +75,13 @@ class AdminPanelProvider extends PanelProvider
                         ...ReceitaResource::getNavigationItems(),
                         ...DispesaResource::getNavigationItems(),
                         ...PlanoResource::getNavigationItems(),
+                        ...ProdutoResource::getNavigationItems(),
                     ])->collapsed(false),
                 NavigationGroup::make('Configuração de tipos e status')
                     ->items([
                         ...StatusDispesaResource::getNavigationItems(),
                         ...TipoDispesaResource::getNavigationItems(),
+
                     ])
                     ->collapsed(false),
                 NavigationGroup::make('Metrica')
@@ -99,8 +99,9 @@ class AdminPanelProvider extends PanelProvider
                             ->url(url: url()->to(config('filament-debugger.url.horizon')), shouldOpenInNewTab: true)
                             ->label('Horizon'),
                     ]),
-            ])
-            );
+            ]),
+            )
+            ->spa();
     }
 
     protected function mutateFormDataBeforeFill(array $data): array
@@ -119,12 +120,5 @@ class AdminPanelProvider extends PanelProvider
         }
 
         return true;
-    }
-
-    public static function getRecordSubNavigation(Page $page): array
-    {
-        return $page->generateNavigationItems([
-
-        ]);
     }
 }

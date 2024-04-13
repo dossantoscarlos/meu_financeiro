@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TipoDispesaResource\Pages;
 use App\Models\TipoDispesa;
+use App\Rules\UniqueColumnCustom;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+
 
 class TipoDispesaResource extends Resource
 {
@@ -21,7 +25,14 @@ class TipoDispesaResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nome')
-                    ->required(),
+                ->columnSpanFull()
+                ->extraInputAttributes([
+                    '@input' => '$event.target.value = $event.target.value.toUpperCase()'
+                ])
+                ->rules([
+                    new UniqueColumnCustom()
+                ])
+                ->required(),
             ]);
     }
 

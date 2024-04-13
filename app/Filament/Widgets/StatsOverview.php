@@ -8,6 +8,7 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class StatsOverview extends BaseWidget
 {
@@ -32,14 +33,16 @@ class StatsOverview extends BaseWidget
             Stat::make('Renda atual', $receita->saldo ?? 'R$ 0,00'),
         ];
 
-        if ($plano['gastos'] == null) {
+        if (empty($plano) || $plano['gastos'] == null) {
+            $date = now();
+            Log::info("{$date} - Array de plano esta vazio ", $plano);
             return $stat;
         }
 
-        if (!empty($receita)) {
+        if (! empty($receita)) {
 
             $total = strval($plano['gastos']['valor']) ?? 0.0;
-            ds('total de gastos: ', $total);
+            Log::debug("total de gastos: {$total}");
 
             return [
                 Stat::make('Renda inicial', 'R$ '.number_format(floatval($receita->saldo), 2, ',', '.')),
