@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Receita::class);
     }
+
+    public function produto(): HasMany
+    {
+        return $this->hasMany(Produto::class);
+    }
 }
