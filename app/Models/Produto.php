@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Produto extends Model
@@ -24,4 +25,9 @@ class Produto extends Model
         'tipo_medida',
         'data_compra',
     ];
+
+    public function users() : BelongsTo 
+    {
+        return $this->belongsTo(User::class);
+    }
 }
