@@ -20,7 +20,7 @@ class StatusDispesa extends Model
 
     protected $fillable = ['nome'];
 
-    public function dispesa(): HasMany
+    public function dispesas(): HasMany
     {
         return $this->hasMany(Dispesa::class);
     }

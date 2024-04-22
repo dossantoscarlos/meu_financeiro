@@ -9,13 +9,12 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class ListaCategoria extends BaseWidget
 {
-
     public function table(Table $table): Table
     {
         return $table
             ->query(TipoDispesa::query())
             ->columns([
-                Tables\Columns\TextColumn::make('nome')
+                Tables\Columns\TextColumn::make('nome'),
             ]);
     }
 }

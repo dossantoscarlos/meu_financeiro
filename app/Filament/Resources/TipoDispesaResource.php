@@ -13,7 +13,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-
 class TipoDispesaResource extends Resource
 {
     protected static ?string $model = TipoDispesa::class;
@@ -25,14 +24,14 @@ class TipoDispesaResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nome')
-                ->columnSpanFull()
-                ->extraInputAttributes([
-                    '@input' => '$event.target.value = $event.target.value.toUpperCase()'
-                ])
-                ->rules([
-                    new UniqueColumnCustom()
-                ])
-                ->required(),
+                    ->columnSpanFull()
+                    ->extraInputAttributes([
+                        '@input' => '$event.target.value = $event.target.value.toUpperCase()',
+                    ])
+                    ->rules([
+                        new UniqueColumnCustom(),
+                    ])
+                    ->required(),
             ]);
     }
 

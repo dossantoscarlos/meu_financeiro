@@ -20,7 +20,7 @@ class UniqueColumnCustom implements ValidationRule
         Log::debug($value);
         $hydrate = strtoupper(trim($value));
         $result = TipoDispesa::whereNome($hydrate)->get() ?? [];
-        
+
         if ($result === []) {
             Log::debug($result);
             $fail('The :attribute must be unique.');

@@ -6,6 +6,7 @@ use App\Filament\Resources\ReceitaResource\Pages;
 use App\Livewire\Components\MyMoney;
 use App\Models\Receita;
 use Filament\Forms;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -76,7 +77,8 @@ class ReceitaResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ;
     }
 
     public static function getPages(): array

@@ -38,7 +38,25 @@ class DispesaResource extends Resource
                         titleAttribute: 'mes_ano',
                         modifyQueryUsing: fn ($query) => $query->whereUserId(Auth::user()->id))
                     ->native(condition: false)
-
+                    ->createOptionForm([
+                        Forms\Components\Select::make(name: 'user_id')
+                            ->label(label: 'Perfil')
+                            ->relationship(
+                                name: 'user',
+                                titleAttribute: 'name'
+                            )
+                            ->native(false)
+                            ->required(),
+                        Forms\Components\TextInput::make(name: 'mes_ano')
+                            ->label(label: 'Mes e Ano')
+                            ->placeholder(placeholder: '01/2023')
+                            ->mask(mask: '99/9999')
+                            ->required(),
+                        Forms\Components\TextInput::make(name: 'descricao_simples')
+                            ->columnSpanfull()
+                            ->placeholder(placeholder: 'Ex.: Controle do mês de janeiro')
+                            ->required(),
+                    ])
                     ->required(),
                 Forms\Components\Select::make(name: 'status_dispesa_id')
                     ->label(label: 'Status')
@@ -47,10 +65,18 @@ class DispesaResource extends Resource
                     ->searchDebounce(100)
                     ->noSearchResultsMessage('Busca nao retornou resultado')
                     ->native(condition: false)
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('nome')
+                            ->required(),
+                    ])
                     ->required(),
                 Forms\Components\Select::make(name: 'tipo_dispesa_id')
                     ->label(label: 'Categoria')
                     ->relationship(name: 'tipoDispesa', titleAttribute: 'nome')
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('nome')
+                        ->required(),
+                    ])
                     ->searchable()
                     ->searchDebounce(100)
                     ->native(condition: false)
