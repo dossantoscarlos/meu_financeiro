@@ -76,13 +76,6 @@ class AdminPanelProvider extends PanelProvider
                         ...PlanoResource::getNavigationItems(),
                         ...ProdutoResource::getNavigationItems(),
                     ])->collapsed(false),
-                NavigationGroup::make('Configuração de tipos e status')
-                    ->items([
-                        ...StatusDispesaResource::getNavigationItems(),
-                        ...TipoDispesaResource::getNavigationItems(),
-
-                    ])
-                    ->collapsed(false),
                 NavigationGroup::make('Metrica')
                     ->items([
                         NavigationItem::make()

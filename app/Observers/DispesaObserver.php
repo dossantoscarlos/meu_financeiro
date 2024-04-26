@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Observers;
 
 use App\Models\Dispesa;
 use App\Models\Gasto;
 use App\Models\Plano;
 use App\Models\Receita;
-use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,22 +17,17 @@ class DispesaObserver
     {
         $authId = Auth::user()->getAuthIdentifier();
         $receita = Receita::whereUserId($authId)->first();
+        
         $date = Carbon::now();
         $mes = ($date->month >= 1 && $date->month <= 9) ? strval('0'.$date->month) : $date->month;
         $mesAno = "{$mes}/{$date->year}";
-        try {
-            $dispesas = Plano::with('dispesa')->where([
-                ['user_id', '=', $authId],
-                ['mes_ano', '>=', $mesAno],
-            ])
-                ->first()
-                ->toArray();
+        
+        $dispesas = Plano::with('dispesa')->where([
+            ['user_id', '=', $authId],
+            ['mes_ano', '>=', $mesAno],
+        ])->first()?->toArray() ?? [];
 
-            $planoId = $dispesas['id'];
-
-        } catch (Exception $ex) {
-            $dispesas = [];
-        }
+        $planoId = $dispesas['id'] ?? 0;
 
         if (! empty($receita)) {
 

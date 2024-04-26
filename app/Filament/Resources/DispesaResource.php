@@ -60,9 +60,7 @@ class DispesaResource extends Resource
                     ->required(),
                 Forms\Components\Select::make(name: 'status_dispesa_id')
                     ->label(label: 'Status')
-                    ->relationship(name: 'statusDispesa', titleAttribute: 'nome')
-                    ->searchable(condition: true)
-                    ->searchDebounce(100)
+                    ->relationship(name: 'statusDispesa', titleAttribute: 'nome')  
                     ->noSearchResultsMessage('Busca nao retornou resultado')
                     ->native(condition: false)
                     ->createOptionForm([
