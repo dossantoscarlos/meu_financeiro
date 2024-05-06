@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class StatsOverview extends BaseWidget
+class AStatsOverview extends BaseWidget
 {
     protected function getStats(): array
     {
@@ -36,6 +36,7 @@ class StatsOverview extends BaseWidget
         if (empty($plano) || $plano['gastos'] == null) {
             $date = now();
             Log::info("{$date} - Array de plano esta vazio ", $plano);
+
             return $stat;
         }
 
