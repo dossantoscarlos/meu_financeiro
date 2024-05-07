@@ -1,6 +1,41 @@
-# Meu Financeiro
+# Controle Financeiro Pessoal
 
-    Meu financeiro é um projeto pessoal para uso diario onde o foco e ter um controle financeiro para poder ver onde
-esta os "gargalos" de gastos. Poder avaliar a curto e longo prazo onde mais gasta e como otmizar esse custo.
-    O projeto ainda esta em desenvolvimento e ao que avalio sobre sempre estara por ser algo muito proximo a minha
-realidade de uso por isso esta publico para que qualquer um possa usar o código e adaptar a sua realidade.
+## Introdução
+
+Este projeto é um controle financeiro pessoal desenvolvido para uso diário, com o objetivo de fornecer um controle detalhado das finanças, identificando onde estão os principais gastos e como otimizá-los a curto e longo prazo. O projeto está em constante desenvolvimento, ajustando-se continuamente à realidade do usuário e ganhando novas funcionalidades e correções regularmente. O código-fonte está disponível publicamente para que qualquer pessoa possa utilizá-lo e adaptá-lo à sua própria realidade financeira.
+
+## Tecnologias Utilizadas
+
+- **PHP 8.1+**: Linguagem de programação principal.
+- **Laravel 11**: Framework PHP utilizado para o desenvolvimento do projeto.
+- **Filamentphp**: Utilizado para a interface de usuário.
+- **FrankenPHP**: Biblioteca para funcionalidades adicionais.
+- **Horizon**: Utilizado para monitoramento de filas.
+- **Telescope**: Ferramenta de debug e monitoramento.
+
+## Pontos Técnicos
+
+O sistema possui algumas características técnicas importantes:
+
+- **Event Listeners**: Implementados utilizando a capacidade de ouvir eventos no Laravel. Isso permite executar ações personalizadas em resposta a eventos específicos, como salvar uma despesa, sem manter o usuário na tela ou a necessidade de criar Jobs.
+- **Observable**: Utilizado para monitorar eventos de um CRUD, permitindo a execução de ações personalizadas em resposta a esses eventos.
+- **Custom Rules**: Foram criadas regras personalizadas para estender a validação no Filamentphp.
+- **Internationalization**: Mensagens do Laravel foram internacionalizadas para facilitar a tradução.
+
+## Funcionalidades
+
+O sistema consiste nas seguintes funções principais:
+
+- **Despesa**: Utilizada para registrar todas as contas, sejam elas já pagas ou pendentes.
+- **Status de Despesa**: Define o status da despesa, como "a pagar" ou "pago".
+- **Tipo de Despesa**: Informa o tipo da despesa, como mercado, transporte, etc.
+- **Produto**: Cataloga os produtos adquiridos, visando futuras análises de gastos por categoria.
+- **Plano**: Registra os planos mensais, com a intenção de fornecer análises de custo mensal no futuro.
+
+## Futuro do Projeto
+
+O escopo do projeto continuará a crescer e se tornar mais complexo ao longo do tempo, com atualizações que explicarão cada nova abordagem técnica escolhida. Sua finalidade é oferecer um controle financeiro completo e adaptável às necessidades individuais dos usuários.
+
+## Contribuição
+
+Contribuições são bem-vindas! Sinta-se à vontade para reportar problemas, sugerir melhorias ou contribuir diretamente para o desenvolvimento do projeto.
