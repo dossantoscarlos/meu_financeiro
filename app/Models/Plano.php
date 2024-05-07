@@ -24,9 +24,9 @@ class Plano extends Model
         'user_id',
     ];
 
-    public function dispesas(): HasMany
+    public function despesas(): HasMany
     {
-        return $this->hasMany(Dispesa::class);
+        return $this->hasMany(Despesa::class);
     }
 
     public function user(): BelongsTo

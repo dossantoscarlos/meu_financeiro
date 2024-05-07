@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\DispesaResource\Pages;
+namespace App\Filament\Resources\DespesaResource\Pages;
 
-use App\Filament\Resources\DispesaResource;
+use App\Filament\Resources\DespesaResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditDispesa extends EditRecord
+class EditDespesa extends EditRecord
 {
-    protected static string $resource = DispesaResource::class;
+    protected static string $resource = DespesaResource::class;
 
     protected function getHeaderActions(): array
     {

@@ -4,38 +4,38 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\Models\Dispesa;
+use App\Models\Despesa;
 use App\Models\Gasto;
 use App\Models\Plano;
 use App\Models\Receita;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
-class DispesaObserver
+class DespesaObserver
 {
     private function controleCusto(): void
     {
         $authId = Auth::user()->getAuthIdentifier();
         $receita = Receita::whereUserId($authId)->first();
-        
+
         $date = Carbon::now();
         $mes = ($date->month >= 1 && $date->month <= 9) ? strval('0'.$date->month) : $date->month;
         $mesAno = "{$mes}/{$date->year}";
-        
-        $dispesas = Plano::with('dispesa')->where([
+
+        $despesas = Plano::with('despesa')->where([
             ['user_id', '=', $authId],
             ['mes_ano', '>=', $mesAno],
         ])->first()?->toArray() ?? [];
 
-        $planoId = $dispesas['id'] ?? 0;
+        $planoId = $despesas['id'] ?? 0;
 
         if (! empty($receita)) {
 
             $total = 0.0;
 
-            if (! empty($dispesas)) {
-                foreach ($dispesas['dispesa'] as $dispesa) {
-                    $total += (float) $dispesa['valor_documento'];
+            if (! empty($despesas)) {
+                foreach ($despesas['despesa'] as $despesa) {
+                    $total += (float) $despesa['valor_documento'];
                 }
 
                 $receita->custo = strval($receita->saldo - $total);
@@ -59,41 +59,41 @@ class DispesaObserver
     }
 
     /**
-     * Handle the Dispesa "created" event.
+     * Handle the Despesa "created" event.
      */
-    public function saved(Dispesa $dispesa): void
+    public function saved(Despesa $despesa): void
     {
         $this->controleCusto();
     }
 
     /**
-     * Handle the Dispesa "updated" event.
+     * Handle the Despesa "updated" event.
      */
-    public function updated(Dispesa $dispesa): void
+    public function updated(Despesa $despesa): void
     {
         $this->controleCusto();
     }
 
     /**
-     * Handle the Dispesa "deleted" event.
+     * Handle the Despesa "deleted" event.
      */
-    public function deleted(Dispesa $dispesa): void
+    public function deleted(Despesa $despesa): void
     {
         $this->controleCusto();
     }
 
     /**
-     * Handle the Dispesa "restored" event.
+     * Handle the Despesa "restored" event.
      */
-    public function restored(Dispesa $dispesa): void
+    public function restored(Despesa $despesa): void
     {
         //
     }
 
     /**
-     * Handle the Dispesa "force deleted" event.
+     * Handle the Despesa "force deleted" event.
      */
-    public function forceDeleted(Dispesa $dispesa): void
+    public function forceDeleted(Despesa $despesa): void
     {
         //
     }

@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Dispesa extends Model
+class Despesa extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = 'dispesas';
+    protected $table = 'despesas';
 
     protected $primaryKey = 'id';
 
@@ -25,14 +25,14 @@ class Dispesa extends Model
         'data_vencimento',
     ];
 
-    public function statusDispesa(): BelongsTo
+    public function statusDespesa(): BelongsTo
     {
-        return $this->belongsTo(StatusDispesa::class);
+        return $this->belongsTo(StatusDespesa::class);
     }
 
-    public function tipoDispesa(): BelongsTo
+    public function tipoDespesa(): BelongsTo
     {
-        return $this->belongsTo(TipoDispesa::class);
+        return $this->belongsTo(TipoDespesa::class);
     }
 
     public function plano(): BelongsTo

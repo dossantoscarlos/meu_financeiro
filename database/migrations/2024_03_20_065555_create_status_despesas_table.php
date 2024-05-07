@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tipo_dispesas', function (Blueprint $table) {
+        Schema::create('status_despesas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nome');
             $table->softDeletes();
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tipo_dispesas');
+        Schema::dropIfExists('status_despesas');
     }
 };
