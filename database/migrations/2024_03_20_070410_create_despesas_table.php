@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('status_dispesas', function (Blueprint $table) {
+        Schema::create('despesas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nome');
+            $table->string('descricao');
+            $table->string('data_vencimento');
+            $table->foreignId('status_despesa_id');
+            $table->foreignId('tipo_despesa_id');
+            $table->foreignId('plano_id');
+            $table->string('valor_documento');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -24,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('status_dispesas');
+        Schema::dropIfExists('despesas');
     }
 };

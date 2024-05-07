@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dispesas', function (Blueprint $table) {
+        Schema::create('tipo_despesas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('descricao');
-            $table->string('data_vencimento');
-            $table->foreignId('status_dispesa_id');
-            $table->foreignId('tipo_dispesa_id');
-            $table->foreignId('plano_id');
-            $table->string('valor_documento');
+            $table->string('nome');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dispesas');
+        Schema::dropIfExists('tipo_despesas');
     }
 };

@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
-use App\Filament\Resources\DispesaResource;
+use App\Filament\Resources\DespesaResource;
 use App\Filament\Resources\PlanoResource;
 use App\Filament\Resources\ProdutoResource;
 use App\Filament\Resources\ReceitaResource;
-use App\Filament\Resources\StatusDispesaResource;
-use App\Filament\Resources\TipoDispesaResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -72,7 +70,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('Finança')
                     ->items([
                         ...ReceitaResource::getNavigationItems(),
-                        ...DispesaResource::getNavigationItems(),
+                        ...DespesaResource::getNavigationItems(),
                         ...PlanoResource::getNavigationItems(),
                         ...ProdutoResource::getNavigationItems(),
                     ])->collapsed(false),

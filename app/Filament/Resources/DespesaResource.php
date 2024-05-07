@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DispesaResource\Pages\CreateDispesa;
-use App\Filament\Resources\DispesaResource\Pages\EditDispesa;
-use App\Filament\Resources\DispesaResource\Pages\ListDispesas;
+use App\Filament\Resources\DespesaResource\Pages\CreateDespesa;
+use App\Filament\Resources\DespesaResource\Pages\EditDespesa;
+use App\Filament\Resources\DespesaResource\Pages\ListDespesas;
 use App\Livewire\Components\MyMoney;
-use App\Models\Dispesa;
+use App\Models\Despesa;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,9 +15,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class DispesaResource extends Resource
+class DespesaResource extends Resource
 {
-    protected static ?string $model = Dispesa::class;
+    protected static ?string $model = Despesa::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -58,9 +58,9 @@ class DispesaResource extends Resource
                             ->required(),
                     ])
                     ->required(),
-                Forms\Components\Select::make(name: 'status_dispesa_id')
+                Forms\Components\Select::make(name: 'status_despesa_id')
                     ->label(label: 'Status')
-                    ->relationship(name: 'statusDispesa', titleAttribute: 'nome')  
+                    ->relationship(name: 'statusDespesa', titleAttribute: 'nome')
                     ->noSearchResultsMessage('Busca nao retornou resultado')
                     ->native(condition: false)
                     ->createOptionForm([
@@ -68,9 +68,9 @@ class DispesaResource extends Resource
                             ->required(),
                     ])
                     ->required(),
-                Forms\Components\Select::make(name: 'tipo_dispesa_id')
+                Forms\Components\Select::make(name: 'tipo_despesa_id')
                     ->label(label: 'Categoria')
-                    ->relationship(name: 'tipoDispesa', titleAttribute: 'nome')
+                    ->relationship(name: 'tipoDespesa', titleAttribute: 'nome')
                     ->createOptionForm([
                         Forms\Components\TextInput::make('nome')
                         ->required(),
@@ -91,9 +91,9 @@ class DispesaResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make(name: 'descricao')
                     ->searchable(),
-                Tables\Columns\TextColumn::make(name: 'statusDispesa.nome')
+                Tables\Columns\TextColumn::make(name: 'statusDespesa.nome')
                     ->sortable(),
-                Tables\Columns\TextColumn::make(name: 'tipoDispesa.nome')
+                Tables\Columns\TextColumn::make(name: 'tipoDespesa.nome')
                     ->sortable(),
                 Tables\Columns\TextColumn::make(name: 'plano.mes_ano')
                     ->tooltip(fn (Model $record): string => "{$record->plano->descricao_simples}")
@@ -142,9 +142,9 @@ class DispesaResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListDispesas::route('/'),
-            'create' => CreateDispesa::route('/create'),
-            'edit' => EditDispesa::route('/{record}/edit'),
+            'index' => ListDespesas::route('/'),
+            'create' => CreateDespesa::route('/create'),
+            'edit' => EditDespesa::route('/{record}/edit'),
         ];
     }
 }
