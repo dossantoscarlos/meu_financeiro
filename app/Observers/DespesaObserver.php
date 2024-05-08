@@ -7,7 +7,7 @@ namespace App\Observers;
 use App\Models\Despesa;
 use App\Models\Gasto;
 use App\Models\Plano;
-use App\Models\Receita;
+use App\Models\Renda;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +16,7 @@ class DespesaObserver
     private function controleCusto(): void
     {
         $authId = Auth::user()->getAuthIdentifier();
-        $receita = Receita::whereUserId($authId)->first();
+        $receita = Renda::whereUserId($authId)->first();
 
         $date = Carbon::now();
         $mes = ($date->month >= 1 && $date->month <= 9) ? strval('0'.$date->month) : $date->month;

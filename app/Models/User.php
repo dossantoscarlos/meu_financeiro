@@ -50,9 +50,9 @@ class User extends Authenticatable
         return $this->hasMany(Plano::class);
     }
 
-    public function receita(): HasOne
+    public function renda(): HasOne
     {
-        return $this->hasOne(Receita::class);
+        return $this->hasOne(Renda::class);
     }
 
     public function produtos(): HasMany

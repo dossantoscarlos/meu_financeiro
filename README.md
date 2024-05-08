@@ -1,5 +1,9 @@
 # Controle Financeiro Pessoal
 
+![Caso de uso](url_da_imagem)
+
+![Diagrama de classe](url_da_imagem)
+
 ## Introdução
 
 Este projeto é um controle financeiro pessoal desenvolvido para uso diário, com o objetivo de fornecer um controle detalhado das finanças, identificando onde estão os principais gastos e como otimizá-los a curto e longo prazo. O projeto está em constante desenvolvimento, ajustando-se continuamente à realidade do usuário e ganhando novas funcionalidades e correções regularmente. O código-fonte está disponível publicamente para que qualquer pessoa possa utilizá-lo e adaptá-lo à sua própria realidade financeira.

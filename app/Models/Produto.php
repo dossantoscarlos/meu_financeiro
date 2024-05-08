@@ -35,15 +35,17 @@ class Produto extends Model
         return $this->belongsTo(User::class);
     }
 
+    private function totalProduto() : float {
+        return floatval($this->preco) * floatVal($this->quantidade);
+    }
+
     public function total() : Attribute
     {
         return Attribute::make(
             get: fn(?string $value) => $value,
             set: function (string $value) {
-                Log::info($this->preco);
-                
-                $value = floatval($this->preco) * floatVal($this->quantidade);
-                return floatval($value);
+                $value = $this->totalProduto();
+                return $value;
             }
         );
     }
