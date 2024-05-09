@@ -6,13 +6,13 @@ Este projeto é um controle financeiro pessoal desenvolvido para uso diário, co
 
 ## Tecnologias Utilizadas
 
-- **PHP 8.1+**: Linguagem de programação principal.
-- **Laravel 11**: Framework PHP utilizado para o desenvolvimento do projeto.
-- **Filamentphp**: Utilizado para a interface de usuário.
-- **Octane**: Biblioteca para .
+- [**PHP 8.2+**](https://www.php.net/releases/8.2/en.php): Principal linguagem de programação do projeto.
+- [**Laravel 11**](https://laravel.com/docs/11.x): Framework PHP utilizado para o desenvolvimento do projeto.
+- [**Filamentphp**](https://filamentphp.com/): Utilizado para a criação da interface de usuário com uso de classes PHP.
+- [**Octane**](https://laravel.com/docs/11.x/octane): Melhora o desempenho do seu aplicativo servindo seu aplicativo usando servidores de aplicativos de alta potência.
 - [**FrankenPHP**](https://github.com/dunglas/frankenphp): É um servidor de aplicativos moderno para PHP construído sobre o servidor web Caddy.
-- **Horizon**: Utilizado para monitoramento de métricas.
-- **Telescope**: Ferramenta de debug e monitoramento.
+- [**Horizon**](https://laravel.com/docs/11.x/horizon#main-content): Utilizado para monitoramento de métricas.
+- [**Telescope**](https://laravel.com/docs/11.x/telescope#main-content): Ferramenta de debug e monitoramento.
 
 ## Pontos Técnicos
 
