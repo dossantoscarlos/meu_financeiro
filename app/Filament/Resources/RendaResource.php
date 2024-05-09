@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ReceitaResource\Pages;
+use App\Filament\Resources\RendaResource\Pages;
 use App\Livewire\Components\MyMoney;
-use App\Models\Receita;
+use App\Models\Renda;
 use Filament\Forms;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Form;
@@ -14,23 +14,22 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
-class ReceitaResource extends Resource
+class RendaResource extends Resource
 {
-    protected static ?string $model = Receita::class;
+    protected static ?string $model = Renda::class;
 
     protected static ?string $navigationIcon = 'vaadin-money-deposit';
 
     public static function form(Form $form): Form
     {
-
         return $form
             ->schema([
-                Forms\Components\Select::make('user_id')
+                Forms\Components\Select::make('user_id')->native(true)
                     ->relationship(
                         name: 'user',
                         titleAttribute: 'name',
                         modifyQueryUsing: fn (Builder $query): Builder => $query->whereId(Auth::user()->getAuthIdentifier()))
-                    ->native(false)
+
                     ->required(),
                 MyMoney::make('saldo')
                     ->label('Renda')
@@ -84,7 +83,7 @@ class ReceitaResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageReceitas::route('/'),
+            'index' => Pages\ManageRendas::route('/'),
         ];
     }
 }

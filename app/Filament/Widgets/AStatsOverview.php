@@ -3,7 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Plano;
-use App\Models\Receita;
+use App\Models\Renda;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Carbon;
@@ -15,7 +15,7 @@ class AStatsOverview extends BaseWidget
     protected function getStats(): array
     {
         $authId = Auth::user()->getAuthIdentifier();
-        $receita = Receita::whereUserId($authId)->first();
+        $renda = Renda::whereUserId($authId)->first();
         $date = Carbon::now();
 
         $mes = ($date->month >= 1 && $date->month <= 9) ? strval('0'.$date->month) : $date->month;
@@ -28,9 +28,9 @@ class AStatsOverview extends BaseWidget
         ])->first()?->toArray() ?? [];
 
         $stat = [
-            Stat::make('Renda Inicial', $receita->saldo ?? 'R$ 0,00'),
+            Stat::make('Renda Inicial', $renda->saldo ?? 'R$ 0,00'),
             Stat::make('Custo previsto', 'R$ 0,00'),
-            Stat::make('Renda atual', $receita->saldo ?? 'R$ 0,00'),
+            Stat::make('Renda atual', $renda->saldo ?? 'R$ 0,00'),
         ];
 
         if (empty($plano) || $plano['gastos'] == null) {
@@ -40,15 +40,15 @@ class AStatsOverview extends BaseWidget
             return $stat;
         }
 
-        if (! empty($receita)) {
+        if (! empty($renda)) {
 
             $total = strval($plano['gastos']['valor']) ?? 0.0;
             Log::debug("total de gastos: {$total}");
 
             return [
-                Stat::make('Renda inicial', 'R$ '.number_format(floatval($receita->saldo), 2, ',', '.')),
+                Stat::make('Renda inicial', 'R$ '.number_format(floatval($renda->saldo), 2, ',', '.')),
                 Stat::make('Custo previsto', 'R$ '.number_format(floatval($total), 2, ',', '.')),
-                Stat::make('Renda atual', 'R$ '.number_format(floatval($receita->custo ?? $receita->saldo), 2, ',', '.')),
+                Stat::make('Renda atual', 'R$ '.number_format(floatval($renda->custo ?? $renda->saldo), 2, ',', '.')),
             ];
         }
 

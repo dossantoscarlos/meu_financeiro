@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\ReceitaResource\Pages;
+namespace App\Filament\Resources\RendaResource\Pages;
 
-use App\Filament\Resources\ReceitaResource;
+use App\Filament\Resources\RendaResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ManageRecords;
 
-class ManageReceitas extends ManageRecords
+class ManageRendas extends ManageRecords
 {
-    protected static string $resource = ReceitaResource::class;
+    protected static string $resource = RendaResource::class;
 
     protected function getHeaderActions(): array
     {

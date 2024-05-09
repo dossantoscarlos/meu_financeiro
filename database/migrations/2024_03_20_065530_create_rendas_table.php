@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('receitas', function (Blueprint $table) {
+        Schema::create('rendas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('user_id');
             $table->string('saldo');
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('receitas');
+        Schema::dropIfExists('rendas');
     }
 };

@@ -39,3 +39,13 @@ O escopo do projeto continuará a crescer e se tornar mais complexo ao longo do 
 ## Contribuição
 
 Contribuições são bem-vindas! Sinta-se à vontade para reportar problemas, sugerir melhorias ou contribuir diretamente para o desenvolvimento do projeto.
+
+## Diagramas
+
+### Caso de uso
+
+![Caso de uso](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/UseCase%20Diagram0.png?raw=true)
+
+### Diagrama de classe
+
+![Diagrama de classe](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/Class%20Diagram0.png?raw=true)

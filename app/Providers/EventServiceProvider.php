@@ -3,9 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Despesa;
-use App\Models\Receita;
+use App\Models\Renda;
 use App\Observers\DespesaObserver;
-use App\Observers\ReceitaObserver;
+use App\Observers\RendaObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -30,7 +30,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Despesa::observe(DespesaObserver::class);
-        Receita::observe(ReceitaObserver::class);
+        Renda::observe(RendaObserver::class);
     }
 
     /**

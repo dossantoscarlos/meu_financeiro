@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Receita extends Model
+class Renda extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = 'receitas';
+    protected $table = 'rendas';
 
     protected $primaryKey = 'id';
 
