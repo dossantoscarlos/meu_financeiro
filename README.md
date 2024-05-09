@@ -10,7 +10,7 @@ Este projeto é um controle financeiro pessoal desenvolvido para uso diário, co
 - **Laravel 11**: Framework PHP utilizado para o desenvolvimento do projeto.
 - **Filamentphp**: Utilizado para a interface de usuário.
 - **FrankenPHP**: Biblioteca para funcionalidades adicionais.
-- **Horizon**: Utilizado para monitoramento de filas.
+- **Horizon**: Utilizado para monitoramento de métricas.
 - **Telescope**: Ferramenta de debug e monitoramento.
 
 ## Pontos Técnicos
