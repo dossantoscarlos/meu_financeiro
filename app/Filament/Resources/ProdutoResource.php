@@ -23,7 +23,7 @@ class ProdutoResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static function update(?string $get, ?string $state, Set $set) : void {
-      
+
         $state = str_replace(',', '.', $state);
         $get   = str_replace(',', '.', $get);
         dump("get" , $get);
@@ -32,7 +32,7 @@ class ProdutoResource extends Resource
         }
 
         $state = (double) $get * (double) $state ;
-       
+
         $set('total', number_format((float) $state, 2, ',', '.'));
     }
 
@@ -45,7 +45,6 @@ class ProdutoResource extends Resource
                     ->required()
                     ->columnSpanFull()
                     ->maxLength(255),
-
                 MyMoney::make('preco')
                     ->required()
                     ->columnSpan(3)
@@ -59,7 +58,7 @@ class ProdutoResource extends Resource
                     ->inputMode('decimal')
                     ->afterStateUpdated(fn(Get $get, ?string $state,  Set $set) =>  Self::update($get('preco'), $state, $set))
                     ->live()
-                    ->required(),              
+                    ->required(),
                 Forms\Components\Select::make('tipo_medida')
                     ->options([
                         'unidade' => 'unidade',
@@ -68,7 +67,7 @@ class ProdutoResource extends Resource
                     ->searchable()
                     ->columnSpan(3)
                     ->required()
-                    ->native(false),
+                    ->native(true),
                 Forms\Components\TextInput::make('total')
                     ->columnSpan(3)
                     ->readOnly(),
@@ -82,7 +81,7 @@ class ProdutoResource extends Resource
                         titleAttribute: 'name',
                         modifyQueryUsing: fn (Builder $query): Builder => $query->whereId(Auth::user()->getAuthIdentifier())
                     )
-                    ->native(condition: false)
+                    ->native(condition: true)
                     ->required(),
             ]);
     }
