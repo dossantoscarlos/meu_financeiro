@@ -18,10 +18,10 @@ Este projeto é um controle financeiro pessoal desenvolvido para uso diário, co
 
 O sistema possui algumas características técnicas importantes:
 
-- **Event Listeners**: Implementados utilizando a capacidade de ouvir eventos no Laravel. Isso permite executar ações personalizadas em resposta a eventos específicos, como salvar uma despesa, sem manter o usuário na tela ou a necessidade de criar Jobs.
-- **Observable**: Utilizado para monitorar eventos de um CRUD, permitindo a execução de ações personalizadas em resposta a esses eventos.
-- **Custom Rules**: Foram criadas regras personalizadas para estender a validação no Filamentphp.
-- **Internationalization**: Mensagens do Laravel foram internacionalizadas para facilitar a tradução.
+- [**Event Listeners**](https://laravel.com/docs/11.x/events#generating-events-and-listeners): Implementados utilizando a capacidade de ouvir eventos no Laravel. Isso permite executar ações personalizadas em resposta a eventos específicos, como salvar uma despesa, sem manter o usuário na tela ou a necessidade de criar Jobs.
+- [**Observable**](https://laravel.com/docs/11.x/eloquent#observers): Utilizado para monitorar eventos de um CRUD, permitindo a execução de ações personalizadas em resposta a esses eventos.
+- [**Custom Rules**](https://laravel.com/docs/11.x/precognition#customizing-validation-rules): Foram criadas regras personalizadas para estender a validação no Filamentphp.
+- [**Translate**](https://laravel.com/docs/11.x/localization#defining-translation-strings): Mensagens do Laravel foram internacionalizadas para facilitar a tradução.
 
 ## Funcionalidades
 
