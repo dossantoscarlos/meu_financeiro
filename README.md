@@ -9,7 +9,8 @@ Este projeto é um controle financeiro pessoal desenvolvido para uso diário, co
 - **PHP 8.1+**: Linguagem de programação principal.
 - **Laravel 11**: Framework PHP utilizado para o desenvolvimento do projeto.
 - **Filamentphp**: Utilizado para a interface de usuário.
-- **FrankenPHP**: Biblioteca para funcionalidades adicionais.
+- **Octane**: Biblioteca para .
+- **FrankenPHP**: É um servidor de aplicativos moderno para PHP construído sobre o servidor web Caddy.
 - **Horizon**: Utilizado para monitoramento de métricas.
 - **Telescope**: Ferramenta de debug e monitoramento.
 
@@ -19,7 +20,7 @@ O sistema possui algumas características técnicas importantes:
 
 - **Event Listeners**: Implementados utilizando a capacidade de ouvir eventos no Laravel. Isso permite executar ações personalizadas em resposta a eventos específicos, como salvar uma despesa, sem manter o usuário na tela ou a necessidade de criar Jobs.
 - **Observable**: Utilizado para monitorar eventos de um CRUD, permitindo a execução de ações personalizadas em resposta a esses eventos.
-- **Custom Rules**: Foram criadas regras personalizadas para estender a validação no Filamentphp.
+- [**Custom Rules**](https://github.com/dunglas/frankenphp): Foram criadas regras personalizadas para estender a validação no Filamentphp.
 - **Internationalization**: Mensagens do Laravel foram internacionalizadas para facilitar a tradução.
 
 ## Funcionalidades
