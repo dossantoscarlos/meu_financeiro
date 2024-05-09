@@ -1,9 +1,5 @@
 # Controle Financeiro Pessoal
 
-![Caso de uso](url_da_imagem)
-
-![Diagrama de classe](url_da_imagem)
-
 ## Introdução
 
 Este projeto é um controle financeiro pessoal desenvolvido para uso diário, com o objetivo de fornecer um controle detalhado das finanças, identificando onde estão os principais gastos e como otimizá-los a curto e longo prazo. O projeto está em constante desenvolvimento, ajustando-se continuamente à realidade do usuário e ganhando novas funcionalidades e correções regularmente. O código-fonte está disponível publicamente para que qualquer pessoa possa utilizá-lo e adaptá-lo à sua própria realidade financeira.
@@ -43,3 +39,13 @@ O escopo do projeto continuará a crescer e se tornar mais complexo ao longo do 
 ## Contribuição
 
 Contribuições são bem-vindas! Sinta-se à vontade para reportar problemas, sugerir melhorias ou contribuir diretamente para o desenvolvimento do projeto.
+
+## Diagramas
+
+### Caso de uso
+
+![Caso de uso](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/UseCase%20Diagram0.png?raw=true)
+
+### Diagrama de classe
+
+![Diagrama de classe](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/Class%20Diagram0.png?raw=true)
