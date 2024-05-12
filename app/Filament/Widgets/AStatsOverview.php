@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Despesa;
 use App\Models\Plano;
 use App\Models\Renda;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -10,10 +11,12 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
+
 class AStatsOverview extends BaseWidget
 {
     protected function getStats(): array
     {
+
         $authId = Auth::user()->getAuthIdentifier();
         $renda = Renda::whereUserId($authId)->first();
         $date = Carbon::now();
