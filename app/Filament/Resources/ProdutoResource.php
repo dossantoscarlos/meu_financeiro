@@ -67,7 +67,7 @@ class ProdutoResource extends Resource
                     ->searchable()
                     ->columnSpan(3)
                     ->required()
-                    ->native(true),
+                    ->native(condition: false),
                 Forms\Components\TextInput::make('total')
                     ->columnSpan(3)
                     ->readOnly(),
@@ -81,7 +81,7 @@ class ProdutoResource extends Resource
                         titleAttribute: 'name',
                         modifyQueryUsing: fn (Builder $query): Builder => $query->whereId(Auth::user()->getAuthIdentifier())
                     )
-                    ->native(condition: true)
+                    ->native(condition: false)
                     ->required(),
             ]);
     }

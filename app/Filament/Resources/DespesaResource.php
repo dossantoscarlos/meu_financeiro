@@ -39,7 +39,7 @@ class DespesaResource extends Resource
                         name: 'plano',
                         titleAttribute: 'mes_ano',
                         modifyQueryUsing: fn ($query) => $query->whereUserId(Auth::user()->id))
-                    ->native(condition: true)
+                    ->native(condition: false)
                     ->createOptionForm([
                         Forms\Components\Select::make(name: 'user_id')
                             ->label(label: 'Perfil')
@@ -47,7 +47,7 @@ class DespesaResource extends Resource
                                 name: 'user',
                                 titleAttribute: 'name'
                             )
-                            ->native(true)
+                            ->native(false)
                             ->required(),
                         Forms\Components\TextInput::make(name: 'mes_ano')
                             ->label(label: 'Mes e Ano')
@@ -64,7 +64,7 @@ class DespesaResource extends Resource
                     ->label(label: 'Status')
                     ->relationship(name: 'statusDespesa', titleAttribute: 'nome')
                     ->noSearchResultsMessage('Busca nao retornou resultado')
-                    ->native(condition: true)
+                    ->native(condition: false)
                     ->createOptionForm([
                         Forms\Components\TextInput::make('nome')
                             ->required(),
@@ -79,7 +79,7 @@ class DespesaResource extends Resource
                     ])
                     ->searchable()
                     ->searchDebounce(100)
-                    ->native(condition: true)
+                    ->native(condition: false)
                     ->required(),
                 MyMoney::make(name: 'valor_documento')
                     ->label(label: 'Valor do documento')

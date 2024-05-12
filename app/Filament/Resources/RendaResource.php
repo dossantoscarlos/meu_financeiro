@@ -29,7 +29,6 @@ class RendaResource extends Resource
                         name: 'user',
                         titleAttribute: 'name',
                         modifyQueryUsing: fn (Builder $query): Builder => $query->whereId(Auth::user()->getAuthIdentifier()))
-
                     ->required(),
                 MyMoney::make('saldo')
                     ->label('Renda')
