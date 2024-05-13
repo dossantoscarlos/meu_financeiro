@@ -24,7 +24,7 @@ class RendaResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('user_id')->native(true)
+                Forms\Components\Select::make('user_id')->native(false)
                     ->relationship(
                         name: 'user',
                         titleAttribute: 'name',
