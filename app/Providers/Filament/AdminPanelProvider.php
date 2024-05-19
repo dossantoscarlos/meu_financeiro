@@ -90,8 +90,10 @@ class AdminPanelProvider extends PanelProvider
                             ->label('Horizon'),
                     ]),
             ]),
-            )
-            ->spa();
+        )
+        ->spa()
+        ->sidebarCollapsibleOnDesktop();
+
     }
 
     protected function mutateFormDataBeforeFill(array $data): array

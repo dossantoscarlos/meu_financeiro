@@ -75,7 +75,7 @@ class DespesaResource extends Resource
                     ->relationship(name: 'tipoDespesa', titleAttribute: 'nome')
                     ->createOptionForm([
                         Forms\Components\TextInput::make('nome')
-                        ->required(),
+                            ->required(),
                     ])
                     ->searchable()
                     ->searchDebounce(100)
