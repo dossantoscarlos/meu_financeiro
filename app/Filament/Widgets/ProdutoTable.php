@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Log;
 
 class ProdutoTable extends BaseWidget
 {
-
     public function table(Table $table): Table
     {
 

@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Log;
 
 class Produto extends Model
 {
@@ -35,16 +34,18 @@ class Produto extends Model
         return $this->belongsTo(User::class);
     }
 
-    private function totalProduto() : float {
-        return floatval($this->preco) * floatVal($this->quantidade);
+    private function totalProduto(): float
+    {
+        return floatval($this->preco) * floatval($this->quantidade);
     }
 
-    public function total() : Attribute
+    public function total(): Attribute
     {
         return Attribute::make(
-            get: fn(?string $value) => $value,
+            get: fn (?string $value) => $value,
             set: function (string $value) {
                 $value = $this->totalProduto();
+
                 return $value;
             }
         );

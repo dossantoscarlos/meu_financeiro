@@ -14,7 +14,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class ProdutoResource extends Resource
 {
@@ -22,16 +21,17 @@ class ProdutoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static function update(?string $get, ?string $state, Set $set) : void {
+    protected static function update(?string $get, ?string $state, Set $set): void
+    {
 
         $state = str_replace(',', '.', $state);
-        $get   = str_replace(',', '.', $get);
-        dump("get" , $get);
-        if ($get === null){
+        $get = str_replace(',', '.', $get);
+        dump('get', $get);
+        if ($get === null) {
             $get = 1;
         }
 
-        $state = (double) $get * (double) $state ;
+        $state = (float) $get * (float) $state;
 
         $set('total', number_format((float) $state, 2, ',', '.'));
     }
@@ -49,14 +49,14 @@ class ProdutoResource extends Resource
                     ->required()
                     ->columnSpan(3)
                     ->inputMode('decimal')
-                    ->afterStateUpdated(fn(Get $get, ?string $state, Set $set)  => Self::update($get('quantidade'), $state, $set))
+                    ->afterStateUpdated(fn (Get $get, ?string $state, Set $set) => self::update($get('quantidade'), $state, $set))
                     ->live()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('quantidade')
                     ->integer()
                     ->columnSpan(3)
                     ->inputMode('decimal')
-                    ->afterStateUpdated(fn(Get $get, ?string $state,  Set $set) =>  Self::update($get('preco'), $state, $set))
+                    ->afterStateUpdated(fn (Get $get, ?string $state, Set $set) => self::update($get('preco'), $state, $set))
                     ->live()
                     ->required(),
                 Forms\Components\Select::make('tipo_medida')

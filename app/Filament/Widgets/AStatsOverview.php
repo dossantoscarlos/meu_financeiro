@@ -2,7 +2,6 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Despesa;
 use App\Models\Plano;
 use App\Models\Renda;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -10,7 +9,6 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-
 
 class AStatsOverview extends BaseWidget
 {
