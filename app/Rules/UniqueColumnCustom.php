@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\Models\TipoDispesa;
+use App\Models\TipoDespesa;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +19,7 @@ class UniqueColumnCustom implements ValidationRule
 
         Log::debug($value);
         $hydrate = strtoupper(trim($value));
-        $result = TipoDispesa::whereNome($hydrate)->get() ?? [];
+        $result = TipoDespesa::whereNome($hydrate)->get() ?? [];
 
         if ($result === []) {
             Log::debug($result);
