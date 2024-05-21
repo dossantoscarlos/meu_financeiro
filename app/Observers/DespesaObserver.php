@@ -22,7 +22,7 @@ class DespesaObserver
         $mes = ($date->month >= 1 && $date->month <= 9) ? strval('0'.$date->month) : $date->month;
         $mesAno = "{$mes}/{$date->year}";
 
-        $despesas = Plano::with('despesa')->where([
+        $despesas = Plano::with('despesas')->where([
             ['user_id', '=', $authId],
             ['mes_ano', '>=', $mesAno],
         ])->first()?->toArray() ?? [];
@@ -34,7 +34,7 @@ class DespesaObserver
             $total = 0.0;
 
             if (! empty($despesas)) {
-                foreach ($despesas['despesa'] as $despesa) {
+                foreach ($despesas['despesas'] as $despesa) {
                     $total += (float) $despesa['valor_documento'];
                 }
 

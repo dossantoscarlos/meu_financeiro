@@ -19,9 +19,9 @@ class Despesa extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'status_dispesa_id',
+        'status_despesa_id',
         'plano_id',
-        'tipo_dispesa_id',
+        'tipo_despesa_id',
         'descricao',
         'valor_documento',
         'data_vencimento',

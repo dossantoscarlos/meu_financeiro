@@ -8,6 +8,8 @@ use App\Filament\Resources\DespesaResource;
 use App\Filament\Resources\PlanoResource;
 use App\Filament\Resources\ProdutoResource;
 use App\Filament\Resources\RendaResource;
+use App\Filament\Resources\StatusDespesaResource;
+use App\Filament\Resources\TipoDespesaResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -71,9 +73,12 @@ class AdminPanelProvider extends PanelProvider
                     ->items([
                         ...RendaResource::getNavigationItems(),
                         ...DespesaResource::getNavigationItems(),
-                        ...PlanoResource::getNavigationItems(),
-                        ...ProdutoResource::getNavigationItems(),
                     ])->collapsed(false),
+                NavigationGroup::make('Lista de compra')
+                    ->items([
+                        ...ProdutoResource::getNavigationItems(),
+                    ])->collapsed(true),
+
                 NavigationGroup::make('Metrica')
                     ->items([
                         NavigationItem::make()
@@ -89,6 +94,13 @@ class AdminPanelProvider extends PanelProvider
                             ->url(url: url()->to(config('filament-debugger.url.horizon')), shouldOpenInNewTab: true)
                             ->label('Horizon'),
                     ]),
+                NavigationGroup::make('Configuracao')
+                    ->items([
+                        ...PlanoResource::getNavigationItems(),
+                        ...TipoDespesaResource::getNavigationItems(),
+                        ...StatusDespesaResource::getNavigationItems(),
+                ])->collapsed(true),
+
             ]),
         )
         ->spa()

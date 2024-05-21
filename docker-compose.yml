@@ -10,10 +10,10 @@ services:
             - 'host.docker.internal:host-gateway'
         ports:
             - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}' 
+            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
         environment:
-            XDG_CONFIG_HOME:  /var/www/html/config 
-            XDG_DATA_HOME:  /var/www/html/data 
+            XDG_CONFIG_HOME:  /var/www/html/config
+            XDG_DATA_HOME:  /var/www/html/data
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
             XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
