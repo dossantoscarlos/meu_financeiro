@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DespesaResource\Pages\CreateDespesa;
-use App\Filament\Resources\DespesaResource\Pages\EditDespesa;
-use App\Filament\Resources\DespesaResource\Pages\ListDespesas;
 use App\Livewire\Components\MyMoney;
 use App\Models\Despesa;
 use Filament\Forms;
@@ -16,6 +13,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use App\Filament\Resources\DespesaResource\Pages;
+
 
 class DespesaResource extends Resource
 {
@@ -63,7 +62,6 @@ class DespesaResource extends Resource
                 Forms\Components\Select::make(name: 'status_despesa_id')
                     ->label(label: 'Status')
                     ->relationship(name: 'statusDespesa', titleAttribute: 'nome')
-                    ->noSearchResultsMessage('Busca nao retornou resultado')
                     ->native(condition: false)
                     ->createOptionForm([
                         Forms\Components\TextInput::make('nome')
@@ -141,12 +139,11 @@ class DespesaResource extends Resource
         ];
     }
 
+
     public static function getPages(): array
     {
         return [
-            'index' => ListDespesas::route('/'),
-            'create' => CreateDespesa::route('/create'),
-            'edit' => EditDespesa::route('/{record}/edit'),
+            'index' => Pages\ManageDespesas::route('/'),
         ];
     }
 }
