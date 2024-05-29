@@ -49,4 +49,6 @@ Contribuições são bem-vindas! Sinta-se à vontade para reportar problemas, su
 
 ### Diagrama de classe
 
-![Diagrama de classe](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/Class%20Diagram0.png?raw=true)
+![Diagrama de classe](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/Class%20Diagram2.png?raw=true)
+
+![Diagrama de pacotes](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/diagram%20package.png?raw=true)
