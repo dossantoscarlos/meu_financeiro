@@ -99,12 +99,12 @@ class AdminPanelProvider extends PanelProvider
                         ...PlanoResource::getNavigationItems(),
                         ...TipoDespesaResource::getNavigationItems(),
                         ...StatusDespesaResource::getNavigationItems(),
-                ])->collapsed(true),
+                    ])->collapsed(true),
 
             ]),
-        )
-        ->spa()
-        ->sidebarCollapsibleOnDesktop();
+            )
+            ->spa()
+            ->sidebarCollapsibleOnDesktop();
 
     }
 

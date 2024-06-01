@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\DespesaResource\Pages;
 use App\Livewire\Components\MyMoney;
 use App\Models\Despesa;
 use Filament\Forms;
@@ -13,8 +14,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use App\Filament\Resources\DespesaResource\Pages;
-
 
 class DespesaResource extends Resource
 {
@@ -138,7 +137,6 @@ class DespesaResource extends Resource
 
         ];
     }
-
 
     public static function getPages(): array
     {

@@ -3,15 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TipoDespesaResource\Pages;
-use App\Filament\Resources\TipoDespesaResource\RelationManagers;
 use App\Models\TipoDespesa;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\Page;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TipoDespesaResource extends Resource
 {
@@ -24,6 +22,10 @@ class TipoDespesaResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nome')
+                    ->unique('nome', true)
+                    ->afterStateUpdated(function (Page $livewire): void {
+                        $livewire->validateOnly('data.nome');
+                    })
                     ->required(),
             ]);
     }
