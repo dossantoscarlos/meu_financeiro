@@ -33,6 +33,9 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+            ->brandName('Meu Financeiro')
+            //->brandLogo(asset('images/logo.png'))
+            ->favicon(asset('images/logo.png'))
             ->default()
             ->id('admin')
             ->path('admin')
