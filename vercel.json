@@ -19,7 +19,7 @@
         "APP_ENV": "production",
         "APP_DEBUG": "true",
         "APP_KEY":"base64:p8swxpMKg4IRXqHb46BQtGwxPvgc/+aiiDOMjZXd1xA=",
-        "APP_URL": "https:/meu-financeiro-three.vercel.app",
+        "APP_URL": "https://meu-financeiro-three.vercel.app",
         "VERCEL_DEMO_MODE": "true",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
