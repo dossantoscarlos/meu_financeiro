@@ -13,7 +13,8 @@ use Filament\Tables\Table;
 class PlanoResource extends Resource
 {
     protected static ?string $model = Plano::class;
-
+    protected static ?string $modelLabel = 'Plano';
+    protected static bool $hasTitleCaseModelLabel = false;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

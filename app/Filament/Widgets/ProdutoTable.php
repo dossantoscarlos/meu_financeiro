@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class ProdutoTable extends BaseWidget
 {
+    protected static ?string $heading = "Lista de produto";
     public function table(Table $table): Table
     {
 

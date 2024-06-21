@@ -13,7 +13,9 @@ use Filament\Tables\Table;
 class StatusDespesaResource extends Resource
 {
     protected static ?string $model = StatusDespesa::class;
-
+    protected static ?string $modelLabel = 'status da despesa';
+    protected static ?string $pluralModelLabel = 'Status da despesa';
+    protected static bool $hasTitleCaseModelLabel = false;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -21,6 +23,9 @@ class StatusDespesaResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nome')
+                    ->label(str('informe o status')->ucfirst())
+                    ->columnSpanFull()
+                    ->prefix(str('status')->ucfirst())
                     ->required(),
             ]);
     }

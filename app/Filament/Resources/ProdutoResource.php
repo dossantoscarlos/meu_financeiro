@@ -21,6 +21,12 @@ class ProdutoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+
+    protected static function total_produto(?string $preco, ?string $quantidade): float {
+        return floatval($preco) * floatval($quantidade);
+    }
+
+
     protected static function update(?string $get, ?string $state, Set $set): void
     {
 
@@ -70,7 +76,12 @@ class ProdutoResource extends Resource
                     ->native(condition: false),
                 Forms\Components\TextInput::make('total')
                     ->columnSpan(3)
-                    ->readOnly(),
+                    ->prefix('R$')
+                    ->inputMode('decimal')
+                    ->formatStateUsing(fn (Get $get, ?string $state): ?string => number_format(
+                        self::total_produto($get('preco'), $get('quantidade')
+                    ), 2, ',', '.'))
+                    ->disabled(),
                 Forms\Components\DatePicker::make('data_compra')
                     ->columnSpan(6)
                     ->required(),
