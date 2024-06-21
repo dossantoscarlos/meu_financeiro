@@ -17,6 +17,8 @@ class RendaResource extends Resource
 {
     protected static ?string $model = Renda::class;
 
+    public static ?string $pluralModelLabel = 'Renda';
+
     protected static ?string $navigationIcon = 'vaadin-money-deposit';
 
     public static function form(Form $form): Form

@@ -15,6 +15,12 @@ class TipoDespesaResource extends Resource
 {
     protected static ?string $model = TipoDespesa::class;
 
+    protected static ?string $modelLabel = 'tipo de despesa';
+
+    protected static ?string $pluralModelLabel = 'Tipo de despesa';
+
+    protected static bool $hasTitleCaseModelLabel = false;
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -23,6 +29,9 @@ class TipoDespesaResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nome')
                     ->unique('nome', true)
+                    ->label(str("Informe a tag")->upper())
+                    ->columnSpanFull()
+                    ->prefix(str('tag')->ucfirst())
                     ->afterStateUpdated(function (Page $livewire): void {
                         $livewire->validateOnly('data.nome');
                     })
