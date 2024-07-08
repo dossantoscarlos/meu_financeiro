@@ -13,7 +13,8 @@
 				"amiralizadeh9480.laravel-extra-intellisense",
 				"ryannaddy.laravel-artisan",
 				"onecentlin.laravel5-snippets",
-				"onecentlin.laravel-blade"
+				"onecentlin.laravel-blade",
+                "material-theme.theme-vscode"
 			],
 			"settings": {}
 		}
