@@ -55,7 +55,9 @@ class ProdutoResource extends Resource
                     ->required()
                     ->columnSpan(3)
                     ->inputMode('decimal')
-                    ->afterStateUpdated(fn (Get $get, ?string $state, Set $set) => self::update($get('quantidade'), $state, $set))
+                    ->afterStateUpdated(
+                        fn (Get $get, ?string $state, Set $set) => self::update($get('quantidade'), $state, $set)
+                    )
                     ->live()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('quantidade')
@@ -117,18 +119,6 @@ class ProdutoResource extends Resource
                     ->label('Data da compra')
                     ->date('d/m/Y')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
