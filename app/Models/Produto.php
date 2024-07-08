@@ -43,11 +43,7 @@ class Produto extends Model
     {
         return Attribute::make(
             get: fn (?string $value) => $value,
-            set: function (string $value) {
-                $value = $this->totalProduto();
-
-                return $value;
-            }
+            set: fn (string $value) => $this->totalProduto()
         );
     }
 }

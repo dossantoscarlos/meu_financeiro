@@ -81,8 +81,9 @@ class ProdutoResource extends Resource
                     ->formatStateUsing(fn (Get $get, ?string $state): ?string => number_format(
                         self::total_produto($get('preco'), $get('quantidade')
                     ), 2, ',', '.'))
-                    ->disabled(),
+                    ->readOnly(),
                 Forms\Components\DatePicker::make('data_compra')
+                    ->label('Data da compra')
                     ->columnSpan(6)
                     ->required(),
                 Forms\Components\Select::make('user_id')
@@ -113,7 +114,8 @@ class ProdutoResource extends Resource
                 Tables\Columns\TextColumn::make('tipo_medida')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('data_compra')
-                    ->date()
+                    ->label('Data da compra')
+                    ->date('d/m/Y')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
