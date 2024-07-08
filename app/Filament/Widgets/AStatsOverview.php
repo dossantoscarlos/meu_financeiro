@@ -29,9 +29,9 @@ class AStatsOverview extends BaseWidget
         ])->first()?->toArray() ?? [];
 
         $stat = [
-            Stat::make('Renda Inicial', $renda->saldo ?? 'R$ 0,00'),
+            Stat::make('Renda Inicial', 'R$ '.number_format(floatval($renda->saldo), 2, ',', '.') ?? 'R$ 0,00'),
             Stat::make('Custo previsto', 'R$ 0,00'),
-            Stat::make('Renda atual', $renda->saldo ?? 'R$ 0,00'),
+            Stat::make('Renda atual', 'R$ '.number_format(floatval($renda->saldo), 2, ',', '.') ?? 'R$ 0,00'),
         ];
 
         if (empty($plano) || $plano['gastos'] == null) {
