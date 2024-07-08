@@ -17,7 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-
+/.theia
 /caddy
 frankenphp
 frankenphp-worker.php
