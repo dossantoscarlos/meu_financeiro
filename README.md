@@ -41,6 +41,24 @@ O escopo do projeto continuará a crescer e se tornar mais complexo ao longo do 
 
 Contribuições são bem-vindas! Sinta-se à vontade para reportar problemas, sugerir melhorias ou contribuir diretamente para o desenvolvimento do projeto.
 
+## Sistema exemplo das telas
+
+##### Tela de criacao de produto
+![Tela de produto](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/img/criar_produto.png?raw=true)
+
+##### Tela de criacao da despesa com modal
+![Tela de criacao da despesa](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/img/despesa_create.png?raw=true)
+
+
+
+##### Tela do painel de controle
+
+![Diagrama de classe](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/img/painel_controle.png?raw=true)
+
+##### Tela de listagem de dados
+
+![Diagrama de classe](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/img/renda_lista.png?raw=true)
+
 ## Diagramas
 
 ### Caso de uso
