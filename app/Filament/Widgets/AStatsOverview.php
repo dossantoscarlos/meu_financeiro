@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 class AStatsOverview extends BaseWidget
 {
 
-    private function stat_item($data) : string
+    private function brl_moeda($data) : string
     {
         return 'R$ '.number_format(floatval($data), 2, ',', '.');
     }
@@ -45,9 +45,9 @@ class AStatsOverview extends BaseWidget
         }
 
         return [
-            Stat::make('Renda Inicial', $this->stat_item($renda->saldo ?? 0)),
-            Stat::make('Custo previsto',$this->stat_item($total)),
-            Stat::make('Renda atual', $this->stat_item($renda->custo ?? $renda->saldo ?? 0)),
+            Stat::make('Renda Inicial', $this->brl_moeda($renda->saldo ?? 0)),
+            Stat::make('Custo previsto',$this->brl_moeda($total)),
+            Stat::make('Renda atual', $this->brl_moeda($renda->custo ?? $renda->saldo ?? 0)),
         ];
     }
 }
