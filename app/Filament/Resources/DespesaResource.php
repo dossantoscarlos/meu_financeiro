@@ -12,7 +12,9 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
 class DespesaResource extends Resource
@@ -87,7 +89,11 @@ class DespesaResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
+            ->modifyQueryUsing(fn (Builder $query) => $query
+                ->withoutGlobalScopes([
+                    SoftDeletingScope::class,
+                ])
+            )->columns([
                 Tables\Columns\TextColumn::make(name: 'descricao')
                     ->searchable(),
                 Tables\Columns\TextColumn::make(name: 'statusDespesa.nome')
@@ -123,6 +129,9 @@ class DespesaResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ForceDeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -143,5 +152,13 @@ class DespesaResource extends Resource
         return [
             'index' => Pages\ManageDespesas::route('/'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

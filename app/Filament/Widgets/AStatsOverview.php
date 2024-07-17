@@ -27,7 +27,7 @@ class AStatsOverview extends BaseWidget
         $date = Carbon::now();
 
         $total = 0.0;
-        $mes = ($date->month >= 1 && $date->month <= 9) ? strval('0'.$date->month) : $date->month;
+        $mes = ($date->month >= 1 && $date->month <= 9) ? strval("0{$date->month}") : $date->month;
         $ano = $date->year;
         $mesAno = "{$mes}/{$ano}";
 
@@ -36,7 +36,7 @@ class AStatsOverview extends BaseWidget
             ['mes_ano', '>=', $mesAno],
         ])->first()?->toArray() ?? [];
 
-        if (!empty($renda)) {
+        if (!empty($renda) && sizeof($plano) > 0) {
             $total = strval($plano['gastos']['valor']) ?? 0.0;
             Log::debug("total de gastos: {$total}");
         }
