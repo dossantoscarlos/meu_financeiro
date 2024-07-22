@@ -33,7 +33,7 @@ jobs:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
       run: php artisan test
-  docker-build:
+  docker-login:
     runs-on: ubuntu-latest
     needs: laravel-tests
     steps:
