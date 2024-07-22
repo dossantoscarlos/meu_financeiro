@@ -49,7 +49,7 @@ jobs:
         uses: docker/build-push-action@v6.4.1
         with:
           context: .
-          file: ./build-docker/8.3/Dockerfile
+          file: ./docker/8.3/Dockerfile
           push: true
           tags: |
             phantasmablack/meu-financeiro:${{github.run_number}}
