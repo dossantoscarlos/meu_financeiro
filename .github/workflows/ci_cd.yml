@@ -40,7 +40,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3 
+        uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Docker Login
@@ -52,7 +52,7 @@ jobs:
       - name: Construção da imagem Docker
         uses: docker/build-push-action@v6
         with:
-          file: .
+          file: ./docker/8.3/Dockerfile
           push: true
           tags: |
             phantasmablack/meu-financeiro:${{github.run_number}}
