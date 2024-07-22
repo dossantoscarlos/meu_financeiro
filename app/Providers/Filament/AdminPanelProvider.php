@@ -10,6 +10,9 @@ use App\Filament\Resources\ProdutoResource;
 use App\Filament\Resources\RendaResource;
 use App\Filament\Resources\StatusDespesaResource;
 use App\Filament\Resources\TipoDespesaResource;
+use App\Filament\Widgets\StatsOverview;
+use App\Filament\Widgets\ListaCategoria;
+use App\Filament\Widgets\ProdutoTable;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -49,6 +52,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
+                StatsOverview::class,
+                ListaCategoria::class,
+                ProdutoTable::class
             ])
             ->middleware([
                 EncryptCookies::class,

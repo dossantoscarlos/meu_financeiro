@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class AStatsOverview extends BaseWidget
+class StatsOverview extends BaseWidget
 {
 
     private function brl_moeda($data) : string
