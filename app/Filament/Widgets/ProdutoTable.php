@@ -13,13 +13,8 @@ class ProdutoTable extends BaseWidget
     protected static ?string $heading = "Lista de produto";
     public function table(Table $table): Table
     {
-
-        $produto = Produto::query();
-
-        Log::debug('produto', (array) $produto);
-
         return $table
-            ->query($produto)
+            ->query(Produto::query())
             ->columns([
                 Tables\Columns\TextColumn::make('descricao_curta'),
                 Tables\Columns\TextColumn::make('preco')
