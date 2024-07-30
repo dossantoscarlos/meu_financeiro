@@ -8,4 +8,4 @@ Route::get('/', function () {
 });
 
 
-Volt::route('/home', 'home');
+//Volt::route('/home', 'home');

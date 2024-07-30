@@ -25,7 +25,7 @@ class TipoDespesa extends Model
     {
         return Attribute::make(
             get: fn (?string $value): ?string => $value,
-            set: fn (string $value): string => trim(strtoupper($value)));
+            set: fn (string $value): string => trim(mb_strtoupper($value)));
     }
 
     public function despesas(): HasMany

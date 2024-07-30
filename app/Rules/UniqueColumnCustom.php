@@ -18,7 +18,7 @@ class UniqueColumnCustom implements ValidationRule
     {
 
         Log::debug($value);
-        $hydrate = strtoupper(trim($value));
+        $hydrate = mb_strtoupper(trim($value));
         $result = TipoDespesa::whereNome($hydrate)->get() ?? [];
 
         if ($result === []) {
