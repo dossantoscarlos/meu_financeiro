@@ -32,6 +32,6 @@
         "SESSION_DRIVER": "cookie",
 
         "DB_CONNECTION": "sqlite",
-        "MYSQL_ATTR_SSL_CA": "/etc/pki/tls/certs/ca-bundle.crt"
+        "NODE_PATH": "node"
     }
 }
