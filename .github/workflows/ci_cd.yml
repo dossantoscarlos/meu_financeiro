@@ -32,9 +32,10 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
-      run: php artisan test \
-    - name: Criando migrations
-      run: php artisan migrate
+      run: |
+        php artisan test
+        php artisan migrate
+
   # docker-build:
   #   runs-on: ubuntu-latest
   #   needs: laravel-tests
