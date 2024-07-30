@@ -9,12 +9,12 @@
     "outputDirectory": "public",
     "routes": [
         {
-            "source": "/public/**/(.*)",
-            "destination": "/public/**/$1"
+            "src": "/public/**/(.*)",
+            "dest": "/public/**/$1"
         },
         {
-            "source": "./(.*)",
-            "destination": "./api/index.php"
+            "src": "/(.*)",
+            "dest": "/api/index.php"
         }
     ],
     "env": {
