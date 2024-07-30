@@ -8,14 +8,9 @@
     },
     "outputDirectory": "public",
     "routes": [
-        {
-            "src": "/public/css|js|vendor/(.*)",
-            "dest": "/public/css|js|vendor/$1"
-        },
-        {
-            "src": "./(.*)",
-            "dest": "./api/index.php"
-        }
+        { "src": "/public/**/(.*)", "dest": "/public/**/$1"},
+        { "src": "/(.*)",  "dest": "/api/index.php" }
+
     ],
     "env": {
         "APP_ENV": "production",
