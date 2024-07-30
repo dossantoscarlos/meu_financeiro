@@ -1,10 +1,7 @@
 {
     "version": 2,
-    "framework": null,
     "functions": {
-        "api/index.php": {
-            "runtime": "vercel-php@0.7.1"
-        }
+        "api/index.php": {"runtime": "vercel-php@0.7.1"}
     },
     "outputDirectory": "public",
     "routes": [
@@ -20,8 +17,6 @@
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "true",
-        "APP_URL": "https://meu-financeiro-kappa.vercel.app",
-
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",
