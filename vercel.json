@@ -6,6 +6,7 @@
             "runtime": "vercel-php@0.7.1"
         }
     },
+    "outputDirectory": "public",
     "routes": [
         {
             "src": "/build/(.*)",
