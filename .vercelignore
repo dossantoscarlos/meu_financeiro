@@ -1,2 +1,8 @@
 /vendor
 /public/build
+.devcontainer
+.docker
+.vscode
+rr
+.rr.yaml
+node_modules
