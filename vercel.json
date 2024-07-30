@@ -9,11 +9,11 @@
     "routes": [
         {
             "src": "/public/(.*)",
-            "dest": "/public/$1"
+            "dest": "/$1"
         },
         {
-            "src": "/(.*)",
-            "dest": "api/index.php"
+            "src": "/",
+            "dest": "/api/index.php"
         }
     ],
     "env": {
