@@ -1,7 +1,1 @@
-/vendor
-.devcontainer
-.docker
-.vscode
-rr
-.rr.yaml
-
+vendor
