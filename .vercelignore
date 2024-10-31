@@ -1,1 +1,6 @@
-vendor
+/vendor
+frankenphp
+/doc
+/node_modules
+.vercel
+/docker
