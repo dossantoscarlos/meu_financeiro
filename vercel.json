@@ -20,6 +20,7 @@
         "APP_ENV": "production",
         "APP_DEBUG": "true",
         "APP_URL": "https://meu-financeiro-kappa.vercel.app",
+        "APP_KEY": "base64:VreQ/JBgIDJXkBBPzjCua2muJO5tN6MDrh0zslReLi4=",
 
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
