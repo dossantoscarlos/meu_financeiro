@@ -21,8 +21,6 @@
         "leandrocfe/filament-ptbr-form-fields": "^3.0",
         "livewire/livewire": "^3.4",
         "livewire/volt": "^1.0",
-        "spiral/roadrunner-cli": "^2.6.0",
-        "spiral/roadrunner-http": "^3.3.0",
         "stephenjude/filament-debugger": "^3.0"
     },
     "require-dev": {

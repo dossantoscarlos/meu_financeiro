@@ -24,3 +24,5 @@ frankenphp-worker.php
 .vercel
 rr
 .rr.yaml
+
+**/caddy
