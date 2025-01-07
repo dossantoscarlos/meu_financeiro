@@ -4,18 +4,10 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
-use App\Filament\Resources\DespesaResource;
-use App\Filament\Resources\PlanoResource;
-use App\Filament\Resources\ProdutoResource;
-use App\Filament\Resources\RendaResource;
-use App\Filament\Resources\StatusDespesaResource;
-use App\Filament\Resources\TipoDespesaResource;
+
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\NavigationBuilder;
-use Filament\Navigation\NavigationGroup;
-use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -27,6 +19,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -37,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
             URL::forceScheme('https');
         }
 
-        
+
         return $panel
             ->brandName('Meu Financeiro')
             ->default()
@@ -71,46 +64,46 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->navigation(fn (NavigationBuilder $builder): NavigationBuilder => $builder->groups([
-                NavigationGroup::make('Dashboard')
-                    ->items([
-                        ...Pages\Dashboard::getNavigationItems(),
-                    ])
-                    ->collapsed(false),
-                NavigationGroup::make('Finança')
-                    ->items([
-                        ...RendaResource::getNavigationItems(),
-                        ...DespesaResource::getNavigationItems(),
-                    ])->collapsed(false),
-                NavigationGroup::make('Lista de compra')
-                    ->items([
-                        ...ProdutoResource::getNavigationItems(),
-                    ])->collapsed(true),
+            // ->navigation(fn (NavigationBuilder $builder): NavigationBuilder => $builder->groups([
+            //     NavigationGroup::make('Dashboard')
+            //         ->items([
+            //             ...Pages\Dashboard::getNavigationItems(),
+            //         ])
+            //         ->collapsed(false),
+            //     NavigationGroup::make('Finança')
+            //         ->items([
+            //             ...RendaResource::getNavigationItems(),
+            //             ...DespesaResource::getNavigationItems(),
+            //         ])->collapsed(false),
+            //     NavigationGroup::make('Lista de compra')
+            //         ->items([
+            //             ...ProdutoResource::getNavigationItems(),
+            //         ])->collapsed(true),
 
-                NavigationGroup::make('Metrica')
-                    ->items([
-                        NavigationItem::make()
-                            ->visible(self::authorized(config('filament-debugger.permissions.telescope')))
-                            ->group(config('filament-debugger.group'))
-                            ->url(url: url()->to(config('filament-debugger.url.telescope')), shouldOpenInNewTab: true)
-                            ->icon('heroicon-o-sparkles')
-                            ->label('Telescope'),
-                        NavigationItem::make()
-                            ->visible(self::authorized(config('filament-debugger.permissions.horizon')))
-                            ->group(config('filament-debugger.group'))
-                            ->icon('heroicon-o-globe-europe-africa')
-                            ->url(url: url()->to(config('filament-debugger.url.horizon')), shouldOpenInNewTab: true)
-                            ->label('Horizon'),
-                    ]),
-                NavigationGroup::make('Configuracao')
-                    ->items([
-                        ...PlanoResource::getNavigationItems(),
-                        ...TipoDespesaResource::getNavigationItems(),
-                        ...StatusDespesaResource::getNavigationItems(),
-                    ])->collapsed(true),
+            //     NavigationGroup::make('Metrica')
+            //         ->items([
+            //             NavigationItem::make()
+            //                 ->visible(self::authorized(config('filament-debugger.permissions.telescope')))
+            //                 ->group(config('filament-debugger.group'))
+            //                 ->url(url: url()->to(config('filament-debugger.url.telescope')), shouldOpenInNewTab: true)
+            //                 ->icon('heroicon-o-sparkles')
+            //                 ->label('Telescope'),
+            //             NavigationItem::make()
+            //                 ->visible(self::authorized(config('filament-debugger.permissions.horizon')))
+            //                 ->group(config('filament-debugger.group'))
+            //                 ->icon('heroicon-o-globe-europe-africa')
+            //                 ->url(url: url()->to(config('filament-debugger.url.horizon')), shouldOpenInNewTab: true)
+            //                 ->label('Horizon'),
+            //         ]),
+            //     NavigationGroup::make('Configuracao')
+            //         ->items([
+            //             ...PlanoResource::getNavigationItems(),
+            //             ...TipoDespesaResource::getNavigationItems(),
+            //             ...StatusDespesaResource::getNavigationItems(),
+            //         ])->collapsed(true),
 
-            ]),
-            )
+            // ]),
+            // )
             ->spa()
             ->sidebarCollapsibleOnDesktop();
 
@@ -125,12 +118,14 @@ class AdminPanelProvider extends PanelProvider
 
     private static function authorized(string $ability): bool
     {
-        if (config('filament-debugger.authorization')) {
-            return (bool) auth(config('filament.auth.guard'))
+        return (bool)
+            app(Gate::class)
+                ->forUser(
+                auth(
+                    config('filament.auth.guard')
+                )
                 ->user()
-                ?->can($ability);
-        }
-
-        return true;
+            )
+            ->check($ability);
     }
 }

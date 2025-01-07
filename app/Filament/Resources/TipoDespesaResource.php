@@ -13,6 +13,8 @@ use Filament\Tables\Table;
 
 class TipoDespesaResource extends Resource
 {
+
+    protected static ?string $navigationGroup = 'Configurações';
     protected static ?string $model = TipoDespesa::class;
 
     protected static ?string $modelLabel = 'tipo de despesa';
