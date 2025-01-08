@@ -22,7 +22,6 @@ class RendaObserver
      */
     public function updated(Renda $renda): void
     {
-
     }
 
     /**
@@ -30,7 +29,6 @@ class RendaObserver
      */
     public function deleted(Renda $renda): void
     {
-
     }
 
     /**

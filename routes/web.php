@@ -7,5 +7,4 @@ Route::get('/', function () {
     return redirect('/admin/register');
 });
 
-
-//Volt::route('/home', 'home');
+// Volt::route('/home', 'home');

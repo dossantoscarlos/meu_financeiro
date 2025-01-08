@@ -13,9 +13,13 @@ use Filament\Tables\Table;
 class StatusDespesaResource extends Resource
 {
     protected static ?string $model = StatusDespesa::class;
+
     protected static ?string $modelLabel = 'status da despesa';
+
     protected static ?string $pluralModelLabel = 'Status da despesa';
+
     protected static bool $hasTitleCaseModelLabel = false;
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

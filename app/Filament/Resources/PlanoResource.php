@@ -12,15 +12,16 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-
-
 class PlanoResource extends Resource
 {
     protected static ?string $model = Plano::class;
 
     protected static ?string $navigationGroup = 'Financeiro';
+
     protected static ?string $modelLabel = 'Plano';
+
     protected static bool $hasTitleCaseModelLabel = false;
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

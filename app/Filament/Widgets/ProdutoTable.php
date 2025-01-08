@@ -6,11 +6,11 @@ use App\Models\Produto;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
-use Illuminate\Support\Facades\Log;
 
 class ProdutoTable extends BaseWidget
 {
-    protected static ?string $heading = "Lista de produto";
+    protected static ?string $heading = 'Lista de produto';
+
     public function table(Table $table): Table
     {
         return $table

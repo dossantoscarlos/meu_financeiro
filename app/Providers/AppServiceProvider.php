@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(TelescopeServiceProvider::class);
         }
 
-        if($this->app->environment('production')) {
+        if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
     }

@@ -21,11 +21,10 @@ class ProdutoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-
-    protected static function total_produto(?string $preco, ?string $quantidade): float {
+    protected static function total_produto(?string $preco, ?string $quantidade): float
+    {
         return floatval($preco) * floatval($quantidade);
     }
-
 
     protected static function update(?string $get, ?string $state, Set $set): void
     {
@@ -81,8 +80,14 @@ class ProdutoResource extends Resource
                     ->prefix('R$')
                     ->inputMode('decimal')
                     ->formatStateUsing(fn (Get $get, ?string $state): ?string => number_format(
-                        self::total_produto($get('preco'), $get('quantidade')
-                    ), 2, ',', '.'))
+                        self::total_produto(
+                            $get('preco'),
+                            $get('quantidade')
+                        ),
+                        2,
+                        ',',
+                        '.'
+                    ))
                     ->readOnly(),
                 Forms\Components\DatePicker::make('data_compra')
                     ->label('Data da compra')

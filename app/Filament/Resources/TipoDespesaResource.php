@@ -13,8 +13,8 @@ use Filament\Tables\Table;
 
 class TipoDespesaResource extends Resource
 {
-
     protected static ?string $navigationGroup = 'Configurações';
+
     protected static ?string $model = TipoDespesa::class;
 
     protected static ?string $modelLabel = 'tipo de despesa';
@@ -31,7 +31,7 @@ class TipoDespesaResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nome')
                     ->unique('nome', true)
-                    ->label(str("Informe a tag")->upper())
+                    ->label(str('Informe a tag')->upper())
                     ->columnSpanFull()
                     ->prefix(str('tag')->ucfirst())
                     ->afterStateUpdated(function (Page $livewire): void {

@@ -38,7 +38,8 @@ class DespesaResource extends Resource
                     ->relationship(
                         name: 'plano',
                         titleAttribute: 'mes_ano',
-                        modifyQueryUsing: fn ($query) => $query->whereUserId(Auth::user()->id))
+                        modifyQueryUsing: fn ($query) => $query->whereUserId(Auth::user()->id)
+                    )
                     ->native(condition: false)
                     ->createOptionForm([
                         Forms\Components\Select::make(name: 'user_id')
@@ -89,7 +90,8 @@ class DespesaResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query
+            ->modifyQueryUsing(
+                fn (Builder $query) => $query
                 ->withoutGlobalScopes([
                     SoftDeletingScope::class,
                 ])
@@ -131,7 +133,7 @@ class DespesaResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
-                Tables\Actions\ForceDeleteAction::make()
+                Tables\Actions\ForceDeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

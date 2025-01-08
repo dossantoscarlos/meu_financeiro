@@ -9,7 +9,6 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class ListaCategoria extends BaseWidget
 {
-
     protected static ?string $heading = 'Categorias';
 
     public function table(Table $table): Table

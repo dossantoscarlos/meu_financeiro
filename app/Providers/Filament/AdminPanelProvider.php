@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
-
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -12,6 +11,7 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -19,7 +19,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -29,7 +28,6 @@ class AdminPanelProvider extends PanelProvider
         if (config('app.env') !== 'local') {
             URL::forceScheme('https');
         }
-
 
         return $panel
             ->brandName('Meu Financeiro')
@@ -121,11 +119,11 @@ class AdminPanelProvider extends PanelProvider
         return (bool)
             app(Gate::class)
                 ->forUser(
-                auth(
-                    config('filament.auth.guard')
+                    auth(
+                        config('filament.auth.guard')
+                    )
+                        ->user()
                 )
-                ->user()
-            )
-            ->check($ability);
+                ->check($ability);
     }
 }

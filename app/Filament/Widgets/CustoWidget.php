@@ -11,21 +11,22 @@ use Illuminate\Support\Facades\Auth;
 
 class CustoWidget extends BaseWidget
 {
-
-    private function brl_moeda(float $data) : string
+    private function brl_moeda(float $data): string
     {
         return 'R$ '.number_format(floatval($data), 2, ',', '.');
     }
 
-    private function msgDescriptionCustom(bool $status, string $campo ): string {
-        return $status ? "{$campo} positivo(a)": "{$campo} negativo(a)" ;
+    private function msgDescriptionCustom(bool $status, string $campo): string
+    {
+        return $status ? "{$campo} positivo(a)" : "{$campo} negativo(a)";
     }
 
-    private function customColorStat(bool $status): string {
+    private function customColorStat(bool $status): string
+    {
         return $status ? 'success' : 'danger';
     }
 
-    private function stat_custom(string $texto, float $valor, bool $condicional, $description) : Stat
+    private function stat_custom(string $texto, float $valor, bool $condicional, $description): Stat
     {
         return Stat::make("{$texto}", $this->brl_moeda($valor))
             ->description($this->msgDescriptionCustom($condicional, $description))
@@ -54,8 +55,8 @@ class CustoWidget extends BaseWidget
 
         return [
             Stat::make('Renda Inicial', $this->brl_moeda($saldo)),
-            $this->stat_custom('Custo previsto', $total, !($saldo < $total), "Custo"),
-            $this->stat_custom('Renda atual', $custo, $saldo > $total, "Renda"),
+            $this->stat_custom('Custo previsto', $total, ! ($saldo < $total), 'Custo'),
+            $this->stat_custom('Renda atual', $custo, $saldo > $total, 'Renda'),
         ];
     }
 }
