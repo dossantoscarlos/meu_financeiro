@@ -7,13 +7,6 @@ on:
     branches: [ "release", "test" ]
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        php: [8.4]
-
   docker-build:
     runs-on: ubuntu-latest
     steps:
