@@ -20,12 +20,6 @@ jobs:
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Install Pint
-      run: composer global require laravel/pint
-    - name: Run Pint
-      run: pint
-    - name: Commit linted files
-      uses: stefanzweifel/git-auto-commit-action@v5
     - name: Generate key
       run: php artisan key:generate
     - name: Directory Permissions
@@ -42,7 +36,7 @@ jobs:
         php artisan test
   # docker-build:
   #   runs-on: ubuntu-latest
-  #   needs: laravel-tests
+  #   needs: test-automatizado
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@v4
