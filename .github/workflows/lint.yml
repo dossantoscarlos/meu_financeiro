@@ -74,9 +74,3 @@ jobs:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
         run: php artisan test
-          commit_user_name: github-actions[bot]
-          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
-          commit_author: dossantoscarlos <20567649+dossantoscarlos@users.noreply.github.com>
-          push_options: "--force"  # Apenas se for necessário usar --force
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
