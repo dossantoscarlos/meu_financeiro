@@ -32,8 +32,9 @@ jobs:
         with:
           commit_message: "Fix code style using Pint"
           branch: ${{ github.ref }}
-          user_name: github-actions[bot]
-          user_email: 41898282+github-actions[bot]@users.noreply.github.com
-          push: true
+          commit_user_name: github-actions[bot]
+          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          commit_author: dossantoscarlos <20567649+dossantoscarlos@users.noreply.github.com>
+          push_options: "--force"  # Apenas se for necessário usar --force
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
