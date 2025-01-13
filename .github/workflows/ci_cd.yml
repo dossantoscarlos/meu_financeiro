@@ -2,10 +2,10 @@ name: test-automatizado
 
 on:
   push:
-    branches: [ "release", "test" ]
-  pull_request:
-    branches: [ "release", "test" ]
-
+    workflow_run:
+    workflows: ["Fix Code Style"]  # Nome do primeiro workflow
+    types:
+      - completed  # Executar quando o primeiro workflow for concluído
 jobs:
   tests-automatizado:
 
