@@ -12,7 +12,11 @@ use Filament\Tables\Table;
 
 class StatusDespesaResource extends Resource
 {
+
+
     protected static ?string $model = StatusDespesa::class;
+
+    protected static ?string $navigationGroup = 'Configurações';
 
     protected static ?string $modelLabel = 'status da despesa';
 
@@ -20,7 +24,7 @@ class StatusDespesaResource extends Resource
 
     protected static bool $hasTitleCaseModelLabel = false;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
 
     public static function form(Form $form): Form
     {

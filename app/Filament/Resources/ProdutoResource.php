@@ -19,7 +19,13 @@ class ProdutoResource extends Resource
 {
     protected static ?string $model = Produto::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $modelLabel = 'Produto';
+
+    protected static ?string $navigationGroup = 'Operação';
+
+    protected static ?string $pluralModelLabel = 'Produtos';
+
+    protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
 
     protected static function total_produto(?string $preco, ?string $quantidade): float
     {

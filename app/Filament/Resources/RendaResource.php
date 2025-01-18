@@ -17,7 +17,11 @@ class RendaResource extends Resource
 {
     protected static ?string $model = Renda::class;
 
-    public static ?string $pluralModelLabel = 'Renda';
+    protected static ?string $modelLabel = 'Renda';
+
+    public static ?string $pluralModelLabel = 'Rendas';
+
+    protected static ?string $navigationGroup = 'Financeiro';
 
     protected static ?string $navigationIcon = 'vaadin-money-deposit';
 

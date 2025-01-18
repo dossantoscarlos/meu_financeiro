@@ -21,7 +21,15 @@ class DespesaResource extends Resource
 {
     protected static ?string $model = Despesa::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $modelLabel = 'Despesa';
+
+    protected static ?string $navigationGroup = 'Financeiro';
+
+    protected static ?string $pluralModelLabel = 'Despesas';
+
+    protected static ?string $icon = 'heroicon-o-credit-card';
+
+    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
     public static function form(Form $form): Form
     {
