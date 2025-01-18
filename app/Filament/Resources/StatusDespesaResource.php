@@ -12,8 +12,6 @@ use Filament\Tables\Table;
 
 class StatusDespesaResource extends Resource
 {
-
-
     protected static ?string $model = StatusDespesa::class;
 
     protected static ?string $navigationGroup = 'Configurações';
