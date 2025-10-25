@@ -8,7 +8,6 @@ use App\Models\Despesa;
 use App\Models\Gasto;
 use App\Models\Plano;
 use App\Models\Renda;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class DespesaObserver
@@ -18,9 +17,9 @@ class DespesaObserver
         $authId = Auth::user()->getAuthIdentifier();
         $receita = Renda::whereUserId($authId)->first();
 
-        $date = Carbon::now();
-        $mes = ($date->month >= 1 && $date->month <= 9) ? strval('0'.$date->month) : $date->month;
-        $mesAno = "{$mes}/{$date->year}";
+        $date = \Illuminate\Support\Facades\Date::now();
+        $mes = ($date->month >= 1 && $date->month <= 9) ? strval('0' . $date->month) : $date->month;
+        $mesAno = sprintf('%s/%d', $mes, $date->year);
 
         $despesas = Plano::with('despesas')->where([
             ['user_id', '=', $authId],
@@ -30,7 +29,6 @@ class DespesaObserver
         $planoId = $despesas['id'] ?? 0;
 
         if (! empty($receita)) {
-
             $total = 0.0;
 
             if (! empty($despesas)) {
@@ -38,20 +36,19 @@ class DespesaObserver
                     $total += (float) $despesa['valor_documento'];
                 }
 
-                $receita->custo = strval($receita->saldo - $total);
+                $diferenca = (float) $receita->saldo - $total;
+                $receita->custo = strval($diferenca);
                 $receita->update();
 
                 $gasto = Gasto::where('plano_id', '=', $planoId)->first();
 
                 if (empty($gasto)) {
-
                     Gasto::create([
                         'plano_id' => $planoId,
-                        'valor' => $total,
+                        'valor' => (string) $total,
                     ]);
-
                 } else {
-                    $gasto->valor = $total;
+                    $gasto->valor = (string) $total;
                     $gasto->update();
                 }
             }

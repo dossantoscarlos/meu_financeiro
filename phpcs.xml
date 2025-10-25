@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<ruleset name="Meu Projeto">
+    <!-- Descrição -->
+    <description>Regras de código para o projeto</description>
+
+    <!-- Define o padrão base -->
+    <rule ref="PSR12"/>
+
+    <!-- Ignorar pastas e arquivos -->
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>storage/*</exclude-pattern>
+    <exclude-pattern>bootstrap/*</exclude-pattern>
+    <exclude-pattern>node_modules/*</exclude-pattern>
+    <exclude-pattern>config</exclude-pattern>
+    <exclude-pattern>./tests/Pest.php</exclude-pattern>
+
+    <!-- Diretórios ou arquivos específicos -->
+    <file>app</file>
+    <file>routes</file>
+    <file>tests</file>
+</ruleset>
+

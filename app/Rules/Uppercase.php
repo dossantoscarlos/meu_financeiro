@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Rules;
 
 use Closure;
@@ -14,7 +16,7 @@ class Uppercase implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (mb_strtoupper($value) !== $value) {
+        if (mb_strtoupper((string) $value) !== $value) {
             $fail('The :attribute must be uppercase.');
         }
     }

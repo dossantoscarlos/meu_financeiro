@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Livewire\Forms\LoginForm;
 use Illuminate\Support\Facades\Session;
 
@@ -10,7 +12,7 @@ layout('layouts.guest');
 
 form(LoginForm::class);
 
-$login = function () {
+$login = function (): void {
     $this->validate();
 
     $this->form->authenticate();

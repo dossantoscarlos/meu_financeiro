@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Livewire;
 
 use Livewire\Volt\Volt;
 use Tests\TestCase;
 
-class HomeTest extends TestCase
+final class HomeTest extends TestCase
 {
-    public function test_it_can_render(): void
+    public function testItCanRender(): void
     {
-        $component = Volt::test('home');
+        $testable = Volt::test('home');
 
-        $component->assertSee(true);
+        $testable->assertSee(true);
     }
 }

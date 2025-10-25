@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,16 +12,16 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('despesas', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('descricao');
-            $table->string('data_vencimento');
-            $table->foreignId('status_despesa_id');
-            $table->foreignId('tipo_despesa_id');
-            $table->foreignId('plano_id');
-            $table->string('valor_documento');
-            $table->softDeletes();
-            $table->timestamps();
+        Schema::create('despesas', function (Blueprint $blueprint): void {
+            $blueprint->bigIncrements('id');
+            $blueprint->string('descricao');
+            $blueprint->string('data_vencimento');
+            $blueprint->foreignId('status_despesa_id');
+            $blueprint->foreignId('tipo_despesa_id');
+            $blueprint->foreignId('plano_id');
+            $blueprint->string('valor_documento');
+            $blueprint->softDeletes();
+            $blueprint->timestamps();
         });
     }
 

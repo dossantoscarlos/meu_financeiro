@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,40 +20,40 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        $schema = Schema::connection($this->getConnection());
+        $builder = Schema::connection($this->getConnection());
 
-        $schema->create('telescope_entries', function (Blueprint $table) {
-            $table->bigIncrements('sequence');
-            $table->uuid('uuid');
-            $table->uuid('batch_id');
-            $table->string('family_hash')->nullable();
-            $table->boolean('should_display_on_index')->default(true);
-            $table->string('type', 20);
-            $table->longText('content');
-            $table->dateTime('created_at')->nullable();
+        $builder->create('telescope_entries', function (Blueprint $blueprint): void {
+            $blueprint->bigIncrements('sequence');
+            $blueprint->uuid('uuid');
+            $blueprint->uuid('batch_id');
+            $blueprint->string('family_hash')->nullable();
+            $blueprint->boolean('should_display_on_index')->default(true);
+            $blueprint->string('type', 20);
+            $blueprint->longText('content');
+            $blueprint->dateTime('created_at')->nullable();
 
-            $table->unique('uuid');
-            $table->index('batch_id');
-            $table->index('family_hash');
-            $table->index('created_at');
-            $table->index(['type', 'should_display_on_index']);
+            $blueprint->unique('uuid');
+            $blueprint->index('batch_id');
+            $blueprint->index('family_hash');
+            $blueprint->index('created_at');
+            $blueprint->index(['type', 'should_display_on_index']);
         });
 
-        $schema->create('telescope_entries_tags', function (Blueprint $table) {
-            $table->uuid('entry_uuid');
-            $table->string('tag');
+        $builder->create('telescope_entries_tags', function (Blueprint $blueprint): void {
+            $blueprint->uuid('entry_uuid');
+            $blueprint->string('tag');
 
-            $table->primary(['entry_uuid', 'tag']);
-            $table->index('tag');
+            $blueprint->primary(['entry_uuid', 'tag']);
+            $blueprint->index('tag');
 
-            $table->foreign('entry_uuid')
+            $blueprint->foreign('entry_uuid')
                 ->references('uuid')
                 ->on('telescope_entries')
                 ->onDelete('cascade');
         });
 
-        $schema->create('telescope_monitoring', function (Blueprint $table) {
-            $table->string('tag')->primary();
+        $builder->create('telescope_monitoring', function (Blueprint $blueprint): void {
+            $blueprint->string('tag')->primary();
         });
     }
 
@@ -60,10 +62,10 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        $schema = Schema::connection($this->getConnection());
+        $builder = Schema::connection($this->getConnection());
 
-        $schema->dropIfExists('telescope_entries_tags');
-        $schema->dropIfExists('telescope_entries');
-        $schema->dropIfExists('telescope_monitoring');
+        $builder->dropIfExists('telescope_entries_tags');
+        $builder->dropIfExists('telescope_entries');
+        $builder->dropIfExists('telescope_monitoring');
     }
 };

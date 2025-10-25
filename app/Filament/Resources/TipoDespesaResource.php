@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TipoDespesaResource\Pages;
@@ -30,12 +32,12 @@ class TipoDespesaResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nome')
-                    ->unique('nome', true)
+                    ->unique('nome')
                     ->label(str('Informe a tag')->upper())
                     ->columnSpanFull()
                     ->prefix(str('tag')->ucfirst())
-                    ->afterStateUpdated(function (Page $livewire): void {
-                        $livewire->validateOnly('data.nome');
+                    ->afterStateUpdated(function (Page $page): void {
+                        $page->validateOnly('data.nome');
                     })
                     ->required(),
             ]);

@@ -99,7 +99,7 @@ class DespesaResource extends Resource
     {
         return $table
             ->modifyQueryUsing(
-                fn (Builder $query) => $query
+                fn (Builder $builder) => $builder
                 ->withoutGlobalScopes([
                     SoftDeletingScope::class,
                 ])
@@ -111,7 +111,7 @@ class DespesaResource extends Resource
                 Tables\Columns\TextColumn::make(name: 'tipoDespesa.nome')
                     ->sortable(),
                 Tables\Columns\TextColumn::make(name: 'plano.mes_ano')
-                    ->tooltip(fn (Model $record): string => "{$record->plano->descricao_simples}")
+                    ->tooltip(fn (Model $model): string => $model->plano->descricao_simples)
                     ->searchable(),
                 Tables\Columns\TextColumn::make(name: 'data_vencimento')
                     ->label('Data de vencimento')

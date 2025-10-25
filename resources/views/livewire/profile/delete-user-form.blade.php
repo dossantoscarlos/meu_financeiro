@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Livewire\Actions\Logout;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,7 +12,7 @@ state(['password' => '']);
 
 rules(['password' => ['required', 'string', 'current_password']]);
 
-$deleteUser = function (Logout $logout) {
+$deleteUser = function (Logout $logout): void {
     $this->validate();
 
     tap(Auth::user(), $logout(...))->delete();

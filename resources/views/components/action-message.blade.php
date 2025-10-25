@@ -1,3 +1,8 @@
+<?php
+
+declare(strict_types=1);
+
+?>
 @props(['on'])
 
 <div x-data="{ shown: false, timeout: null }"
@@ -8,3 +13,4 @@
     {{ $attributes->merge(['class' => 'text-sm text-gray-600']) }}>
     {{ $slot->isEmpty() ? 'Saved.' : $slot }}
 </div>
+<?php

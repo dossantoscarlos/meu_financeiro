@@ -1,3 +1,8 @@
+<?php
+
+declare(strict_types=1);
+
+?>
 <nav class="-mx-3 flex flex-1 justify-end">
     @auth
         <a
@@ -24,3 +29,4 @@
         @endif
     @endauth
 </nav>
+<?php

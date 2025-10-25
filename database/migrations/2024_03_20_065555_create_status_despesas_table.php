@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,11 +12,11 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('status_despesas', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('nome');
-            $table->softDeletes();
-            $table->timestamps();
+        Schema::create('status_despesas', function (Blueprint $blueprint): void {
+            $blueprint->bigIncrements('id');
+            $blueprint->string('nome');
+            $blueprint->softDeletes();
+            $blueprint->timestamps();
         });
     }
 

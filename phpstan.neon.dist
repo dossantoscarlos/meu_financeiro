@@ -1,0 +1,20 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/nesbot/carbon/extension.neon
+#    - vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+
+    paths:
+        - app/
+#        - tests/Unit
+#        - tests/Feature
+
+    # Level 10 is the highest level
+    level: 5
+
+#   ignoreErrors:
+    excludePaths:
+#        - ./*/*/FileToBeExcluded.php
+       - ./app/Filament/**/*
+       -  app/Http/Controllers/Auth/**

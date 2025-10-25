@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Auth;
@@ -20,18 +22,36 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 
         $this->hideSensitiveRequestDetails();
 
-        Telescope::filter(function (IncomingEntry $entry) {
+        Telescope::filter(function (IncomingEntry $incomingEntry): true {
             if ($this->app->environment('local')) {
                 return true;
             }
 
-            return $entry->isReportableException() ||
-                   $entry->isFailedRequest() ||
-                   $entry->isFailedJob() ||
-                   $entry->isScheduledTask() ||
-                   $entry->hasMonitoredTag() ||
-                   $entry->isDump() ||
-                   $entry->type = EntryType::LOG;
+            if ($incomingEntry->isReportableException()) {
+                return true;
+            }
+
+            if ($incomingEntry->isFailedRequest()) {
+                return true;
+            }
+
+            if ($incomingEntry->isFailedJob()) {
+                return true;
+            }
+
+            if ($incomingEntry->isScheduledTask()) {
+                return true;
+            }
+
+            if ($incomingEntry->hasMonitoredTag()) {
+                return true;
+            }
+
+            if ($incomingEntry->isDump()) {
+                return true;
+            }
+
+            return (bool) $incomingEntry->type = EntryType::LOG;
         });
     }
 
@@ -69,9 +89,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 
     protected function gate()
     {
-        Gate::define('viewTelescope', function ($user) {
-            return $user->can(config('filament-debugger.permissions.telescope'));
-        });
+        Gate::define('viewTelescope', fn ($user) => $user->can(config('filament-debugger.permissions.telescope')));
     }
 
     // protected function authorization()

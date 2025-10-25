@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Session;
 
@@ -13,7 +15,7 @@ state(['email' => '']);
 
 rules(['email' => ['required', 'string', 'email']]);
 
-$sendPasswordResetLink = function () {
+$sendPasswordResetLink = function (): void {
     $this->validate();
 
     // We will send the password reset link to this user. Once we have attempted

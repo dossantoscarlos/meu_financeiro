@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Livewire\Actions\Logout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -8,7 +10,7 @@ use function Livewire\Volt\layout;
 
 layout('layouts.guest');
 
-$sendVerification = function () {
+$sendVerification = function (): void {
     if (Auth::user()->hasVerifiedEmail()) {
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
 
@@ -20,7 +22,7 @@ $sendVerification = function () {
     Session::flash('status', 'verification-link-sent');
 };
 
-$logout = function (Logout $logout) {
+$logout = function (Logout $logout): void {
     $logout();
 
     $this->redirect('/', navigate: true);

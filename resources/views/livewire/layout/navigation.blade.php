@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Livewire\Actions\Logout;
 
-$logout = function (Logout $logout) {
+$logout = function (Logout $logout): void {
     $logout();
 
     $this->redirect('/', navigate: true);

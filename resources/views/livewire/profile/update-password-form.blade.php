@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -19,13 +21,13 @@ rules([
     'password' => ['required', 'string', Password::defaults(), 'confirmed'],
 ]);
 
-$updatePassword = function () {
+$updatePassword = function (): void {
     try {
         $validated = $this->validate();
-    } catch (ValidationException $e) {
+    } catch (ValidationException $validationException) {
         $this->reset('current_password', 'password', 'password_confirmation');
 
-        throw $e;
+        throw $validationException;
     }
 
     Auth::user()->update([

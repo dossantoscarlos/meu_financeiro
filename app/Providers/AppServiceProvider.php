@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use Filament\Facades\Filament;
@@ -29,12 +31,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Filament::serving(function () {
+        Filament::serving(function (): void {
             Filament::registerUserMenuItems([
                 'logout' => MenuItem::make()->visible(true),
             ]);
-
         });
-
     }
 }

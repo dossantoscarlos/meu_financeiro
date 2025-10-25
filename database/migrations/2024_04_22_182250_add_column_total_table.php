@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,8 +12,8 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::table('produtos', function (Blueprint $table) {
-            $table->float('total')->default(0.0)->nullable();
+        Schema::table('produtos', function (Blueprint $blueprint): void {
+            $blueprint->float('total')->default(0.0)->nullable();
         });
     }
 
@@ -20,8 +22,8 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::table('produtos', function (Blueprint $table) {
-            $table->dropColumn('total');
+        Schema::table('produtos', function (Blueprint $blueprint): void {
+            $blueprint->dropColumn('total');
         });
     }
 };

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\RendaResource\Pages;
@@ -33,9 +35,12 @@ class RendaResource extends Resource
                     ->relationship(
                         name: 'user',
                         titleAttribute: 'name',
-                        modifyQueryUsing: fn (Builder $query): Builder => $query->whereId(Auth::user()->getAuthIdentifier())
+                        modifyQueryUsing: fn (Builder $builder): Builder =>
+                            $builders->whereId(
+                                Auth::user()->getAuthIdentifier()
+                            )
                     )
-                    ->required(),
+                ->required(),
                 MyMoney::make('saldo')
                     ->label('Renda')
                     ->required(),

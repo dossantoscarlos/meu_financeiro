@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +15,7 @@ state([
     'email' => fn () => auth()->user()->email
 ]);
 
-$updateProfileInformation = function () {
+$updateProfileInformation = function (): void {
     $user = Auth::user();
 
     $validated = $this->validate([
@@ -32,7 +34,7 @@ $updateProfileInformation = function () {
     $this->dispatch('profile-updated', name: $user->name);
 };
 
-$sendVerification = function () {
+$sendVerification = function (): void {
     $user = Auth::user();
 
     if ($user->hasVerifiedEmail()) {

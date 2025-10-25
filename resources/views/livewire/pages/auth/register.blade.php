@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
@@ -21,11 +23,11 @@ state([
 
 rules([
     'name' => ['required', 'string', 'max:255'],
-    'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+    'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
     'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
 ]);
 
-$register = function () {
+$register = function (): void {
     $validated = $this->validate();
 
     $validated['password'] = Hash::make($validated['password']);

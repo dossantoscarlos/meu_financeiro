@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::get('/', function () {
-    return redirect('/admin/register');
-});
+Route::get('/', fn () => redirect('/admin/register'));
 
 // Volt::route('/home', 'home');

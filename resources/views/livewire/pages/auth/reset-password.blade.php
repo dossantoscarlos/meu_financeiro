@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -27,7 +29,7 @@ rules([
     'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
 ]);
 
-$resetPassword = function () {
+$resetPassword = function (): void {
     $this->validate();
 
     // Here we will attempt to reset the user's password. If it is successful we
@@ -35,7 +37,7 @@ $resetPassword = function () {
     // database. Otherwise we will parse the error and return the response.
     $status = Password::reset(
         $this->only('email', 'password', 'password_confirmation', 'token'),
-        function ($user) {
+        function ($user): void {
             $user->forceFill([
                 'password' => Hash::make($this->password),
                 'remember_token' => Str::random(60),

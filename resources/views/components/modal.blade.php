@@ -1,3 +1,8 @@
+<?php
+
+declare(strict_types=1);
+
+?>
 @props([
     'name',
     'show' => false,
@@ -76,3 +81,4 @@ $maxWidth = [
         {{ $slot }}
     </div>
 </div>
+<?php

@@ -39,11 +39,11 @@ class Produto extends Model
         return floatval($this->preco) * floatval($this->quantidade);
     }
 
-    public function total(): Attribute
+    protected function total(): Attribute
     {
         return Attribute::make(
-            get: fn (?string $value) => $value,
-            set: fn (string $value) => $this->totalProduto()
+            get: fn (?string $value): ?string => $value,
+            set: $this->totalProduto(...)
         );
     }
 }

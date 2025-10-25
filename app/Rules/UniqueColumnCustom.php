@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Rules;
 
 use App\Models\TipoDespesa;
@@ -18,10 +20,10 @@ class UniqueColumnCustom implements ValidationRule
     {
 
         Log::debug($value);
-        $hydrate = mb_strtoupper(trim($value));
-        $result = TipoDespesa::whereNome($hydrate)->get() ?? [];
+        $hydrate = mb_strtoupper(trim((string) $value));
+        $result = TipoDespesa::whereNome($hydrate)->get();
 
-        if ($result === []) {
+        if ($result == null) {
             Log::debug($result);
             $fail('The :attribute must be unique.');
         }

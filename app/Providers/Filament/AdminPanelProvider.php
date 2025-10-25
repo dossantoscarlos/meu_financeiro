@@ -11,7 +11,6 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -77,14 +76,15 @@ class AdminPanelProvider extends PanelProvider
             //         ->items([
             //             ...ProdutoResource::getNavigationItems(),
             //         ])->collapsed(true),
-
             //     NavigationGroup::make('Metrica')
             //         ->items([
             //             NavigationItem::make()
             //                 ->visible(self::authorized(config('filament-debugger.permissions.telescope')))
             //                 ->group(config('filament-debugger.group'))
-            //                 ->url(url: url()->to(config('filament-debugger.url.telescope')), shouldOpenInNewTab: true)
-            //                 ->icon('heroicon-o-sparkles')
+            //                 ->url(
+            //                      url: url()->to(config('filament-debugger.url.telescope')),
+            //                      shouldOpenInNewTab: true
+            //                  )->icon('heroicon-o-sparkles')
             //                 ->label('Telescope'),
             //             NavigationItem::make()
             //                 ->visible(self::authorized(config('filament-debugger.permissions.horizon')))
@@ -99,12 +99,10 @@ class AdminPanelProvider extends PanelProvider
             //             ...TipoDespesaResource::getNavigationItems(),
             //             ...StatusDespesaResource::getNavigationItems(),
             //         ])->collapsed(true),
-
             // ]),
             // )
             ->spa()
             ->sidebarCollapsibleOnDesktop();
-
     }
 
     protected function mutateFormDataBeforeFill(array $data): array
@@ -112,18 +110,5 @@ class AdminPanelProvider extends PanelProvider
         unset($data['is_admin']);
 
         return $data;
-    }
-
-    private static function authorized(string $ability): bool
-    {
-        return (bool)
-            app(Gate::class)
-                ->forUser(
-                    auth(
-                        config('filament.auth.guard')
-                    )
-                        ->user()
-                )
-                ->check($ability);
     }
 }

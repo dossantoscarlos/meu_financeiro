@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -13,13 +15,15 @@ state(['password' => '']);
 
 rules(['password' => ['required', 'string']]);
 
-$confirmPassword = function () {
+$confirmPassword = function (): void {
     $this->validate();
 
-    if (! Auth::guard('web')->validate([
+    if (
+        ! Auth::guard('web')->validate([
         'email' => Auth::user()->email,
         'password' => $this->password,
-    ])) {
+        ])
+    ) {
         throw ValidationException::withMessages([
             'password' => __('auth.password'),
         ]);
