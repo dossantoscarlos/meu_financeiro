@@ -7,15 +7,18 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProdutoResource\Pages;
 use App\Livewire\Components\MyMoney;
 use App\Models\Produto;
+use BackedEnum;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use UnitEnum;
+
 
 class ProdutoResource extends Resource
 {
@@ -23,11 +26,11 @@ class ProdutoResource extends Resource
 
     protected static ?string $modelLabel = 'Produto';
 
-    protected static ?string $navigationGroup = 'Operação';
+    protected static UnitEnum|string|null $navigationGroup = 'Operação';
 
     protected static ?string $pluralModelLabel = 'Produtos';
 
-    protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
+    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-list-bullet';
 
     protected static function totalProduto(?string $preco, ?string $quantidade): float
     {
@@ -49,7 +52,7 @@ class ProdutoResource extends Resource
         $set('total', number_format($state, 2, ',', '.'));
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form
             ->columns(12)
@@ -91,7 +94,7 @@ class ProdutoResource extends Resource
                     ->columnSpan(3)
                     ->prefix('R$')
                     ->inputMode('decimal')
-                    ->formatStateUsing(fn (Get $get, ?string $state): string =>
+                    ->formatStateUsing(fn (Get $get): string =>
                         number_format(
                             self::totalProduto(
                                 $get('preco'),
@@ -143,15 +146,6 @@ class ProdutoResource extends Resource
             ])
             ->filters([
                 //
-            ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 

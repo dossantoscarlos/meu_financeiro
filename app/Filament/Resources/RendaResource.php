@@ -7,13 +7,16 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\RendaResource\Pages;
 use App\Livewire\Components\MyMoney;
 use App\Models\Renda;
+use BackedEnum;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use UnitEnum;
 
 class RendaResource extends Resource
 {
@@ -23,11 +26,11 @@ class RendaResource extends Resource
 
     public static ?string $pluralModelLabel = 'Rendas';
 
-    protected static ?string $navigationGroup = 'Financeiro';
+    protected static UnitEnum|string|null $navigationGroup = 'Financeiro';
 
-    protected static ?string $navigationIcon = 'vaadin-money-deposit';
+    protected static BackedEnum|string|null $navigationIcon = 'vaadin-money-deposit';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form
             ->schema([
@@ -36,7 +39,7 @@ class RendaResource extends Resource
                         name: 'user',
                         titleAttribute: 'name',
                         modifyQueryUsing: fn (Builder $builder): Builder =>
-                            $builders->whereId(
+                            $builder->whereId(
                                 Auth::user()->getAuthIdentifier()
                             )
                     )
@@ -77,15 +80,6 @@ class RendaResource extends Resource
             ])
             ->filters([
                 //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 

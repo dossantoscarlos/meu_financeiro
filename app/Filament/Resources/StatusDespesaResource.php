@@ -6,17 +6,20 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\StatusDespesaResource\Pages;
 use App\Models\StatusDespesa;
+use BackedEnum;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class StatusDespesaResource extends Resource
 {
     protected static ?string $model = StatusDespesa::class;
 
-    protected static ?string $navigationGroup = 'Configurações';
+    protected static UnitEnum|string|null $navigationGroup = 'Configurações';
 
     protected static ?string $modelLabel = 'status da despesa';
 
@@ -24,16 +27,16 @@ class StatusDespesaResource extends Resource
 
     protected static bool $hasTitleCaseModelLabel = false;
 
-    protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
+    protected  static BackedEnum|string|null $navigationIcon = 'heroicon-o-list-bullet';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nome')
-                    ->label(str('informe o status')->ucfirst())
+                    ->label(str('informe o status')->ucfirst()->__toString())
                     ->columnSpanFull()
-                    ->prefix(str('status')->ucfirst())
+                    ->prefix(str('status')->ucfirst()->__toString())
                     ->required(),
             ]);
     }
@@ -59,15 +62,6 @@ class StatusDespesaResource extends Resource
             ])
             ->filters([
                 //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 

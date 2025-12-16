@@ -6,16 +6,19 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TipoDespesaResource\Pages;
 use App\Models\TipoDespesa;
+use BackedEnum;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class TipoDespesaResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Configurações';
+    protected static UnitEnum|string|null $navigationGroup = 'Configurações';
 
     protected static ?string $model = TipoDespesa::class;
 
@@ -25,17 +28,17 @@ class TipoDespesaResource extends Resource
 
     protected static bool $hasTitleCaseModelLabel = false;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nome')
                     ->unique('nome')
-                    ->label(str('Informe a tag')->upper())
+                    ->label(str('Informe a tag')->upper()->__toString())
                     ->columnSpanFull()
-                    ->prefix(str('tag')->ucfirst())
+                    ->prefix(str('tag')->ucfirst()->__toString())
                     ->afterStateUpdated(function (Page $page): void {
                         $page->validateOnly('data.nome');
                     })
@@ -64,15 +67,6 @@ class TipoDespesaResource extends Resource
             ])
             ->filters([
                 //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 

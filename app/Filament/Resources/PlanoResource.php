@@ -6,27 +6,30 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PlanoResource\Pages;
 use App\Models\Plano;
+use BackedEnum;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class PlanoResource extends Resource
 {
     protected static ?string $model = Plano::class;
 
-    protected static ?string $navigationGroup = 'Financeiro';
+    protected static UnitEnum|string|null $navigationGroup = 'Financeiro';
 
     protected static ?string $modelLabel = 'Plano';
 
     protected static bool $hasTitleCaseModelLabel = false;
 
-    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-calendar';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form
             ->schema([
@@ -64,17 +67,6 @@ class PlanoResource extends Resource
             ])
             ->filters([
                 //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 
