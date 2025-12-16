@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
-use App\Models\StatusDespesa;
-use PHPUnit\Framework\TestCase;
-
 use function PHPUnit\Framework\assertTrue;
+
+use PHPUnit\Framework\TestCase;
 
 class StatusDespesaModelTest extends TestCase
 {

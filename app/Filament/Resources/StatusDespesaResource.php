@@ -8,7 +8,6 @@ use App\Filament\Resources\StatusDespesaResource\Pages;
 use App\Models\StatusDespesa;
 use BackedEnum;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
@@ -27,7 +26,7 @@ class StatusDespesaResource extends Resource
 
     protected static bool $hasTitleCaseModelLabel = false;
 
-    protected  static BackedEnum|string|null $navigationIcon = 'heroicon-o-list-bullet';
+    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-list-bullet';
 
     public static function form(Schema $form): Schema
     {

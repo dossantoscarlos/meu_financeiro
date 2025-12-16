@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
-
 class ProdutoResource extends Resource
 {
     protected static ?string $model = Produto::class;

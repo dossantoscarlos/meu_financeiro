@@ -9,8 +9,8 @@ use App\Livewire\Components\MyMoney;
 use App\Models\Despesa;
 use BackedEnum;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
-use Filament\Schemas\Schema;
 
 class DespesaResource extends Resource
 {
@@ -139,17 +138,17 @@ class DespesaResource extends Resource
             ->filters([
                 //
             ]);
-            // ->actions([
-            //     Tables\Actions\EditAction::make(),
-            //     Tables\Actions\DeleteAction::make(),
-            //     Tables\Actions\RestoreAction::make(),
-            //     Tables\Actions\ForceDeleteAction::make(),
-            // ])
-            // ->bulkActions([
-            //     Tables\Actions\BulkActionGroup::make([
-            //         Tables\Actions\DeleteBulkAction::make(),
-            //     ]),
-            // ]);
+        // ->actions([
+        //     Tables\Actions\EditAction::make(),
+        //     Tables\Actions\DeleteAction::make(),
+        //     Tables\Actions\RestoreAction::make(),
+        //     Tables\Actions\ForceDeleteAction::make(),
+        // ])
+        // ->bulkActions([
+        //     Tables\Actions\BulkActionGroup::make([
+        //         Tables\Actions\DeleteBulkAction::make(),
+        //     ]),
+        // ]);
     }
 
     public static function getRelations(): array
