@@ -5,16 +5,23 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\StatusDespesa;
+
 
 class StatusDespesaModelTest extends TestCase
 {
+    use RefreshDatabase;
     /**
-     * A basic feature test example.
+     * Teste de criação de status de despesa.
      */
-    public function test_example(): void
+    public function test_create_status_despesa(): void
     {
-        $response = $this->get('/');
+        $response = StatusDespesa::create([
+            'nome' => 'Teste',
+        ]);
 
-        $response->assertStatus(200);
+        $this->assertDatabaseHas('status_despesas', [
+            'nome' => 'Teste',
+        ]);
     }
 }
