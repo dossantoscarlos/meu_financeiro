@@ -1,11 +1,4 @@
-<?php
-
-declare(strict_types=1);
-
-?>
 @extends('errors::minimal')
-
-@section('title', __('Payment Required'))
+@section('title', __('Error 402'))
 @section('code', '402')
-@section('message', __('Payment Required'))
-<?php
+@section('message', __($exception->getMessage() ?: 'Error 402'))

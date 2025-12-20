@@ -19,7 +19,9 @@ class PlanoFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => \App\Models\User::factory(),
+            'mes_ano' => $this->faker->regexify('[0-1][0-9]/202[0-9]'),
+            'descricao_simples' => $this->faker->sentence(),
         ];
     }
 }

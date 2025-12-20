@@ -7,6 +7,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PlanoResource\Pages;
 use App\Models\Plano;
 use BackedEnum;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -66,6 +67,24 @@ class PlanoResource extends Resource
             ])
             ->filters([
                 //
+            ])
+            ->recordActions([
+                Actions\ActionGroup::make([
+                    Actions\EditAction::make(),
+                    Actions\ViewAction::make(),
+                    Actions\DeleteAction::make(),
+                    Actions\RestoreAction::make(),
+                    Actions\ForceDeleteAction::make(),
+                ])
+            ])
+            ->bulkActions([
+                Actions\BulkAction::make('delete')
+                ->label('Deletar')
+                ->action(function (Collection $records) {
+                    $records->each(function (Model $record) {
+                        $record->delete();
+                    });
+                })
             ]);
     }
 

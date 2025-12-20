@@ -8,20 +8,22 @@ use App\Models\Renda;
 
 class RendaObserver
 {
+    use \App\Traits\ControleCusto;
+
     /**
-     * Handle the Receita "created" event.
+     * Handle the Renda "created" event.
      */
     public function created(Renda $renda): void
     {
-        $renda->custo = $renda->saldo;
-        $renda->update();
+        $this->controleCusto();
     }
 
     /**
-     * Handle the Receita "updated" event.
+     * Handle the Renda "updated" event.
      */
     public function updated(Renda $renda): void
     {
+        $this->controleCusto();
     }
 
     /**
@@ -36,14 +38,11 @@ class RendaObserver
      */
     public function restored(Renda $renda): void
     {
-        //
     }
-
     /**
      * Handle the Renda "force deleted" event.
      */
     public function forceDeleted(Renda $renda): void
     {
-        //
     }
 }

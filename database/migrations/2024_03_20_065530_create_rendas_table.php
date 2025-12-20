@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +15,10 @@ return new class () extends Migration {
     {
         Schema::create('rendas', function (Blueprint $blueprint): void {
             $blueprint->bigIncrements('id');
-            $blueprint->foreignId('user_id');
+            $blueprint->foreignIdFor(User::class)
+                ->index()
+                ->constrained()
+                ->cascadeOnDelete();
             $blueprint->string('saldo');
             $blueprint->string('custo')->default(0);
             $blueprint->softDeletes();

@@ -9,6 +9,7 @@ use App\Models\Renda;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 
 class CustoWidget extends BaseWidget
 {
@@ -38,7 +39,7 @@ class CustoWidget extends BaseWidget
     {
         $authId = Auth::user()->getAuthIdentifier();
         $renda = Renda::whereUserId($authId)->first();
-        $date = \Illuminate\Support\Facades\Date::now();
+        $date = Date::now();
         $mes = ($date->month >= 1 && $date->month <= 9) ? strval('0' . $date->month) : $date->month;
         $ano = $date->year;
         $mesAno = sprintf('%s/%d', $mes, $ano);
@@ -55,10 +56,9 @@ class CustoWidget extends BaseWidget
         info(sprintf('%s | %s | %s', $total, $saldo, $custo));
 
         return [
-            Stat::make('Renda Inicial', $this->brl_moeda($saldo)),
-            $this->statCustom('Custo previsto', $total, $saldo >= $total, 'Custo'),
-            $this->statCustom('Renda atual', $custo, $saldo > $total, 'Renda'),
-
+            Stat::make('Renda Inicial', $this->brlMoeda((float) $saldo)),
+            $this->statCustom('Custo previsto', (float) $total, $saldo >= $total, 'Custo'),
+            $this->statCustom('Renda atual', (float) $custo, $saldo > $total, 'Renda'),
         ];
     }
 }
