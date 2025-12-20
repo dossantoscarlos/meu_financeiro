@@ -1,17 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\Despesa;
-use App\Models\TipoDespesa;
-use App\Models\StatusDespesa;
-use App\Models\CategoriaDespesa;
 use App\Models\Plano;
+use App\Models\StatusDespesa;
+use App\Models\TipoDespesa;
 use App\Models\User;
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class DespesaModelTest extends TestCase
 {
