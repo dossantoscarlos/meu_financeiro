@@ -72,7 +72,7 @@ jobs:
       - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
         env:
           DB_CONNECTION: sqlite
-          DB_DATABASE: database/database.sqlite
+          DB_DATABASE: database.sqlite
         run: php artisan test
 
   # docker-build:
