@@ -9,6 +9,9 @@ use App\Models\Despesa;
 use App\Models\TipoDespesa;
 use App\Models\StatusDespesa;
 use App\Models\CategoriaDespesa;
+use App\Models\Plano;
+use App\Models\User;
+
 
 class DespesaModelTest extends TestCase
 {
@@ -39,6 +42,8 @@ class DespesaModelTest extends TestCase
             'mes_ano' => '2025-12',
             'user_id' => $user->id,
         ]);
+
+        $this->actingAs($user);
 
         Despesa::create([
             'descricao' => 'Teste',

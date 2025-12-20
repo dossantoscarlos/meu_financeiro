@@ -1,42 +1,21 @@
 services:
-  #aplicação web (PHP+NGINX)
   web:
-    #image: urnau/php-community:8.1.28-fpm-nginx
-    image: urnau/php-community:latest
-    # utilizado quando vamos contruir uma nova imagem
+    image: minha-app:latest
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "8089:10000"
+    volumes:
+      - sqlite_data:/var/www/html/database
     networks:
       - net_principal
-    volumes:
-      - ./docker/nginx/sites:/etc/nginx/sites-available
-    ports:
-      - "9001:9001" #http
-      - "443:443" #https
-    #depends_on:
-     # - mysql
-  # aplicação MySQL
-  #mysql:
-    # image: 'mysql/mysql-server:8.0'
-    # restart: always
-    # volumes:
-    #   - 'volume_mysql:/var/lib/mysql'
-    # environment:
-    #   MYSQL_ROOT_HOST: '%'
-    #   MYSQL_ROOT_PASSWORD: password
-    #   MYSQL_USER: sail
-    #   MYSQL_DATABASE: app_test
-    #   MYSQL_PASSWORD: password
-    #   MYSQL_ALLOW_EMPTY_PASSWORD: 1
-    # networks:
-    #   - net_principal
-    # ports:
-    #   - 3306:3306
+    restart: always
+
 networks:
   net_principal:
     driver: bridge
 
-# volumes:
-#   volume_mysql:
-#     driver: local
+volumes:
+  sqlite_data:
+    driver: local

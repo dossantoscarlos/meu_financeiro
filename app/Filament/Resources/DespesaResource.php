@@ -7,10 +7,12 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DespesaResource\Pages;
 use App\Livewire\Components\MyMoney;
 use App\Models\Despesa;
+use App\Util\StatusDespesaColor;
 use BackedEnum;
+use Filament\Actions;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,7 +20,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
-use Filament\Schemas\Schema;
 
 class DespesaResource extends Resource
 {
@@ -34,9 +35,9 @@ class DespesaResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-credit-card';
 
-    public static function form(Schema $form): Schema
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make(name: 'descricao')
                     ->required(),
@@ -100,29 +101,36 @@ class DespesaResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(
-                fn (Builder $builder) => $builder
-                ->withoutGlobalScopes([
-                    SoftDeletingScope::class,
-                ])
-            )->columns([
+            ->columns([
                 Tables\Columns\TextColumn::make(name: 'descricao')
+                    ->label(label: 'Descrição')
                     ->searchable(),
                 Tables\Columns\TextColumn::make(name: 'statusDespesa.nome')
+                    ->label(label: 'Status')
+                    ->badge()
+                    ->color(fn (string $state): string => StatusDespesaColor::getColor($state))
+                    ->formatStateUsing(fn (string $state): string => mb_strtoupper($state))
                     ->sortable(),
                 Tables\Columns\TextColumn::make(name: 'tipoDespesa.nome')
+                    ->label(label: 'Categoria')
+                    ->formatStateUsing(fn (string $state): string => mb_strtoupper($state))
                     ->sortable(),
                 Tables\Columns\TextColumn::make(name: 'plano.mes_ano')
-                    ->tooltip(fn (Model $model): string => $model->plano->descricao_simples)
-                    ->searchable(),
+                    ->label(label: 'Plano mensal')
+                    ->formatStateUsing(fn (string $state): string => mb_strtoupper($state))
+                    ->tooltip(fn (Model $model): ?string => $model->plano?->descricao_simples)
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make(name: 'data_vencimento')
                     ->label('Data de vencimento')
                     ->date('d/m/Y')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make(name: 'valor_documento')
                     ->label(label: 'Valor do documento')
                     ->money(currency: 'BRL', locale: 'pt_BR')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make(name: 'deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -138,24 +146,30 @@ class DespesaResource extends Resource
             ])
             ->filters([
                 //
-            ]);
-            // ->actions([
-            //     Tables\Actions\EditAction::make(),
-            //     Tables\Actions\DeleteAction::make(),
-            //     Tables\Actions\RestoreAction::make(),
-            //     Tables\Actions\ForceDeleteAction::make(),
-            // ])
-            // ->bulkActions([
-            //     Tables\Actions\BulkActionGroup::make([
-            //         Tables\Actions\DeleteBulkAction::make(),
-            //     ]),
-            // ]);
+            ])
+        ->recordActions([
+            Actions\ActionGroup::make([
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
+                Actions\RestoreAction::make(),
+                Actions\ForceDeleteAction::make(),
+            ]),
+        ])
+        ->toolbarActions([
+            Actions\BulkAction::make('delete')
+            ->label('Deletar')
+            ->action(function (Collection $records) {
+                $records->each(function (Model $record) {
+                    $record->delete();
+                });
+            })
+        ]);
     }
 
     public static function getRelations(): array
     {
         return [
-
+            //
         ];
     }
 

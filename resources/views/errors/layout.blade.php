@@ -1,8 +1,3 @@
-<?php
-
-declare(strict_types=1);
-
-?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -56,4 +51,3 @@ declare(strict_types=1);
         </div>
     </body>
 </html>
-<?php

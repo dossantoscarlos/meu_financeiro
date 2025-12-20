@@ -19,7 +19,7 @@ return new class () extends Migration {
             $blueprint->string('quantidade');
             $blueprint->string('tipo_medida');
             $blueprint->date('data_compra');
-            $blueprint->softdeletes();
+            $blueprint->softDeletes();
             $blueprint->timestamps();
         });
     }

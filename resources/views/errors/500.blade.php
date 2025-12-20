@@ -1,11 +1,4 @@
-<?php
-
-declare(strict_types=1);
-
-?>
 @extends('errors::minimal')
-
-@section('title', __('Server Error'))
+@section('title', __('Error 500'))
 @section('code', '500')
-@section('message', __('Server Error'))
-<?php
+@section('message', __($exception->getMessage() ?: 'Error 500'))

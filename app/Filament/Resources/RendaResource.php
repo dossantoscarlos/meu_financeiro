@@ -8,13 +8,12 @@ use App\Filament\Resources\RendaResource\Pages;
 use App\Livewire\Components\MyMoney;
 use App\Models\Renda;
 use BackedEnum;
+use Filament\Actions;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
@@ -38,10 +37,7 @@ class RendaResource extends Resource
                     ->relationship(
                         name: 'user',
                         titleAttribute: 'name',
-                        modifyQueryUsing: fn (Builder $builder): Builder =>
-                            $builder->whereId(
-                                Auth::user()->getAuthIdentifier()
-                            )
+                        modifyQueryUsing: fn ($query) => $query->where('users.id', Auth::id())
                     )
                 ->required(),
                 MyMoney::make('saldo')
@@ -80,6 +76,23 @@ class RendaResource extends Resource
             ])
             ->filters([
                 //
+            ])
+            ->recordActions([
+                Actions\ActionGroup::make([
+                    Actions\EditAction::make(),
+                    Actions\DeleteAction::make(),
+                    Actions\RestoreAction::make(),
+                    Actions\ForceDeleteAction::make(),
+                ])
+            ])
+            ->toolbarActions([
+                Actions\BulkAction::make('delete')
+                ->label('Deletar')
+                ->action(function (Collection $records) {
+                    $records->each(function (Model $record) {
+                        $record->delete();
+                    });
+                })
             ]);
     }
 

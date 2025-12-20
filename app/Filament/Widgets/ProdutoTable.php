@@ -18,12 +18,18 @@ class ProdutoTable extends BaseWidget
         return $table
             ->query(Produto::query())
             ->columns([
-                Tables\Columns\TextColumn::make('descricao_curta'),
+                Tables\Columns\TextColumn::make('descricao_curta')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('preco')
-                    ->money('BRL', locale: 'pt_BR'),
-                Tables\Columns\TextColumn::make('quantidade'),
+                    ->money('BRL', locale: 'pt_BR')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('quantidade')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('total')
-                    ->money('BRL', locale: 'pt_BR'),
-            ]);
+                    ->money('BRL', locale: 'pt_BR')
+                    ->sortable(),
+            ])
+            ->paginated([3, 5, 10])
+            ->defaultPaginationPageOption(3);
     }
 }

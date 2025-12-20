@@ -1,11 +1,4 @@
-<?php
-
-declare(strict_types=1);
-
-?>
 @extends('errors::minimal')
-
-@section('title', __('Too Many Requests'))
+@section('title', __('Error 429'))
 @section('code', '429')
-@section('message', __('Too Many Requests'))
-<?php
+@section('message', __($exception->getMessage() ?: 'Error 429'))

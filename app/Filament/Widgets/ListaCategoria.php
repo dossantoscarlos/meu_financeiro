@@ -18,7 +18,10 @@ class ListaCategoria extends BaseWidget
         return $table
             ->query(TipoDespesa::query())
             ->columns([
-                Tables\Columns\TextColumn::make('nome'),
-            ]);
+                Tables\Columns\TextColumn::make('nome')
+                ->searchable(),
+            ])
+            ->paginated([3, 5, 10])
+            ->defaultPaginationPageOption(3);
     }
 }

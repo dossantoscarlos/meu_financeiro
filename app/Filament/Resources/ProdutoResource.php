@@ -8,6 +8,11 @@ use App\Filament\Resources\ProdutoResource\Pages;
 use App\Livewire\Components\MyMoney;
 use App\Models\Produto;
 use BackedEnum;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Utilities\Get;
@@ -15,10 +20,9 @@ use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
-
 
 class ProdutoResource extends Resource
 {
@@ -39,11 +43,10 @@ class ProdutoResource extends Resource
 
     protected static function update(?string $get, ?string $state, Set $set): void
     {
+        $state = str_replace(',', '.', $state ?? '0');
+        $get = str_replace(',', '.', $get ?? '1');
 
-        $state = str_replace(',', '.', $state);
-        $get = str_replace(',', '.', $get);
-        dump('get', $get);
-        if ($get === null) {
+        if ($get === null || $get === '') {
             $get = 1;
         }
 
@@ -114,10 +117,7 @@ class ProdutoResource extends Resource
                     ->relationship(
                         name: 'user',
                         titleAttribute: 'name',
-                        modifyQueryUsing: fn (Builder $builder): Builder =>
-                            $builder->whereId(
-                                Auth::user()->getAuthIdentifier()
-                            )
+                        modifyQueryUsing: fn ($query) => $query->where('users.id', Auth::id())
                     )
                     ->native(condition: false)
                     ->required(),
@@ -146,6 +146,17 @@ class ProdutoResource extends Resource
             ])
             ->filters([
                 //
+            ])->recordActions([
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make(),
+                ]),
+            ])->toolbarActions([
+                BulkAction::make('delete')
+                    ->requiresConfirmation()
+                    ->authorizeIndividualRecords('delete')
+                    ->action(fn (Collection $records) => $records->each->delete())
             ]);
     }
 
