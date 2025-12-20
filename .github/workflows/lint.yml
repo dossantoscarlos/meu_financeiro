@@ -62,7 +62,7 @@ jobs:
         run: php artisan key:generate
 
       - name: Directory Permissions
-        run: chmod -R -X storage bootstrap/cache
+        run: chmod -R 755 storage bootstrap/cache
 
       - name: Create Database
         run: |
