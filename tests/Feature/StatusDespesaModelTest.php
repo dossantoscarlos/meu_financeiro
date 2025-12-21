@@ -16,7 +16,7 @@ class StatusDespesaModelTest extends TestCase
      */
     public function test_create_status_despesa(): void
     {
-        $response = StatusDespesa::create([
+        StatusDespesa::create([
             'nome' => 'Teste',
         ]);
 
