@@ -1,12 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\StatusDespesa;
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class StatusDespesaModelTest extends TestCase
 {
@@ -16,7 +16,7 @@ class StatusDespesaModelTest extends TestCase
      */
     public function test_create_status_despesa(): void
     {
-        $response = StatusDespesa::create([
+        StatusDespesa::create([
             'nome' => 'Teste',
         ]);
 
