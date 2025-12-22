@@ -26,3 +26,6 @@ rr
 .rr.yaml
 
 **/caddy
+
+localhost+3.pem
+localhost+3-key.pem

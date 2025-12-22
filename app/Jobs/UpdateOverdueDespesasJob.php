@@ -11,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class UpdateOverdueDespesasJob implements ShouldQueue
 {
@@ -37,27 +36,12 @@ class UpdateOverdueDespesasJob implements ShouldQueue
         $statusAtrasado = StatusDespesa::where('nome', 'atrasado')->first();
         $statusPago = StatusDespesa::where('nome', 'pago')->first();
 
-        if (!$statusPendente || !$statusAtrasado || !$statusPago) {
-            Log::warning('UpdateOverdueDespesasJob: Required statuses (pendente, atrasado, or pago) not found.');
-            return;
-        }
-
         $today = now()->toDateString();
 
         // 1. Update to 'atrasado': not paid and vencimento < today
-        $atrasadoCount = Despesa::where('status_despesa_id', '!=', $statusPago->id)
+        Despesa::where('status_despesa_id', '!=', $statusPago->id)
             ->where('data_vencimento', '<', $today)
             ->where('status_despesa_id', '!=', $statusAtrasado->id)
             ->update(['status_despesa_id' => $statusAtrasado->id]);
-
-        // 2. Update to 'pendente': not paid and vencimento >= today
-        $pendenteCount = Despesa::where('status_despesa_id', '!=', $statusPago->id)
-            ->where('data_vencimento', '>=', $today)
-            ->where('status_despesa_id', '!=', $statusPendente->id)
-            ->update(['status_despesa_id' => $statusPendente->id]);
-
-        if ($atrasadoCount > 0 || $pendenteCount > 0) {
-            Log::info("UpdateOverdueDespesasJob: Updated {$atrasadoCount} to 'atrasado' and {$pendenteCount} to 'pendente'.");
-        }
     }
 }
