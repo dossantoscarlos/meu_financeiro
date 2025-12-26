@@ -21,7 +21,7 @@ class ListaDespesasWidget extends BaseWidget
             ->query(
                 Despesa::query()
                     ->whereHas('plano', function ($query) {
-                        $query->where('user_id', Auth::id());
+                        $query->where('user_id', Auth::id())->whereD;
                     })
             )
             ->columns([

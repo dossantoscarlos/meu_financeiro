@@ -7,11 +7,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\StatusDespesaResource\Pages;
 use App\Models\StatusDespesa;
 use BackedEnum;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use UnitEnum;
 
 class StatusDespesaResource extends Resource
@@ -60,8 +63,16 @@ class StatusDespesaResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
-            ]);
+
+            ])->toolbarActions([
+                Actions\BulkAction::make('delete')
+                ->label('Deletar')
+                ->action(function (Collection $records) {
+                    $records->each(function (Model $record) {
+                        $record->delete();
+                    });
+                })
+            ])  ;
     }
 
     public static function getPages(): array

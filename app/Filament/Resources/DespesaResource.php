@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use Filament\Tables\Filters\Filter;
 use App\Filament\Resources\DespesaResource\Pages;
 use App\Livewire\Components\MyMoney;
 use App\Models\Despesa;
@@ -20,6 +21,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
+use Illuminate\Support\Collection;
+
 
 class DespesaResource extends Resource
 {
@@ -110,6 +113,7 @@ class DespesaResource extends Resource
                     ->badge()
                     ->color(fn (string $state): string => StatusDespesaColor::getColor($state))
                     ->formatStateUsing(fn (string $state): string => mb_strtoupper($state))
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make(name: 'tipoDespesa.nome')
                     ->label(label: 'Categoria')
@@ -145,7 +149,14 @@ class DespesaResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Filter::make('ocultar_pagos')
+                    ->label('Ocultar pagos')
+                    ->query(fn (Builder $query) =>
+                        $query->whereDoesntHave('statusDespesa', fn (Builder $query) =>
+                            $query->where('nome', 'pago')
+                        )
+                    )
+                    ->default(),
             ])
         ->recordActions([
             Actions\ActionGroup::make([
