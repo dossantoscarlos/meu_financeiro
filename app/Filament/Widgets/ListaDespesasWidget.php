@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Widgets;
 
 use App\Models\Despesa;
+use App\Models\Plano;
 use App\Util\StatusDespesaColor;
+use Carbon\Carbon;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -17,11 +19,41 @@ class ListaDespesasWidget extends BaseWidget
 
     public function table(Table $table): Table
     {
+        $userId = Auth::id();
+        $currentDate = Carbon::now()->startOfMonth();
+
+        $planos = Plano::where('user_id', $userId)->get(['id', 'mes_ano']);
+        $currentPlanIds = [];
+        $pastPlanIds = [];
+
+        foreach ($planos as $plano) {
+            try {
+                $planoDate = Carbon::createFromFormat('m/Y', $plano->mes_ano)->startOfMonth();
+                if ($planoDate->equalTo($currentDate)) {
+                    $currentPlanIds[] = $plano->id;
+                } elseif ($planoDate->lessThan($currentDate)) {
+                    $pastPlanIds[] = $plano->id;
+                }
+            } catch (\Exception $e) {
+                // Ignore invalid dates
+            }
+        }
+
         return $table
             ->query(
-                Despesa::whereHas('plano', function ($query) {
-                    $query->where('user_id', Auth::id());
-                })
+                Despesa::query()
+                    ->where(function ($query) use ($currentPlanIds, $pastPlanIds) {
+                        $query->whereIn('plano_id', $currentPlanIds);
+
+                        if (! empty($pastPlanIds)) {
+                            $query->orWhere(function ($q) use ($pastPlanIds) {
+                                $q->whereIn('plano_id', $pastPlanIds)
+                                    ->whereHas('statusDespesa', function ($sq) {
+                                        $sq->whereIn('nome', ['atrasado', 'pendente']);
+                                    });
+                            });
+                        }
+                    })
             )
             ->columns([
                 Tables\Columns\TextColumn::make('descricao')
