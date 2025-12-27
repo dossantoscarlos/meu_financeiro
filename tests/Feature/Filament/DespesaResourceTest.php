@@ -22,6 +22,7 @@ class DespesaResourceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        config(['database.connections.sqlite.database' => 'testing']);
 
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -35,7 +36,8 @@ class DespesaResourceTest extends TestCase
 
     public function test_can_list_records(): void
     {
-        $despesas = Despesa::factory()->count(5)->create();
+        $plano = Plano::factory()->create(['user_id' => auth()->id()]);
+        $despesas = Despesa::factory()->count(5)->create(['plano_id' => $plano->id]);
 
         Livewire::test(DespesaResource\Pages\ManageDespesas::class)
             ->assertCanSeeTableRecords($despesas);

@@ -102,6 +102,7 @@ class PlanoResource extends Resource
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
+            ])
+            ->where('user_id', \Illuminate\Support\Facades\Auth::id());
     }
 }

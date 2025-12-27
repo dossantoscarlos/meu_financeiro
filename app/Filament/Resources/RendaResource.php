@@ -104,4 +104,13 @@ class RendaResource extends Resource
             'index' => Pages\ManageRendas::route('/'),
         ];
     }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                \Illuminate\Database\Eloquent\SoftDeletingScope::class,
+            ])
+            ->where('user_id', \Illuminate\Support\Facades\Auth::id());
+    }
 }

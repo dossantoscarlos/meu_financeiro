@@ -198,6 +198,7 @@ class DespesaResource extends Resource
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
+            ])
+            ->whereHas('plano', fn ($query) => $query->where('user_id', Auth::id()));
     }
 }
