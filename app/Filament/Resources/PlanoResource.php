@@ -14,7 +14,9 @@ use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Collection;
 use UnitEnum;
 
 class PlanoResource extends Resource
@@ -77,7 +79,7 @@ class PlanoResource extends Resource
                     Actions\ForceDeleteAction::make(),
                 ])
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 Actions\BulkAction::make('delete')
                 ->label('Deletar')
                 ->action(function (Collection $records) {

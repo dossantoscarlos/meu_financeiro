@@ -26,7 +26,7 @@ class ListaDespesasWidgetTest extends TestCase
 
     public function test_can_render_widget(): void
     {
-        $plano = Plano::factory()->create(['user_id' => auth()->id()]);
+        $plano = Plano::factory()->create(['user_id' => auth()->id(), 'mes_ano' => now()->format('m/Y')]);
         $despesas = Despesa::factory()->count(3)->create(['plano_id' => $plano->id]);
 
         Livewire::test(ListaDespesasWidget::class)
@@ -39,7 +39,7 @@ class ListaDespesasWidgetTest extends TestCase
         $otherPlano = Plano::factory()->create(['user_id' => $otherUser->id]);
         $otherDespesa = Despesa::factory()->create(['plano_id' => $otherPlano->id]);
 
-        $myPlano = Plano::factory()->create(['user_id' => auth()->id()]);
+        $myPlano = Plano::factory()->create(['user_id' => auth()->id(), 'mes_ano' => now()->format('m/Y')]);
         $myDespesa = Despesa::factory()->create(['plano_id' => $myPlano->id]);
 
         Livewire::test(ListaDespesasWidget::class)

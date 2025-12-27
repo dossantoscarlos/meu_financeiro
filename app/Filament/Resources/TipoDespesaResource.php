@@ -7,11 +7,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\TipoDespesaResource\Pages\ManageTipoDespesas;
 use App\Models\TipoDespesa;
 use BackedEnum;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use UnitEnum;
 
 class TipoDespesaResource extends Resource
@@ -69,6 +72,15 @@ class TipoDespesaResource extends Resource
             ])
             ->filters([
                 //
+            ])
+            ->toolbarActions([
+                Actions\BulkAction::make('delete')
+                ->label('Deletar')
+                ->action(function (Collection $records) {
+                    $records->each(function (Model $record) {
+                        $record->delete();
+                    });
+                })
             ]);
     }
 

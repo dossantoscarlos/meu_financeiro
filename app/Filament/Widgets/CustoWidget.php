@@ -37,12 +37,15 @@ class CustoWidget extends BaseWidget
 
     protected function getStats(): array
     {
-        $authId = Auth::user()->getAuthIdentifier();
-        $renda = Renda::whereUserId($authId)->first();
         $date = Date::now();
         $mes = ($date->month >= 1 && $date->month <= 9) ? strval('0' . $date->month) : $date->month;
         $ano = $date->year;
         $mesAno = sprintf('%s/%d', $mes, $ano);
+
+        $authId = Auth::user()->getAuthIdentifier();
+        $renda = Renda::where([
+            ['user_id', '=', $authId],
+        ])->first();
 
         $plano = Plano::with('gastos')->where([
             ['user_id', '=', $authId],

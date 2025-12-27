@@ -14,10 +14,12 @@ use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
@@ -110,6 +112,7 @@ class DespesaResource extends Resource
                     ->badge()
                     ->color(fn (string $state): string => StatusDespesaColor::getColor($state))
                     ->formatStateUsing(fn (string $state): string => mb_strtoupper($state))
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make(name: 'tipoDespesa.nome')
                     ->label(label: 'Categoria')
@@ -145,7 +148,17 @@ class DespesaResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Filter::make('ocultar_pagos')
+                    ->label('Ocultar pagos')
+                    ->query(
+                        fn (Builder $query) =>
+                        $query->whereDoesntHave(
+                            'statusDespesa',
+                            fn (Builder $query) =>
+                            $query->where('nome', 'pago')
+                        )
+                    )
+                    ->default(),
             ])
         ->recordActions([
             Actions\ActionGroup::make([
