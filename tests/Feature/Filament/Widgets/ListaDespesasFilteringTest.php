@@ -9,7 +9,6 @@ use App\Models\Despesa;
 use App\Models\Plano;
 use App\Models\StatusDespesa;
 use App\Models\User;
-use Carbon\Carbon;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -18,7 +17,7 @@ class ListaDespesasFilteringTest extends TestCase
     public function test_it_filters_despesas_correctly(): void
     {
         // Setup dates (mocking time not needed if we set mes_ano correctly)
-        $now = Carbon::now();
+        $now = \Illuminate\Support\Facades\Date::now();
         $currentMesAno = $now->format('m/Y');
         $pastMesAno = $now->copy()->subMonth()->format('m/Y');
         $futureMesAno = $now->copy()->addMonth()->format('m/Y');

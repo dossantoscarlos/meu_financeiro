@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Jobs\UpdateOverdueDespesasJob;
 use Illuminate\Console\Command;
 
 class UpdateDespesaStatusCommand extends Command
@@ -29,7 +28,7 @@ class UpdateDespesaStatusCommand extends Command
     public function handle(): void
     {
         $this->info('Dispatching UpdateOverdueDespesasJob...');
-        UpdateOverdueDespesasJob::dispatch();
+        dispatch(new \App\Jobs\UpdateOverdueDespesasJob());
         $this->info('Job dispatched successfully.');
     }
 }

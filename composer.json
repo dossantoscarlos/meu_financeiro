@@ -76,6 +76,15 @@
         "dev": [
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan octane:start --server=frankenphp\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"php artisan schedule:work\" \"npm run dev \" --names=server,queue,logs,vite"
+        ],
+        "lint":[
+            "@php vendor/bin/phpstan",
+            "@php vendor/bin/phpcs"
+        ],
+        "format":[
+            "@php vendor/bin/rector",
+            "@php vendor/bin/pint",
+            "@php vendor/bin/phpcbf"
         ]
     },
     "extra": {

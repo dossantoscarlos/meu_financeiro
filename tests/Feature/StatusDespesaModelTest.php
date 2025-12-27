@@ -11,6 +11,7 @@ use Tests\TestCase;
 class StatusDespesaModelTest extends TestCase
 {
     use RefreshDatabase;
+
     /**
      * Teste de criação de status de despesa.
      */

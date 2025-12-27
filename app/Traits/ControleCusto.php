@@ -40,7 +40,13 @@ trait ControleCusto
         }
 
         $total = 0.0;
-        foreach ($plano->despesas as $despesa) {
+
+        /**
+         * @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\Despesa> $despesas
+         */
+        $despesas = $plano->despesas;
+
+        foreach ($despesas as $despesa) {
             $total += (float) $despesa->valor_documento;
         }
 

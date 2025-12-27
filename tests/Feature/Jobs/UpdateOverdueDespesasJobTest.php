@@ -8,7 +8,6 @@ use App\Jobs\UpdateOverdueDespesasJob;
 use App\Models\Despesa;
 use App\Models\StatusDespesa;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class UpdateOverdueDespesasJobTest extends TestCase
@@ -23,12 +22,12 @@ class UpdateOverdueDespesasJobTest extends TestCase
 
         $overduePendente = Despesa::factory()->create([
             'status_despesa_id' => $pendente->id,
-            'data_vencimento' => Carbon::yesterday()->toDateString(),
+            'data_vencimento' => \Illuminate\Support\Facades\Date::yesterday()->toDateString(),
         ]);
 
         $overduePaid = Despesa::factory()->create([
             'status_despesa_id' => $paid->id,
-            'data_vencimento' => Carbon::yesterday()->toDateString(),
+            'data_vencimento' => \Illuminate\Support\Facades\Date::yesterday()->toDateString(),
         ]);
 
 

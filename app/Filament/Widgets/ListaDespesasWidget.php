@@ -7,7 +7,6 @@ namespace App\Filament\Widgets;
 use App\Models\Despesa;
 use App\Models\Plano;
 use App\Util\StatusDespesaColor;
-use Carbon\Carbon;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -20,7 +19,7 @@ class ListaDespesasWidget extends BaseWidget
     public function table(Table $table): Table
     {
         $userId = Auth::id();
-        $currentDate = Carbon::now()->startOfMonth();
+        $currentDate = \Illuminate\Support\Facades\Date::now()->startOfMonth();
 
         $planos = Plano::where('user_id', $userId)->get(['id', 'mes_ano']);
         $currentPlanIds = [];
@@ -28,13 +27,13 @@ class ListaDespesasWidget extends BaseWidget
 
         foreach ($planos as $plano) {
             try {
-                $planoDate = Carbon::createFromFormat('m/Y', $plano->mes_ano)->startOfMonth();
+                $planoDate = \Illuminate\Support\Facades\Date::createFromFormat('m/Y', $plano->mes_ano)->startOfMonth();
                 if ($planoDate->equalTo($currentDate)) {
                     $currentPlanIds[] = $plano->id;
                 } elseif ($planoDate->lessThan($currentDate)) {
                     $pastPlanIds[] = $plano->id;
                 }
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 // Ignore invalid dates
             }
         }

@@ -1,308 +1,308 @@
-<?php return array (
+<?php return  [
   'anourvalar/eloquent-serialize' => 
-  array (
+   [
     'aliases' => 
-    array (
-      'EloquentSerialize' => 'AnourValar\\EloquentSerialize\\Facades\\EloquentSerializeFacade',
-    ),
-  ),
+     [
+      'EloquentSerialize' => \AnourValar\EloquentSerialize\Facades\EloquentSerializeFacade::class,
+    ],
+  ],
   'archtechx/money' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'ArchTech\\Money\\MoneyServiceProvider',
-    ),
-  ),
+     [
+      0 => \ArchTech\Money\MoneyServiceProvider::class,
+    ],
+  ],
   'barryvdh/laravel-debugbar' => 
-  array (
+   [
     'aliases' => 
-    array (
-      'Debugbar' => 'Barryvdh\\Debugbar\\Facades\\Debugbar',
-    ),
+     [
+      'Debugbar' => \Barryvdh\Debugbar\Facades\Debugbar::class,
+    ],
     'providers' => 
-    array (
-      0 => 'Barryvdh\\Debugbar\\ServiceProvider',
-    ),
-  ),
+     [
+      0 => \Barryvdh\Debugbar\ServiceProvider::class,
+    ],
+  ],
   'barryvdh/laravel-dompdf' => 
-  array (
+   [
     'aliases' => 
-    array (
-      'PDF' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
-      'Pdf' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
-    ),
+     [
+      'PDF' => \Barryvdh\DomPDF\Facade\Pdf::class,
+      'Pdf' => \Barryvdh\DomPDF\Facade\Pdf::class,
+    ],
     'providers' => 
-    array (
-      0 => 'Barryvdh\\DomPDF\\ServiceProvider',
-    ),
-  ),
+     [
+      0 => \Barryvdh\DomPDF\ServiceProvider::class,
+    ],
+  ],
   'blade-ui-kit/blade-heroicons' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'BladeUI\\Heroicons\\BladeHeroiconsServiceProvider',
-    ),
-  ),
+     [
+      0 => \BladeUI\Heroicons\BladeHeroiconsServiceProvider::class,
+    ],
+  ],
   'blade-ui-kit/blade-icons' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'BladeUI\\Icons\\BladeIconsServiceProvider',
-    ),
-  ),
+     [
+      0 => \BladeUI\Icons\BladeIconsServiceProvider::class,
+    ],
+  ],
   'codeat3/blade-line-awesome-icons' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Codeat3\\BladeLineAwesomeIcons\\BladeLineAwesomeIconsServiceProvider',
-    ),
-  ),
+     [
+      0 => \Codeat3\BladeLineAwesomeIcons\BladeLineAwesomeIconsServiceProvider::class,
+    ],
+  ],
   'codeat3/blade-vaadin-icons' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Codeat3\\BladeVaadinIcons\\BladeVaadinIconsServiceProvider',
-    ),
-  ),
+     [
+      0 => \Codeat3\BladeVaadinIcons\BladeVaadinIconsServiceProvider::class,
+    ],
+  ],
   'filament/actions' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Filament\\Actions\\ActionsServiceProvider',
-    ),
-  ),
+     [
+      0 => \Filament\Actions\ActionsServiceProvider::class,
+    ],
+  ],
   'filament/filament' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Filament\\FilamentServiceProvider',
-    ),
-  ),
+     [
+      0 => \Filament\FilamentServiceProvider::class,
+    ],
+  ],
   'filament/forms' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Filament\\Forms\\FormsServiceProvider',
-    ),
-  ),
+     [
+      0 => \Filament\Forms\FormsServiceProvider::class,
+    ],
+  ],
   'filament/infolists' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Filament\\Infolists\\InfolistsServiceProvider',
-    ),
-  ),
+     [
+      0 => \Filament\Infolists\InfolistsServiceProvider::class,
+    ],
+  ],
   'filament/notifications' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Filament\\Notifications\\NotificationsServiceProvider',
-    ),
-  ),
+     [
+      0 => \Filament\Notifications\NotificationsServiceProvider::class,
+    ],
+  ],
   'filament/query-builder' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Filament\\QueryBuilder\\QueryBuilderServiceProvider',
-    ),
-  ),
+     [
+      0 => \Filament\QueryBuilder\QueryBuilderServiceProvider::class,
+    ],
+  ],
   'filament/schemas' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Filament\\Schemas\\SchemasServiceProvider',
-    ),
-  ),
+     [
+      0 => \Filament\Schemas\SchemasServiceProvider::class,
+    ],
+  ],
   'filament/support' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Filament\\Support\\SupportServiceProvider',
-    ),
-  ),
+     [
+      0 => \Filament\Support\SupportServiceProvider::class,
+    ],
+  ],
   'filament/tables' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Filament\\Tables\\TablesServiceProvider',
-    ),
-  ),
+     [
+      0 => \Filament\Tables\TablesServiceProvider::class,
+    ],
+  ],
   'filament/widgets' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Filament\\Widgets\\WidgetsServiceProvider',
-    ),
-  ),
+     [
+      0 => \Filament\Widgets\WidgetsServiceProvider::class,
+    ],
+  ],
   'kirschbaum-development/eloquent-power-joins' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Kirschbaum\\PowerJoins\\PowerJoinsServiceProvider',
-    ),
-  ),
+     [
+      0 => \Kirschbaum\PowerJoins\PowerJoinsServiceProvider::class,
+    ],
+  ],
   'laravel/boost' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Laravel\\Boost\\BoostServiceProvider',
-    ),
-  ),
+     [
+      0 => \Laravel\Boost\BoostServiceProvider::class,
+    ],
+  ],
   'laravel/breeze' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Laravel\\Breeze\\BreezeServiceProvider',
-    ),
-  ),
+     [
+      0 => \Laravel\Breeze\BreezeServiceProvider::class,
+    ],
+  ],
   'laravel/mcp' => 
-  array (
+   [
     'aliases' => 
-    array (
+     [
       'Mcp' => 'Laravel\\Mcp\\Server\\Facades\\Mcp',
-    ),
+    ],
     'providers' => 
-    array (
-      0 => 'Laravel\\Mcp\\Server\\McpServiceProvider',
-    ),
-  ),
+     [
+      0 => \Laravel\Mcp\Server\McpServiceProvider::class,
+    ],
+  ],
   'laravel/octane' => 
-  array (
+   [
     'aliases' => 
-    array (
-      'Octane' => 'Laravel\\Octane\\Facades\\Octane',
-    ),
+     [
+      'Octane' => \Laravel\Octane\Facades\Octane::class,
+    ],
     'providers' => 
-    array (
-      0 => 'Laravel\\Octane\\OctaneServiceProvider',
-    ),
-  ),
+     [
+      0 => \Laravel\Octane\OctaneServiceProvider::class,
+    ],
+  ],
   'laravel/pail' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Laravel\\Pail\\PailServiceProvider',
-    ),
-  ),
+     [
+      0 => \Laravel\Pail\PailServiceProvider::class,
+    ],
+  ],
   'laravel/roster' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Laravel\\Roster\\RosterServiceProvider',
-    ),
-  ),
+     [
+      0 => \Laravel\Roster\RosterServiceProvider::class,
+    ],
+  ],
   'laravel/sail' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Laravel\\Sail\\SailServiceProvider',
-    ),
-  ),
+     [
+      0 => \Laravel\Sail\SailServiceProvider::class,
+    ],
+  ],
   'laravel/sanctum' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Laravel\\Sanctum\\SanctumServiceProvider',
-    ),
-  ),
+     [
+      0 => \Laravel\Sanctum\SanctumServiceProvider::class,
+    ],
+  ],
   'laravel/tinker' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Laravel\\Tinker\\TinkerServiceProvider',
-    ),
-  ),
+     [
+      0 => \Laravel\Tinker\TinkerServiceProvider::class,
+    ],
+  ],
   'laravellegends/pt-br-validator' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'LaravelLegends\\PtBrValidator\\ValidatorProvider',
-    ),
-  ),
+     [
+      0 => \LaravelLegends\PtBrValidator\ValidatorProvider::class,
+    ],
+  ],
   'leandrocfe/filament-ptbr-form-fields' => 
-  array (
+   [
     'aliases' => 
-    array (
-      'FilamentPtbrFormFields' => 'Leandrocfe\\FilamentPtbrFormFields\\Facades\\FilamentPtbrFormFields',
-    ),
+     [
+      'FilamentPtbrFormFields' => \Leandrocfe\FilamentPtbrFormFields\Facades\FilamentPtbrFormFields::class,
+    ],
     'providers' => 
-    array (
-      0 => 'Leandrocfe\\FilamentPtbrFormFields\\FilamentPtbrFormFieldsServiceProvider',
-    ),
-  ),
+     [
+      0 => \Leandrocfe\FilamentPtbrFormFields\FilamentPtbrFormFieldsServiceProvider::class,
+    ],
+  ],
   'livewire/livewire' => 
-  array (
+   [
     'aliases' => 
-    array (
-      'Livewire' => 'Livewire\\Livewire',
-    ),
+     [
+      'Livewire' => \Livewire\Livewire::class,
+    ],
     'providers' => 
-    array (
-      0 => 'Livewire\\LivewireServiceProvider',
-    ),
-  ),
+     [
+      0 => \Livewire\LivewireServiceProvider::class,
+    ],
+  ],
   'livewire/volt' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Livewire\\Volt\\VoltServiceProvider',
-    ),
-  ),
+     [
+      0 => \Livewire\Volt\VoltServiceProvider::class,
+    ],
+  ],
   'nesbot/carbon' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Carbon\\Laravel\\ServiceProvider',
-    ),
-  ),
+     [
+      0 => \Carbon\Laravel\ServiceProvider::class,
+    ],
+  ],
   'nunomaduro/collision' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
-    ),
-  ),
+     [
+      0 => \NunoMaduro\Collision\Adapters\Laravel\CollisionServiceProvider::class,
+    ],
+  ],
   'nunomaduro/termwind' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Termwind\\Laravel\\TermwindServiceProvider',
-    ),
-  ),
+     [
+      0 => \Termwind\Laravel\TermwindServiceProvider::class,
+    ],
+  ],
   'ryangjchandler/blade-capture-directive' => 
-  array (
+   [
     'aliases' => 
-    array (
+     [
       'BladeCaptureDirective' => 'RyanChandler\\BladeCaptureDirective\\Facades\\BladeCaptureDirective',
-    ),
+    ],
     'providers' => 
-    array (
-      0 => 'RyanChandler\\BladeCaptureDirective\\BladeCaptureDirectiveServiceProvider',
-    ),
-  ),
+     [
+      0 => \RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider::class,
+    ],
+  ],
   'spatie/laravel-ignition' => 
-  array (
+   [
     'aliases' => 
-    array (
-      'Flare' => 'Spatie\\LaravelIgnition\\Facades\\Flare',
-    ),
+     [
+      'Flare' => \Spatie\LaravelIgnition\Facades\Flare::class,
+    ],
     'providers' => 
-    array (
-      0 => 'Spatie\\LaravelIgnition\\IgnitionServiceProvider',
-    ),
-  ),
+     [
+      0 => \Spatie\LaravelIgnition\IgnitionServiceProvider::class,
+    ],
+  ],
   'spatie/laravel-permission' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Spatie\\Permission\\PermissionServiceProvider',
-    ),
-  ),
+     [
+      0 => \Spatie\Permission\PermissionServiceProvider::class,
+    ],
+  ],
   'stephenjude/filament-debugger' => 
-  array (
+   [
     'providers' => 
-    array (
-      0 => 'Stephenjude\\FilamentDebugger\\DebuggerServiceProvider',
-    ),
-  ),
-);
+     [
+      0 => \Stephenjude\FilamentDebugger\DebuggerServiceProvider::class,
+    ],
+  ],
+];

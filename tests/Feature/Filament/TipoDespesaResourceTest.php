@@ -50,7 +50,7 @@ class TipoDespesaResourceTest extends TestCase
             ->assertHasNoActionErrors();
 
         $this->assertDatabaseHas('tipo_despesas', [
-            'nome' => mb_strtoupper($newData->nome),
+            'nome' => mb_strtoupper((string) $newData->nome),
         ]);
     }
 

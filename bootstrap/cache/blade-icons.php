@@ -1,8 +1,8 @@
-<?php return array (
+<?php return  [
   'heroicons' => 
-  array (
+   [
     '/home/kdu/meu_financeiro/vendor/blade-ui-kit/blade-heroicons/src/../resources/svg' => 
-    array (
+     [
       0 => 'c-academic-cap',
       1 => 'c-adjustments-horizontal',
       2 => 'c-adjustments-vertical',
@@ -1291,12 +1291,12 @@
       1285 => 's-wrench',
       1286 => 's-x-circle',
       1287 => 's-x-mark',
-    ),
-  ),
+    ],
+  ],
   'line-awesome-icons' => 
-  array (
+   [
     '/home/kdu/meu_financeiro/vendor/codeat3/blade-line-awesome-icons/src/../resources/svg' => 
-    array (
+     [
       0 => '500px',
       1 => 'accessible-icon',
       2 => 'accusoft',
@@ -2841,12 +2841,12 @@
       1541 => 'youtube-square',
       1542 => 'youtube',
       1543 => 'zhihu',
-    ),
-  ),
+    ],
+  ],
   'vaadin-icons' => 
-  array (
+   [
     '/home/kdu/meu_financeiro/vendor/codeat3/blade-vaadin-icons/src/../resources/svg' => 
-    array (
+     [
       0 => 'abacus',
       1 => 'absolute-position',
       2 => 'academy-cap',
@@ -3483,12 +3483,12 @@
       633 => 'wrench',
       634 => 'youtube-square',
       635 => 'youtube',
-    ),
-  ),
+    ],
+  ],
   'filament' => 
-  array (
+   [
     '/home/kdu/meu_financeiro/vendor/filament/support/src/../resources/svg' => 
-    array (
+     [
       0 => 'm-pencil-slash',
       1 => 'o-align-center',
       2 => 'o-align-end',
@@ -3522,6 +3522,6 @@
       30 => 'o-table-toggle-header-cell',
       31 => 'o-table-toggle-header-row',
       32 => 'o-table',
-    ),
-  ),
-);
+    ],
+  ],
+];

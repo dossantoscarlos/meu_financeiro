@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Observers;
 
 use App\Models\Renda;
+use App\Traits\ControleCusto;
 
 class RendaObserver
 {
-    use \App\Traits\ControleCusto;
+    use ControleCusto;
 
     /**
      * Handle the Renda "created" event.
@@ -39,6 +40,7 @@ class RendaObserver
     public function restored(Renda $renda): void
     {
     }
+
     /**
      * Handle the Renda "force deleted" event.
      */

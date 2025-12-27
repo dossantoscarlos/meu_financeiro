@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Observers;
 
 use App\Models\Despesa;
+use App\Traits\ControleCusto;
 
 class DespesaObserver
 {
-    use \App\Traits\ControleCusto;
+    use ControleCusto;
 
     /**
      * Handle the Despesa "created" event.
