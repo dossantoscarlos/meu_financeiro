@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
 use UnitEnum;
 
-
 class PlanoResource extends Resource
 {
     protected static ?string $model = Plano::class;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use Filament\Tables\Filters\Filter;
 use App\Filament\Resources\DespesaResource\Pages;
 use App\Livewire\Components\MyMoney;
 use App\Models\Despesa;
@@ -15,14 +14,14 @@ use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
-use Illuminate\Support\Collection;
-
 
 class DespesaResource extends Resource
 {
@@ -151,8 +150,11 @@ class DespesaResource extends Resource
             ->filters([
                 Filter::make('ocultar_pagos')
                     ->label('Ocultar pagos')
-                    ->query(fn (Builder $query) =>
-                        $query->whereDoesntHave('statusDespesa', fn (Builder $query) =>
+                    ->query(
+                        fn (Builder $query) =>
+                        $query->whereDoesntHave(
+                            'statusDespesa',
+                            fn (Builder $query) =>
                             $query->where('nome', 'pago')
                         )
                     )
