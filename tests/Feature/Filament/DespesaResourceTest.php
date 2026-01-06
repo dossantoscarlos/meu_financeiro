@@ -24,6 +24,7 @@ class DespesaResourceTest extends TestCase
         parent::setUp();
         config(['database.connections.sqlite.database' => 'testing']);
 
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
     }
@@ -49,22 +50,23 @@ class DespesaResourceTest extends TestCase
         $plano = Plano::factory()->create(['user_id' => auth()->id()]);
         $tipo = TipoDespesa::factory()->create();
 
+        $form = [
+            'descricao' => 'Nova Despesa',
+            'data_vencimento' => now()->toDateString(),
+            'plano_id' => $plano->id,
+            'status_despesa_id' => $status->id,
+            'tipo_despesa_id' => $tipo->id,
+            'valor_documento' => '100',
+        ];
+
+        $keys = array_keys($form);
+
         Livewire::test(DespesaResource\Pages\ManageDespesas::class)
             ->mountAction(CreateAction::class)
-            ->setActionData([
-                'descricao' => 'Nova Despesa',
-                'data_vencimento' => now()->toDateString(),
-                'plano_id' => $plano->id,
-                'status_despesa_id' => $status->id,
-                'tipo_despesa_id' => $tipo->id,
-                'valor_documento' => '100,00',
-            ])
+            ->fillForm($form)
             ->callMountedAction()
-            ->assertHasNoActionErrors();
+            ->assertHasNoFormErrors($keys);
 
-        $this->assertDatabaseHas('despesas', [
-            'descricao' => 'Nova Despesa',
-            'plano_id' => $plano->id,
-        ]);
+        $this->assertDatabaseHas('despesas', $form);
     }
 }
