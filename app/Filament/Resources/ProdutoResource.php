@@ -36,23 +36,25 @@ class ProdutoResource extends Resource
 
     protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-list-bullet';
 
-    protected static function totalProduto(?string $preco, ?string $quantidade): float
+    protected static function formatTotal(mixed $preco, mixed $quantidade): string
     {
-        return floatval($preco) * floatval($quantidade);
-    }
-
-    protected static function update(Get $get, ?string $state, Set $set): void
-    {
-        $preco = str_replace(',', '.', (string) ($get('preco') ?? '0'));
-        $quantidade = str_replace(',', '.', (string) ($get('quantidade') ?? '1'));
+        $preco = str_replace(',', '.', (string) ($preco ?? '0'));
+        $quantidade = str_replace(',', '.', (string) ($quantidade ?? '1'));
 
         if ($quantidade === null || $quantidade === '') {
             $quantidade = '1';
         }
 
-        $total = (float) $preco * (float) $quantidade;
+        $total = floatval($preco) * floatval($quantidade);
+        return number_format($total, 2, ',', '.');
+    }
 
-        $set('total', number_format($total, 2, ',', '.'));
+    protected static function update(Get $get, ?string $state, Set $set): void
+    {
+        $set(
+            'total',
+            self::formatTotal($get('preco'), $get('quantidade'))
+        );
     }
 
     public static function form(Schema $form): Schema
@@ -97,16 +99,13 @@ class ProdutoResource extends Resource
                     ->columnSpan(3)
                     ->prefix('R$')
                     ->inputMode('decimal')
-                    ->formatStateUsing(fn (Get $get): string =>
-                        number_format(
-                            self::totalProduto(
-                                $get('preco'),
-                                $get('quantidade')
-                            ),
-                            2,
-                            ',',
-                            '.'
-                        ))
+                    ->formatStateUsing(
+                        fn (Get $get): string =>
+                        self::formatTotal(
+                            $get('preco'),
+                            $get('quantidade')
+                        )
+                    )
                     ->readOnly(),
                 Forms\Components\DatePicker::make('data_compra')
                     ->label('Data da compra')
