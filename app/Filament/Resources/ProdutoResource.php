@@ -36,23 +36,25 @@ class ProdutoResource extends Resource
 
     protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-list-bullet';
 
-    protected static function totalProduto(?string $preco, ?string $quantidade): float
+    protected static function formatTotal(mixed $preco, mixed $quantidade): string
     {
-        return floatval($preco) * floatval($quantidade);
-    }
+        $preco = str_replace(',', '.', (string) ($preco ?? '0'));
+        $quantidade = str_replace(',', '.', (string) ($quantidade ?? '1'));
 
-    protected static function update(?string $get, ?string $state, Set $set): void
-    {
-        $state = str_replace(',', '.', $state ?? '0');
-        $get = str_replace(',', '.', $get ?? '1');
-
-        if ($get === null || $get === '') {
-            $get = 1;
+        if ($quantidade === null || $quantidade === '') {
+            $quantidade = '1';
         }
 
-        $state = (float) $get * (float) $state;
+        $total = floatval($preco) * floatval($quantidade);
+        return number_format($total, 2, ',', '.');
+    }
 
-        $set('total', number_format($state, 2, ',', '.'));
+    protected static function update(Get $get, ?string $state, Set $set): void
+    {
+        $set(
+            'total',
+            self::formatTotal($get('preco'), $get('quantidade'))
+        );
     }
 
     public static function form(Schema $form): Schema
@@ -70,7 +72,7 @@ class ProdutoResource extends Resource
                     ->inputMode('decimal')
                     ->afterStateUpdated(
                         fn (Get $get, ?string $state, Set $set) =>
-                            self::update($get('quantidade'), $state, $set)
+                            self::update($get, $state, $set)
                     )
                     ->live()
                     ->maxLength(255),
@@ -80,7 +82,7 @@ class ProdutoResource extends Resource
                     ->inputMode('decimal')
                     ->afterStateUpdated(
                         fn (Get $get, ?string $state, Set $set) =>
-                            self::update($get('preco'), $state, $set)
+                            self::update($get, $state, $set)
                     )
                     ->live()
                     ->required(),
@@ -97,16 +99,13 @@ class ProdutoResource extends Resource
                     ->columnSpan(3)
                     ->prefix('R$')
                     ->inputMode('decimal')
-                    ->formatStateUsing(fn (Get $get): string =>
-                        number_format(
-                            self::totalProduto(
-                                $get('preco'),
-                                $get('quantidade')
-                            ),
-                            2,
-                            ',',
-                            '.'
-                        ))
+                    ->formatStateUsing(
+                        fn (Get $get): string =>
+                        self::formatTotal(
+                            $get('preco'),
+                            $get('quantidade')
+                        )
+                    )
                     ->readOnly(),
                 Forms\Components\DatePicker::make('data_compra')
                     ->label('Data da compra')
