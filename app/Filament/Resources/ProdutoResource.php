@@ -41,18 +41,18 @@ class ProdutoResource extends Resource
         return floatval($preco) * floatval($quantidade);
     }
 
-    protected static function update(?string $get, ?string $state, Set $set): void
+    protected static function update(Get $get, ?string $state, Set $set): void
     {
-        $state = str_replace(',', '.', $state ?? '0');
-        $get = str_replace(',', '.', $get ?? '1');
+        $preco = str_replace(',', '.', (string) ($get('preco') ?? '0'));
+        $quantidade = str_replace(',', '.', (string) ($get('quantidade') ?? '1'));
 
-        if ($get === null || $get === '') {
-            $get = 1;
+        if ($quantidade === null || $quantidade === '') {
+            $quantidade = '1';
         }
 
-        $state = (float) $get * (float) $state;
+        $total = (float) $preco * (float) $quantidade;
 
-        $set('total', number_format($state, 2, ',', '.'));
+        $set('total', number_format($total, 2, ',', '.'));
     }
 
     public static function form(Schema $form): Schema
@@ -70,7 +70,7 @@ class ProdutoResource extends Resource
                     ->inputMode('decimal')
                     ->afterStateUpdated(
                         fn (Get $get, ?string $state, Set $set) =>
-                            self::update($get('quantidade'), $state, $set)
+                            self::update($get, $state, $set)
                     )
                     ->live()
                     ->maxLength(255),
@@ -80,7 +80,7 @@ class ProdutoResource extends Resource
                     ->inputMode('decimal')
                     ->afterStateUpdated(
                         fn (Get $get, ?string $state, Set $set) =>
-                            self::update($get('preco'), $state, $set)
+                            self::update($get, $state, $set)
                     )
                     ->live()
                     ->required(),
