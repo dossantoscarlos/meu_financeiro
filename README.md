@@ -4,11 +4,6 @@
 
 Este projeto é um controle financeiro pessoal desenvolvido para uso diário, com o objetivo de fornecer um controle detalhado das finanças, identificando onde estão os principais gastos e como otimizá-los a curto e longo prazo. O projeto está em constante desenvolvimento, ajustando-se continuamente à realidade do usuário e ganhando novas funcionalidades e correções regularmente. O código-fonte está disponível publicamente para que qualquer pessoa possa utilizá-lo e adaptá-lo à sua própria realidade financeira.
 
-
-## Contribuição
-
-
-
 ## Tecnologias Utilizadas
 
 - [**PHP 8.2+**](https://www.php.net/releases/8.2/en.php): Principal linguagem de programação do projeto.
@@ -48,30 +43,30 @@ Contribuições são bem-vindas! Sinta-se à vontade para reportar problemas, su
 
 ## Sistema exemplo das telas
 
-##### Tela de criacao de produto
-![Tela de produto](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/img/criar_produto.png?raw=true)
+### Tela de criacao de produto
 
-##### Tela de criacao da despesa com modal
-![Tela de criacao da despesa](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/img/despesa_create.png?raw=true)
+![Tela de produto](https://github.com/dossantoscarlos/meu_financeiro/blob/main/doc/img/criar_produto.png?raw=true)
 
+### Tela de criacao da despesa com modal
 
+![Tela de criacao da despesa](https://github.com/dossantoscarlos/meu_financeiro/blob/main/doc/img/despesa_create.png?raw=true)
 
-##### Tela do painel de controle
+### Tela do painel de controle
 
-![Diagrama de classe](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/img/painel_controle.png?raw=true)
+![Diagrama de classe](https://github.com/dossantoscarlos/meu_financeiro/blob/main/doc/img/painel_controle.png?raw=true)
 
-##### Tela de listagem de dados
+### Tela de listagem de dados
 
-![Diagrama de classe](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/img/renda_lista.png?raw=true)
+![Diagrama de classe](https://github.com/dossantoscarlos/meu_financeiro/blob/main/doc/img/renda_lista.png?raw=true)
 
 ## Diagramas
 
 ### Caso de uso
 
-![Caso de uso](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/diagramas/UseCase%20Diagram0.png?raw=true)
+![Caso de uso](https://github.com/dossantoscarlos/meu_financeiro/blob/main/doc/diagramas/UseCase%20Diagram0.png?raw=true)
 
 ### Diagrama de classe
 
-![Diagrama de classe](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/diagramas/Class%20Diagram2.png?raw=true)
+![Diagrama de classe](https://github.com/dossantoscarlos/meu_financeiro/blob/main/doc/diagramas/Class%20Diagram2.png?raw=true)
 
-![Diagrama de pacotes](https://github.com/dossantoscarlos/meu_financeiro/blob/test/doc/diagramas/diagram%20package.png?raw=true)
+![Diagrama de pacotes](https://github.com/dossantoscarlos/meu_financeiro/blob/main/doc/diagramas/diagram%20package.png?raw=true)
