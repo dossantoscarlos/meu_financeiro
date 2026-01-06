@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
 class PlanoResource extends Resource
@@ -103,6 +104,6 @@ class PlanoResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ])
-            ->where('user_id', \Illuminate\Support\Facades\Auth::id());
+            ->where('user_id', Auth::id());
     }
 }
