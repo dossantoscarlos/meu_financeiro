@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Metrics\UserMetrics;
 use Filament\Facades\Filament;
 use Filament\Navigation\MenuItem;
 use Illuminate\Support\Facades\URL;
@@ -36,5 +37,7 @@ class AppServiceProvider extends ServiceProvider
                 'logout' => MenuItem::make()->visible(true),
             ]);
         });
+
+        // UserMetrics::register();
     }
 }
