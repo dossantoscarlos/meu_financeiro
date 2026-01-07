@@ -18,7 +18,7 @@ class DespesaObserver
      */
     public function saved(Despesa $despesa): void
     {
-        $this->controleCusto();
+        $this->controleCusto($despesa->plano);
         $this->registerHistoricoStatusDespesa($despesa);
     }
 
@@ -27,7 +27,7 @@ class DespesaObserver
      */
     public function updated(Despesa $despesa): void
     {
-        $this->controleCusto();
+        $this->controleCusto($despesa->plano);
     }
 
     /**
@@ -35,7 +35,7 @@ class DespesaObserver
      */
     public function deleted(Despesa $despesa): void
     {
-        $this->controleCusto();
+        $this->controleCusto($despesa->plano);
     }
 
     /**

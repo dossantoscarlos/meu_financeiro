@@ -133,6 +133,7 @@ class DespesaObserverTest extends TestCase
         $this->actingAs($user);
 
         $statusPendente = StatusDespesa::create(['nome' => 'Pendente']);
+        $statusPago = StatusDespesa::create(['nome' => 'Pago']);
         $tipoDespesa = TipoDespesa::create(['nome' => 'Alimentação']);
 
         $plano = Plano::factory()->create([
@@ -155,8 +156,22 @@ class DespesaObserverTest extends TestCase
         // Atualiza apenas o valor, mantendo o mesmo status
         $despesa->update(['valor_documento' => 200.00]);
 
-        // Deve ter 2 registros (o observer registra em cada update)
-        $this->assertEquals(2, HistoricoDespesa::where('despesa_id', $despesa->id)->count());
+        // Deve manter 1 registro (o observer registra se o status mudar)
+        $this->assertEquals(1, HistoricoDespesa::where('despesa_id', $despesa->id)
+            ->where('status_despesa_id', $statusPendente->id)
+            ->count());
+
+        // Atualiza o status
+        $despesa->update(['status_despesa_id' => $statusPago->id]);
+
+        // Deve ter 1 registro (o observer registra se o status mudar)
+        $this->assertEquals(1, HistoricoDespesa::where('despesa_id', $despesa->id)
+            ->where('status_despesa_id', $statusPendente->id)
+            ->count());
+
+        // Deve ter 2 registros (o observer registra se o status mudar)
+        $this->assertEquals(2, HistoricoDespesa::where('despesa_id', $despesa->id)
+            ->count());
     }
 
     /**

@@ -27,7 +27,11 @@ class ListaDespesasWidgetTest extends TestCase
     public function test_can_render_widget(): void
     {
         $plano = Plano::factory()->create(['user_id' => auth()->id(), 'mes_ano' => now()->format('m/Y')]);
-        $despesas = Despesa::factory()->count(3)->create(['plano_id' => $plano->id]);
+        $status = \App\Models\StatusDespesa::factory()->create(['nome' => 'pendente']);
+        $despesas = Despesa::factory()->count(3)->create([
+            'plano_id' => $plano->id,
+            'status_despesa_id' => $status->id
+        ]);
 
         Livewire::test(ListaDespesasWidget::class)
             ->assertCanSeeTableRecords($despesas);
@@ -39,8 +43,12 @@ class ListaDespesasWidgetTest extends TestCase
         $otherPlano = Plano::factory()->create(['user_id' => $otherUser->id]);
         $otherDespesa = Despesa::factory()->create(['plano_id' => $otherPlano->id]);
 
+        $status = \App\Models\StatusDespesa::factory()->create(['nome' => 'pendente']);
         $myPlano = Plano::factory()->create(['user_id' => auth()->id(), 'mes_ano' => now()->format('m/Y')]);
-        $myDespesa = Despesa::factory()->create(['plano_id' => $myPlano->id]);
+        $myDespesa = Despesa::factory()->create([
+            'plano_id' => $myPlano->id,
+            'status_despesa_id' => $status->id
+        ]);
 
         Livewire::test(ListaDespesasWidget::class)
             ->assertCanSeeTableRecords([$myDespesa])

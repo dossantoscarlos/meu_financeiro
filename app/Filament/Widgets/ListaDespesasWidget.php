@@ -19,39 +19,17 @@ class ListaDespesasWidget extends BaseWidget
     public function table(Table $table): Table
     {
         $userId = Auth::id();
-        $currentDate = \Illuminate\Support\Facades\Date::now()->startOfMonth();
 
-        $planos = Plano::where('user_id', $userId)->get(['id', 'mes_ano']);
-        $currentPlanIds = [];
-        $pastPlanIds = [];
-
-        foreach ($planos as $plano) {
-            try {
-                $planoDate = \Illuminate\Support\Facades\Date::createFromFormat('m/Y', $plano->mes_ano)->startOfMonth();
-                if ($planoDate->equalTo($currentDate)) {
-                    $currentPlanIds[] = $plano->id;
-                } elseif ($planoDate->lessThan($currentDate)) {
-                    $pastPlanIds[] = $plano->id;
-                }
-            } catch (\Exception) {
-                // Ignore invalid dates
-            }
-        }
+        $planIds = Plano::where('user_id', $userId)->pluck('id')->toArray();
 
         return $table
             ->query(
                 Despesa::query()
-                    ->where(function ($query) use ($currentPlanIds, $pastPlanIds) {
-                        $query->whereIn('plano_id', $currentPlanIds);
-
-                        if (! empty($pastPlanIds)) {
-                            $query->orWhere(function ($q) use ($pastPlanIds) {
-                                $q->whereIn('plano_id', $pastPlanIds)
-                                    ->whereHas('statusDespesa', function ($sq) {
-                                        $sq->whereIn('nome', ['atrasado', 'pendente']);
-                                    });
+                    ->where(function ($query) use ($planIds) {
+                        $query->whereIn('plano_id', $planIds)
+                            ->whereHas('statusDespesa', function ($sq) {
+                                $sq->whereIn('nome', ['atrasado', 'pendente']);
                             });
-                        }
                     })
             )
             ->columns([
