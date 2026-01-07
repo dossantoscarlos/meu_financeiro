@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Filament;
 
+use App\Enums\StatusDespesaEnum;
 use App\Filament\Resources\DespesaResource;
 use App\Models\Despesa;
 use App\Models\Plano;
@@ -24,6 +25,13 @@ class DespesaResourceTest extends TestCase
         parent::setUp();
         config(['database.connections.sqlite.database' => 'testing']);
 
+        foreach ([1 => 'pendente', 2 => 'atrasado', 3 => 'pago'] as $id => $nome) {
+            StatusDespesa::updateOrCreate(
+                ['id' => $id],
+                ['nome' => $nome]
+            );
+        }
+
         /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -38,7 +46,10 @@ class DespesaResourceTest extends TestCase
     public function test_can_list_records(): void
     {
         $plano = Plano::factory()->create(['user_id' => auth()->id()]);
-        $despesas = Despesa::factory()->count(5)->create(['plano_id' => $plano->id]);
+        $despesas = Despesa::factory()->count(5)->create([
+            'plano_id' => $plano->id,
+            'status_despesa_id' => StatusDespesaEnum::PENDENTE,
+        ]);
 
         Livewire::test(DespesaResource\Pages\ManageDespesas::class)
             ->assertCanSeeTableRecords($despesas);
@@ -46,7 +57,7 @@ class DespesaResourceTest extends TestCase
 
     public function test_can_create_record(): void
     {
-        $status = StatusDespesa::factory()->create();
+        $status = StatusDespesa::find(1);
         $plano = Plano::factory()->create(['user_id' => auth()->id()]);
         $tipo = TipoDespesa::factory()->create();
 
@@ -54,7 +65,7 @@ class DespesaResourceTest extends TestCase
             'descricao' => 'Nova Despesa',
             'data_vencimento' => now()->toDateString(),
             'plano_id' => $plano->id,
-            'status_despesa_id' => $status->id,
+            'status_despesa_id' => StatusDespesaEnum::PENDENTE->value,
             'tipo_despesa_id' => $tipo->id,
             'valor_documento' => '100',
         ];
@@ -67,6 +78,36 @@ class DespesaResourceTest extends TestCase
             ->callMountedAction()
             ->assertHasNoFormErrors($keys);
 
-        $this->assertDatabaseHas('despesas', $form);
+        $this->assertDatabaseHas('despesas', [
+            'descricao' => 'Nova Despesa',
+            'status_despesa_id' => StatusDespesaEnum::PENDENTE->value,
+        ]);
+    }
+
+    public function test_default_filters_apply_on_load(): void
+    {
+        $plano = Plano::factory()->create(['user_id' => auth()->id()]);
+
+        $pendente = Despesa::factory()->create([
+            'plano_id' => $plano->id,
+            'status_despesa_id' => StatusDespesaEnum::PENDENTE,
+            'descricao' => 'Despesa Pendente',
+        ]);
+
+        $atrasada = Despesa::factory()->create([
+            'plano_id' => $plano->id,
+            'status_despesa_id' => StatusDespesaEnum::ATRASADO,
+            'descricao' => 'Despesa Atrasada',
+        ]);
+
+        $paga = Despesa::factory()->create([
+            'plano_id' => $plano->id,
+            'status_despesa_id' => StatusDespesaEnum::PAGO,
+            'descricao' => 'Despesa Paga',
+        ]);
+
+        Livewire::test(DespesaResource\Pages\ManageDespesas::class)
+            ->assertCanSeeTableRecords([$pendente, $atrasada])
+            ->assertCanNotSeeTableRecords([$paga]);
     }
 }

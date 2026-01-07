@@ -6,7 +6,6 @@ namespace Database\Factories;
 
 use App\Models\Despesa;
 use App\Models\Plano;
-use App\Models\StatusDespesa;
 use App\Models\TipoDespesa;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,7 +24,7 @@ class DespesaFactory extends Factory
     public function definition(): array
     {
         return [
-            'status_despesa_id' => StatusDespesa::factory(),
+            'status_despesa_id' => $this->faker->randomElement([1, 2, 3]),
             'plano_id' => Plano::factory(),
             'tipo_despesa_id' => TipoDespesa::factory(),
             'descricao' => $this->faker->sentence(),

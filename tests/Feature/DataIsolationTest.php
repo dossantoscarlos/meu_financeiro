@@ -10,6 +10,7 @@ use App\Filament\Resources\RendaResource;
 use App\Models\Despesa;
 use App\Models\Plano;
 use App\Models\Renda;
+use App\Models\StatusDespesa;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -18,6 +19,18 @@ use Tests\TestCase;
 class DataIsolationTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        foreach ([1 => 'pendente', 2 => 'atrasado', 3 => 'pago'] as $id => $nome) {
+            StatusDespesa::updateOrCreate(
+                ['id' => $id],
+                ['nome' => $nome]
+            );
+        }
+    }
 
     public function test_despesa_isolation(): void
     {

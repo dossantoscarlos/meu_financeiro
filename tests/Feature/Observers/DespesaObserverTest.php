@@ -17,6 +17,18 @@ class DespesaObserverTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        foreach ([1 => 'pendente', 2 => 'atrasado', 3 => 'pago'] as $id => $nome) {
+            StatusDespesa::updateOrCreate(
+                ['id' => $id],
+                ['nome' => $nome]
+            );
+        }
+    }
+
     /**
      * Teste que verifica se o histórico é criado quando uma despesa é criada.
      */
@@ -26,7 +38,6 @@ class DespesaObserverTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $statusPendente = StatusDespesa::create(['nome' => 'Pendente']);
         $tipoDespesa = TipoDespesa::create(['nome' => 'Alimentação']);
 
         $plano = Plano::factory()->create([
@@ -43,7 +54,7 @@ class DespesaObserverTest extends TestCase
             'data_vencimento' => now()->format('Y-m-d'),
             'plano_id' => $plano->id,
             'tipo_despesa_id' => $tipoDespesa->id,
-            'status_despesa_id' => $statusPendente->id,
+            'status_despesa_id' => 1,
         ]);
 
         // Verifica que o histórico foi criado
@@ -51,7 +62,7 @@ class DespesaObserverTest extends TestCase
 
         $this->assertDatabaseHas('historico_despesas', [
             'despesa_id' => $despesa->id,
-            'status_despesa_id' => $statusPendente->id,
+            'status_despesa_id' => 1,
         ]);
     }
 
@@ -64,9 +75,6 @@ class DespesaObserverTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $statusPendente = StatusDespesa::create(['nome' => 'Pendente']);
-        $statusPago = StatusDespesa::create(['nome' => 'Pago']);
-        $statusAtrasado = StatusDespesa::create(['nome' => 'Atrasado']);
         $tipoDespesa = TipoDespesa::create(['nome' => 'Alimentação']);
 
         $plano = Plano::factory()->create([
@@ -80,7 +88,7 @@ class DespesaObserverTest extends TestCase
             'data_vencimento' => now()->format('Y-m-d'),
             'plano_id' => $plano->id,
             'tipo_despesa_id' => $tipoDespesa->id,
-            'status_despesa_id' => $statusPendente->id,
+            'status_despesa_id' => 1,
         ]);
 
         // Deve ter 1 registro no histórico (criação)
@@ -88,29 +96,29 @@ class DespesaObserverTest extends TestCase
 
         $this->assertDatabaseHas('historico_despesas', [
             'despesa_id' => $despesa->id,
-            'status_despesa_id' => $statusPendente->id,
+            'status_despesa_id' => 1,
         ]);
 
         // Atualiza para status Pago
-        $despesa->update(['status_despesa_id' => $statusPago->id]);
+        $despesa->update(['status_despesa_id' => 3]);
 
         // Deve ter 2 registros no histórico
         $this->assertEquals(2, HistoricoDespesa::where('despesa_id', $despesa->id)->count());
 
         $this->assertDatabaseHas('historico_despesas', [
             'despesa_id' => $despesa->id,
-            'status_despesa_id' => $statusPago->id,
+            'status_despesa_id' => 3,
         ]);
 
         // Atualiza para status Atrasado
-        $despesa->update(['status_despesa_id' => $statusAtrasado->id]);
+        $despesa->update(['status_despesa_id' => 2]);
 
         // Deve ter 3 registros no histórico
         $this->assertEquals(3, HistoricoDespesa::where('despesa_id', $despesa->id)->count());
 
         $this->assertDatabaseHas('historico_despesas', [
             'despesa_id' => $despesa->id,
-            'status_despesa_id' => $statusAtrasado->id,
+            'status_despesa_id' => 2,
         ]);
 
         // Verifica que todos os 3 status estão no histórico
@@ -118,9 +126,9 @@ class DespesaObserverTest extends TestCase
             ->orderBy('created_at')
             ->get();
 
-        $this->assertEquals($statusPendente->id, $historicos[0]->status_despesa_id);
-        $this->assertEquals($statusPago->id, $historicos[1]->status_despesa_id);
-        $this->assertEquals($statusAtrasado->id, $historicos[2]->status_despesa_id);
+        $this->assertEquals(1, $historicos[0]->status_despesa_id);
+        $this->assertEquals(3, $historicos[1]->status_despesa_id);
+        $this->assertEquals(2, $historicos[2]->status_despesa_id);
     }
 
     /**
@@ -132,8 +140,6 @@ class DespesaObserverTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $statusPendente = StatusDespesa::create(['nome' => 'Pendente']);
-        $statusPago = StatusDespesa::create(['nome' => 'Pago']);
         $tipoDespesa = TipoDespesa::create(['nome' => 'Alimentação']);
 
         $plano = Plano::factory()->create([
@@ -147,7 +153,7 @@ class DespesaObserverTest extends TestCase
             'data_vencimento' => now()->format('Y-m-d'),
             'plano_id' => $plano->id,
             'tipo_despesa_id' => $tipoDespesa->id,
-            'status_despesa_id' => $statusPendente->id,
+            'status_despesa_id' => 1,
         ]);
 
         // 1 registro inicial
@@ -158,15 +164,15 @@ class DespesaObserverTest extends TestCase
 
         // Deve manter 1 registro (o observer registra se o status mudar)
         $this->assertEquals(1, HistoricoDespesa::where('despesa_id', $despesa->id)
-            ->where('status_despesa_id', $statusPendente->id)
+            ->where('status_despesa_id', 1)
             ->count());
 
         // Atualiza o status
-        $despesa->update(['status_despesa_id' => $statusPago->id]);
+        $despesa->update(['status_despesa_id' => 3]);
 
         // Deve ter 1 registro (o observer registra se o status mudar)
         $this->assertEquals(1, HistoricoDespesa::where('despesa_id', $despesa->id)
-            ->where('status_despesa_id', $statusPendente->id)
+            ->where('status_despesa_id', 1)
             ->count());
 
         // Deve ter 2 registros (o observer registra se o status mudar)
@@ -183,8 +189,6 @@ class DespesaObserverTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $statusPendente = StatusDespesa::create(['nome' => 'Pendente']);
-        $statusPago = StatusDespesa::create(['nome' => 'Pago']);
         $tipoDespesa = TipoDespesa::create(['nome' => 'Alimentação']);
 
         $plano = Plano::factory()->create([
@@ -198,7 +202,7 @@ class DespesaObserverTest extends TestCase
             'data_vencimento' => now()->format('Y-m-d'),
             'plano_id' => $plano->id,
             'tipo_despesa_id' => $tipoDespesa->id,
-            'status_despesa_id' => $statusPendente->id,
+            'status_despesa_id' => 1,
         ]);
 
         // Cria segunda despesa
@@ -208,7 +212,7 @@ class DespesaObserverTest extends TestCase
             'data_vencimento' => now()->format('Y-m-d'),
             'plano_id' => $plano->id,
             'tipo_despesa_id' => $tipoDespesa->id,
-            'status_despesa_id' => $statusPendente->id,
+            'status_despesa_id' => 1,
         ]);
 
         // Cada despesa deve ter 1 registro
@@ -216,7 +220,7 @@ class DespesaObserverTest extends TestCase
         $this->assertEquals(1, HistoricoDespesa::where('despesa_id', $despesa2->id)->count());
 
         // Atualiza apenas a primeira despesa
-        $despesa1->update(['status_despesa_id' => $statusPago->id]);
+        $despesa1->update(['status_despesa_id' => 3]);
 
         // Primeira despesa deve ter 2 registros, segunda ainda 1
         $this->assertEquals(2, HistoricoDespesa::where('despesa_id', $despesa1->id)->count());

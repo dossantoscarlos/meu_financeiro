@@ -20,11 +20,6 @@ class StatusDespesa extends Model
 
     protected $fillable = ['nome'];
 
-    public function despesas(): HasMany
-    {
-        return $this->hasMany(Despesa::class);
-    }
-
     public function historico(): HasMany
     {
         return $this->hasMany(HistoricoDespesa::class);

@@ -14,6 +14,9 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
 class HistoricoDespesaResource extends Resource
@@ -52,5 +55,20 @@ class HistoricoDespesaResource extends Resource
         return [
             'index' => ListHistoricoDespesas::route('/'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ])
+            ->join('despesas', 'despesas.id', '=', 'historico_despesas.despesa_id')
+            ->join('planos', 'planos.id', '=', 'despesas.plano_id')
+            ->where('planos.user_id', Auth::id())
+            ->whereNull('despesas.deleted_at')
+            ->whereNull('planos.deleted_at')
+            ->distinct()
+            ->select('historico_despesas.*');
     }
 }

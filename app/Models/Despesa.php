@@ -19,6 +19,10 @@ class Despesa extends Model
 
     protected $primaryKey = 'id';
 
+    protected $casts = [
+        'status_despesa_id' => \App\Enums\StatusDespesaEnum::class,
+    ];
+
     protected $fillable = [
         'status_despesa_id',
         'plano_id',
