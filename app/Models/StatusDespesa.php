@@ -24,4 +24,9 @@ class StatusDespesa extends Model
     {
         return $this->hasMany(Despesa::class);
     }
+
+    public function historico(): HasMany
+    {
+        return $this->hasMany(HistoricoDespesa::class);
+    }
 }

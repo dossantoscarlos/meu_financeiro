@@ -17,6 +17,7 @@ class RendaObserverTest extends TestCase
 
     public function test_custo_is_updated_when_saldo_changes(): void
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
 
