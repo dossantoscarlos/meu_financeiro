@@ -20,6 +20,7 @@ class ListaDespesasWidgetTest extends TestCase
     {
         parent::setUp();
 
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
     }
