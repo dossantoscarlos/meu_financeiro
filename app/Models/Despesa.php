@@ -7,9 +7,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $plano_id
+ * @property int $status_despesa_id
+ * @property int $tipo_despesa_id
+ * @property string $descricao
+ * @property float $valor_documento
+ * @property Date $data_vencimento
+ */
 class Despesa extends Model
 {
     use HasFactory;
@@ -18,10 +25,6 @@ class Despesa extends Model
     protected $table = 'despesas';
 
     protected $primaryKey = 'id';
-
-    protected $casts = [
-        'status_despesa_id' => \App\Enums\StatusDespesaEnum::class,
-    ];
 
     protected $fillable = [
         'status_despesa_id',
@@ -45,10 +48,5 @@ class Despesa extends Model
     public function plano(): BelongsTo
     {
         return $this->belongsTo(Plano::class);
-    }
-
-    public function historico(): HasMany
-    {
-        return $this->hasMany(HistoricoDespesa::class);
     }
 }
