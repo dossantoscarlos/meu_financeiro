@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Enums\StatusDespesaEnum;
+use App\Models\StatusDespesa;
 use App\Models\Despesa;
 use App\Models\Gasto;
 use App\Models\Plano;
@@ -40,7 +40,7 @@ trait ControleCusto
 
         $total = Despesa::whereIn(
             'status_despesa_id',
-            [StatusDespesaEnum::PENDENTE->value, StatusDespesaEnum::ATRASADO->value]
+            [StatusDespesa::PENDENTE, StatusDespesa::ATRASADO]
         )
             ->sum('valor_documento');
 

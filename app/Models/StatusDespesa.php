@@ -14,6 +14,10 @@ class StatusDespesa extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public const PENDENTE = 1;
+    public const ATRASADO = 2;
+    public const PAGO = 3;
+
     protected $table = 'status_despesas';
 
     protected $primaryKey = 'id';

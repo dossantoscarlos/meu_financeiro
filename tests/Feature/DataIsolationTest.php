@@ -40,8 +40,8 @@ class DataIsolationTest extends TestCase
         $planoA = Plano::factory()->create(['user_id' => $userA->id]);
         $planoB = Plano::factory()->create(['user_id' => $userB->id]);
 
-        $despesaA = Despesa::factory()->create(['plano_id' => $planoA->id]);
-        $despesaB = Despesa::factory()->create(['plano_id' => $planoB->id]);
+        $despesaA = Despesa::factory()->create(['plano_id' => $planoA->id, 'status_despesa_id' => 1]);
+        $despesaB = Despesa::factory()->create(['plano_id' => $planoB->id, 'status_despesa_id' => 1]);
 
         Livewire::actingAs($userA)
             ->test(DespesaResource\Pages\ManageDespesas::class)

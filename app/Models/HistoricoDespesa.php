@@ -17,7 +17,7 @@ class HistoricoDespesa extends Model
     protected $primaryKey = 'id';
 
     protected $casts = [
-        'status_despesa_id' => \App\Enums\StatusDespesaEnum::class,
+        'data' => 'date',
     ];
 
     protected $fillable = [

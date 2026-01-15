@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use App\Enums\StatusDespesaEnum;
+use App\Models\StatusDespesa;
 use App\Filament\Resources\DespesaResource\Pages;
 use App\Livewire\Components\MyMoney;
 use App\Models\Despesa;
@@ -82,15 +82,11 @@ class DespesaResource extends Resource
                     ->label('Descrição')
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('status_despesa_id')
+                Tables\Columns\TextColumn::make('statusDespesa.nome')
                     ->label('Status')
                     ->badge()
-                    ->color(
-                        fn (mixed $state): ?string =>
-                        $state instanceof StatusDespesaEnum ? StatusDespesaColor::getColor($state->value) : null
-                    )->formatStateUsing(function ($state) {
-                        return $state instanceof StatusDespesaEnum ? mb_strtoupper($state->getLabel()) : $state;
-                    })
+                    ->color(fn ($state) => StatusDespesaColor::getColor($state))
+                    ->formatStateUsing(fn ($state) => mb_strtoupper($state))
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('tipoDespesa.nome')
@@ -117,10 +113,14 @@ class DespesaResource extends Resource
                 Tables\Filters\SelectFilter::make('status_despesa_id')
                     ->label('Status')
                     ->multiple()
-                    ->options(StatusDespesaEnum::class)
+                    ->options([
+                        StatusDespesa::PENDENTE => 'Pendente',
+                        StatusDespesa::ATRASADO => 'Atrasado',
+                        StatusDespesa::PAGO => 'Pago',
+                    ])
                     ->default([
-                        StatusDespesaEnum::PENDENTE->value,
-                        StatusDespesaEnum::ATRASADO->value
+                        StatusDespesa::PENDENTE,
+                        StatusDespesa::ATRASADO
                     ])
                     ->column('despesas.status_despesa_id'),
             ])
@@ -152,9 +152,9 @@ class DespesaResource extends Resource
             ->join('planos', 'despesas.plano_id', '=', 'planos.id')
             ->where('planos.user_id', Auth::id())
             ->whereIn('despesas.status_despesa_id', [
-                StatusDespesaEnum::PENDENTE->value,
-                StatusDespesaEnum::ATRASADO->value,
-                StatusDespesaEnum::PAGO->value
+                StatusDespesa::PENDENTE,
+                StatusDespesa::ATRASADO,
+                StatusDespesa::PAGO
             ])
             ->select('despesas.*')
             ->distinct();

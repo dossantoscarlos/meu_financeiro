@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Widgets;
 
-use App\Enums\StatusDespesaEnum;
+use App\Models\StatusDespesa;
 use App\Models\Despesa;
 use App\Models\Plano;
 use App\Util\StatusDespesaColor;
@@ -30,8 +30,8 @@ class ListaDespesasWidget extends BaseWidget
                         $query->whereIn('plano_id', $planIds)
                             ->whereHas('statusDespesa', function ($sq) {
                                 $sq->whereIn('id', [
-                                    StatusDespesaEnum::ATRASADO->value,
-                                    StatusDespesaEnum::PENDENTE->value
+                                    StatusDespesa::ATRASADO,
+                                    StatusDespesa::PENDENTE
                                 ]);
                             });
                     })
@@ -44,11 +44,11 @@ class ListaDespesasWidget extends BaseWidget
                     ->label('Valor')
                     ->money('BRL', locale: 'pt_BR')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status_despesa_id')
+                Tables\Columns\TextColumn::make('statusDespesa.nome')
                     ->label('Status')
                     ->badge()
-                    ->color(fn ($state): ?string => $state instanceof StatusDespesaEnum ? StatusDespesaColor::getColor($state) : null)
-                    ->formatStateUsing(fn ($state): ?string => $state instanceof StatusDespesaEnum ? mb_strtoupper($state->getLabel()) : $state)
+                    ->color(fn ($state): ?string => StatusDespesaColor::getColor($state))
+                    ->formatStateUsing(fn ($state): string => mb_strtoupper($state))
                     ->sortable(),
             ])
             ->paginated([3, 5, 10])

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Filament;
 
-use App\Enums\StatusDespesaEnum;
+// use App\Enums\StatusDespesaEnum; removed
 use App\Filament\Resources\DespesaResource;
 use App\Models\Despesa;
 use App\Models\Plano;
@@ -40,19 +40,19 @@ class DespesaTableTest extends TestCase
 
         $pendente = Despesa::factory()->create([
             'plano_id' => $plano->id,
-            'status_despesa_id' => StatusDespesaEnum::PENDENTE,
+            'status_despesa_id' => StatusDespesa::PENDENTE,
             'descricao' => 'Despesa Pendente',
         ]);
 
         $atrasada = Despesa::factory()->create([
             'plano_id' => $plano->id,
-            'status_despesa_id' => StatusDespesaEnum::ATRASADO,
+            'status_despesa_id' => StatusDespesa::ATRASADO,
             'descricao' => 'Despesa Atrasada',
         ]);
 
         $paga = Despesa::factory()->create([
             'plano_id' => $plano->id,
-            'status_despesa_id' => StatusDespesaEnum::PAGO,
+            'status_despesa_id' => StatusDespesa::PAGO,
             'descricao' => 'Despesa Paga',
         ]);
 
@@ -67,18 +67,18 @@ class DespesaTableTest extends TestCase
 
         $pendente = Despesa::factory()->create([
             'plano_id' => $plano->id,
-            'status_despesa_id' => StatusDespesaEnum::PENDENTE,
+            'status_despesa_id' => StatusDespesa::PENDENTE,
             'descricao' => 'Despesa Pendente',
         ]);
 
         $paga = Despesa::factory()->create([
             'plano_id' => $plano->id,
-            'status_despesa_id' => StatusDespesaEnum::PAGO,
+            'status_despesa_id' => StatusDespesa::PAGO,
             'descricao' => 'Despesa Paga',
         ]);
 
         Livewire::test(DespesaResource\Pages\ManageDespesas::class)
-            ->filterTable('status_despesa_id', [StatusDespesaEnum::PAGO->value])
+            ->filterTable('status_despesa_id', [StatusDespesa::PAGO])
             ->assertCanSeeTableRecords([$paga])
             ->assertCanNotSeeTableRecords([$pendente]);
     }
@@ -89,18 +89,18 @@ class DespesaTableTest extends TestCase
 
         $pendente = Despesa::factory()->create([
             'plano_id' => $plano->id,
-            'status_despesa_id' => StatusDespesaEnum::PENDENTE,
+            'status_despesa_id' => StatusDespesa::PENDENTE,
             'descricao' => 'Despesa Pendente',
         ]);
 
         $atrasada = Despesa::factory()->create([
             'plano_id' => $plano->id,
-            'status_despesa_id' => StatusDespesaEnum::ATRASADO,
+            'status_despesa_id' => StatusDespesa::ATRASADO,
             'descricao' => 'Despesa Atrasada',
         ]);
 
         Livewire::test(DespesaResource\Pages\ManageDespesas::class)
-            ->filterTable('status_despesa_id', [StatusDespesaEnum::PENDENTE->value])
+            ->filterTable('status_despesa_id', [StatusDespesa::PENDENTE])
             ->assertCanSeeTableRecords([$pendente])
             ->assertCanNotSeeTableRecords([$atrasada]);
     }
@@ -111,18 +111,18 @@ class DespesaTableTest extends TestCase
 
         $pendente = Despesa::factory()->create([
             'plano_id' => $plano->id,
-            'status_despesa_id' => StatusDespesaEnum::PENDENTE,
+            'status_despesa_id' => StatusDespesa::PENDENTE,
             'descricao' => 'Despesa Pendente',
         ]);
 
         $atrasada = Despesa::factory()->create([
             'plano_id' => $plano->id,
-            'status_despesa_id' => StatusDespesaEnum::ATRASADO,
+            'status_despesa_id' => StatusDespesa::ATRASADO,
             'descricao' => 'Despesa Atrasada',
         ]);
 
         Livewire::test(DespesaResource\Pages\ManageDespesas::class)
-            ->filterTable('status_despesa_id', [StatusDespesaEnum::ATRASADO->value])
+            ->filterTable('status_despesa_id', [StatusDespesa::ATRASADO])
             ->assertCanSeeTableRecords([$atrasada])
             ->assertCanNotSeeTableRecords([$pendente]);
     }

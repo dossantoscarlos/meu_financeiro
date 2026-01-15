@@ -6,11 +6,8 @@ namespace App\Util;
 
 class StatusDespesaColor
 {
-    public static function getColor(\App\Enums\StatusDespesaEnum|string|int $status): string
+    public static function getColor(string|int $status): string
     {
-        if ($status instanceof \App\Enums\StatusDespesaEnum) {
-            $status = $status->value;
-        }
 
         if (is_int($status)) {
             $status = match ($status) {

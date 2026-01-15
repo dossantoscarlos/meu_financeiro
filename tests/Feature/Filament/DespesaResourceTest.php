@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Filament;
 
-use App\Enums\StatusDespesaEnum;
+// use App\Enums\StatusDespesaEnum; removed
 use App\Filament\Resources\DespesaResource;
 use App\Models\Despesa;
 use App\Models\Plano;
@@ -48,7 +48,7 @@ class DespesaResourceTest extends TestCase
         $plano = Plano::factory()->create(['user_id' => auth()->id()]);
         $despesas = Despesa::factory()->count(5)->create([
             'plano_id' => $plano->id,
-            'status_despesa_id' => StatusDespesaEnum::PENDENTE,
+            'status_despesa_id' => StatusDespesa::PENDENTE,
         ]);
 
         Livewire::test(DespesaResource\Pages\ManageDespesas::class)
@@ -65,7 +65,7 @@ class DespesaResourceTest extends TestCase
             'descricao' => 'Nova Despesa',
             'data_vencimento' => now()->toDateString(),
             'plano_id' => $plano->id,
-            'status_despesa_id' => StatusDespesaEnum::PENDENTE->value,
+            'status_despesa_id' => StatusDespesa::PENDENTE,
             'tipo_despesa_id' => $tipo->id,
             'valor_documento' => '100',
         ];
@@ -80,7 +80,7 @@ class DespesaResourceTest extends TestCase
 
         $this->assertDatabaseHas('despesas', [
             'descricao' => 'Nova Despesa',
-            'status_despesa_id' => StatusDespesaEnum::PENDENTE->value,
+            'status_despesa_id' => StatusDespesa::PENDENTE,
         ]);
     }
 
@@ -90,19 +90,19 @@ class DespesaResourceTest extends TestCase
 
         $pendente = Despesa::factory()->create([
             'plano_id' => $plano->id,
-            'status_despesa_id' => StatusDespesaEnum::PENDENTE,
+            'status_despesa_id' => StatusDespesa::PENDENTE,
             'descricao' => 'Despesa Pendente',
         ]);
 
         $atrasada = Despesa::factory()->create([
             'plano_id' => $plano->id,
-            'status_despesa_id' => StatusDespesaEnum::ATRASADO,
+            'status_despesa_id' => StatusDespesa::ATRASADO,
             'descricao' => 'Despesa Atrasada',
         ]);
 
         $paga = Despesa::factory()->create([
             'plano_id' => $plano->id,
-            'status_despesa_id' => StatusDespesaEnum::PAGO,
+            'status_despesa_id' => StatusDespesa::PAGO,
             'descricao' => 'Despesa Paga',
         ]);
 

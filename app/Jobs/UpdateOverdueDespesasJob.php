@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Enums\StatusDespesaEnum;
+use App\Models\StatusDespesa;
 use App\Models\Despesa;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -32,9 +32,9 @@ class UpdateOverdueDespesasJob implements ShouldQueue
         $today = now()->toDateString();
 
         // 1. Update to 'atrasado': not paid and vencimento < today
-        Despesa::where('status_despesa_id', '!=', StatusDespesaEnum::PAGO->value)
+        Despesa::where('status_despesa_id', '!=', StatusDespesa::PAGO)
             ->where('data_vencimento', '<', $today)
-            ->where('status_despesa_id', '!=', StatusDespesaEnum::ATRASADO->value)
-            ->update(['status_despesa_id' => StatusDespesaEnum::ATRASADO->value]);
+            ->where('status_despesa_id', '!=', StatusDespesa::ATRASADO)
+            ->update(['status_despesa_id' => StatusDespesa::ATRASADO]);
     }
 }

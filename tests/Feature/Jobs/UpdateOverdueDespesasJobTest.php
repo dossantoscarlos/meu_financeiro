@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Jobs;
 
-use App\Enums\StatusDespesaEnum;
+use App\Models\StatusDespesa;
 use App\Jobs\UpdateOverdueDespesasJob;
 use App\Models\Despesa;
-use App\Models\StatusDespesa;
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -25,21 +25,21 @@ class UpdateOverdueDespesasJobTest extends TestCase
         }
 
         $overduePendente = Despesa::factory()->create([
-            'status_despesa_id' => StatusDespesaEnum::PENDENTE,
+            'status_despesa_id' => StatusDespesa::PENDENTE,
             'data_vencimento' => \Illuminate\Support\Facades\Date::yesterday()->toDateString(),
         ]);
 
         $overduePaid = Despesa::factory()->create([
-            'status_despesa_id' => StatusDespesaEnum::PAGO,
+            'status_despesa_id' => StatusDespesa::PAGO,
             'data_vencimento' => \Illuminate\Support\Facades\Date::yesterday()->toDateString(),
         ]);
 
         (new UpdateOverdueDespesasJob())->handle();
 
         $overduePendente->refresh();
-        $this->assertEquals(StatusDespesaEnum::ATRASADO, $overduePendente->status_despesa_id);
+        $this->assertEquals(StatusDespesa::ATRASADO, $overduePendente->status_despesa_id);
 
         $overduePaid->refresh();
-        $this->assertEquals(StatusDespesaEnum::PAGO, $overduePaid->status_despesa_id);
+        $this->assertEquals(StatusDespesa::PAGO, $overduePaid->status_despesa_id);
     }
 }
