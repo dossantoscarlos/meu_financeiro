@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Models\StatusDespesa;
 use App\Models\Despesa;
 use App\Models\Gasto;
 use App\Models\Plano;
 use App\Models\Renda;
+use App\Models\StatusDespesa;
 use Illuminate\Support\Facades\Auth;
 
 trait ControleCusto

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Jobs;
 
-use App\Models\StatusDespesa;
 use App\Jobs\UpdateOverdueDespesasJob;
 use App\Models\Despesa;
-
+use App\Models\StatusDespesa;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
