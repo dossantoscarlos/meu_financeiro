@@ -9,6 +9,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $plano_id
+ * @property int $status_despesa_id
+ * @property int $tipo_despesa_id
+ * @property string $descricao
+ * @property float $valor_documento
+ * @property Date $data_vencimento
+ */
 class Despesa extends Model
 {
     use HasFactory;

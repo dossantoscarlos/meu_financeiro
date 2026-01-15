@@ -11,7 +11,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class ProdutoTable extends BaseWidget
 {
-    protected static ?string $heading = 'Lista de produto';
+    protected static ?string $heading = 'Lista de compras';
 
     public function table(Table $table): Table
     {
@@ -19,7 +19,8 @@ class ProdutoTable extends BaseWidget
             ->query(Produto::query())
             ->columns([
                 Tables\Columns\TextColumn::make('descricao_curta')
-                    ->searchable(),
+                    ->searchable()
+                    ->limit(25),
                 Tables\Columns\TextColumn::make('preco')
                     ->money('BRL', locale: 'pt_BR')
                     ->sortable(),

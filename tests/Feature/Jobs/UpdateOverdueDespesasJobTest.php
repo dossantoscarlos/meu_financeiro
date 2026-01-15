@@ -16,27 +16,29 @@ class UpdateOverdueDespesasJobTest extends TestCase
 
     public function test_it_updates_statuses_correctly(): void
     {
-        $pendente = StatusDespesa::factory()->create(['nome' => 'pendente']);
-        $atrasado = StatusDespesa::factory()->create(['nome' => 'atrasado']);
-        $paid = StatusDespesa::factory()->create(['nome' => 'pago']);
+        foreach ([1 => 'pendente', 2 => 'atrasado', 3 => 'pago'] as $id => $nome) {
+            StatusDespesa::updateOrCreate(
+                ['id' => $id],
+                ['nome' => $nome]
+            );
+        }
 
         $overduePendente = Despesa::factory()->create([
-            'status_despesa_id' => $pendente->id,
+            'status_despesa_id' => StatusDespesa::PENDENTE,
             'data_vencimento' => \Illuminate\Support\Facades\Date::yesterday()->toDateString(),
         ]);
 
         $overduePaid = Despesa::factory()->create([
-            'status_despesa_id' => $paid->id,
+            'status_despesa_id' => StatusDespesa::PAGO,
             'data_vencimento' => \Illuminate\Support\Facades\Date::yesterday()->toDateString(),
         ]);
-
 
         (new UpdateOverdueDespesasJob())->handle();
 
         $overduePendente->refresh();
-        $this->assertEquals($atrasado->id, $overduePendente->status_despesa_id);
+        $this->assertEquals(StatusDespesa::ATRASADO, $overduePendente->status_despesa_id);
 
         $overduePaid->refresh();
-        $this->assertEquals($paid->id, $overduePaid->status_despesa_id);
+        $this->assertEquals(StatusDespesa::PAGO, $overduePaid->status_despesa_id);
     }
 }

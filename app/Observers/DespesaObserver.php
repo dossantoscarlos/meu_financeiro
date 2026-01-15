@@ -6,17 +6,20 @@ namespace App\Observers;
 
 use App\Models\Despesa;
 use App\Traits\ControleCusto;
+use App\Traits\HistoricoStatusDespesa;
 
 class DespesaObserver
 {
     use ControleCusto;
+    use HistoricoStatusDespesa;
 
     /**
      * Handle the Despesa "created" event.
      */
     public function saved(Despesa $despesa): void
     {
-        $this->controleCusto();
+        $this->controleCusto($despesa->plano);
+        $this->registerHistoricoStatusDespesa($despesa);
     }
 
     /**
@@ -24,7 +27,7 @@ class DespesaObserver
      */
     public function updated(Despesa $despesa): void
     {
-        $this->controleCusto();
+        $this->controleCusto($despesa->plano);
     }
 
     /**
@@ -32,7 +35,7 @@ class DespesaObserver
      */
     public function deleted(Despesa $despesa): void
     {
-        $this->controleCusto();
+        $this->controleCusto($despesa->plano);
     }
 
     /**

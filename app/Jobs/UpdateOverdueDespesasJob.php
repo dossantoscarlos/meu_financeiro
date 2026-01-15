@@ -27,21 +27,14 @@ class UpdateOverdueDespesasJob implements ShouldQueue
         //
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
-        $statusPendente = StatusDespesa::where('nome', 'pendente')->first();
-        $statusAtrasado = StatusDespesa::where('nome', 'atrasado')->first();
-        $statusPago = StatusDespesa::where('nome', 'pago')->first();
-
         $today = now()->toDateString();
 
         // 1. Update to 'atrasado': not paid and vencimento < today
-        Despesa::where('status_despesa_id', '!=', $statusPago->id)
+        Despesa::where('status_despesa_id', '!=', StatusDespesa::PAGO)
             ->where('data_vencimento', '<', $today)
-            ->where('status_despesa_id', '!=', $statusAtrasado->id)
-            ->update(['status_despesa_id' => $statusAtrasado->id]);
+            ->where('status_despesa_id', '!=', StatusDespesa::ATRASADO)
+            ->update(['status_despesa_id' => StatusDespesa::ATRASADO]);
     }
 }

@@ -128,6 +128,8 @@ class ProdutoResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('descricao_curta')
+                    ->label('Descrição')
+                    ->limit(25)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('preco')
                     ->money(currency: 'BRL', locale: 'pt_BR')

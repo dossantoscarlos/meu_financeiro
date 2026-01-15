@@ -7,6 +7,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DespesaResource\Pages;
 use App\Livewire\Components\MyMoney;
 use App\Models\Despesa;
+use App\Models\StatusDespesa;
 use App\Util\StatusDespesaColor;
 use BackedEnum;
 use Filament\Actions;
@@ -14,10 +15,8 @@ use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
-use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -39,158 +38,109 @@ class DespesaResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return $schema
-            ->schema([
-                Forms\Components\TextInput::make(name: 'descricao')
-                    ->required(),
-                Forms\Components\DatePicker::make(name: 'data_vencimento')
-                    ->label(label: 'Data de vencimento')
-                    ->required(),
-                Forms\Components\Select::make(name: 'plano_id')
-                    ->label(label: 'Plano mensal')
-                    ->relationship(
-                        name: 'plano',
-                        titleAttribute: 'mes_ano',
-                        modifyQueryUsing: fn ($query) => $query->whereUserId(Auth::user()->id)
-                    )
-                    ->native(condition: false)
-                    ->createOptionForm([
-                        Forms\Components\Select::make(name: 'user_id')
-                            ->label(label: 'Perfil')
-                            ->relationship(
-                                name: 'user',
-                                titleAttribute: 'name'
-                            )
-                            ->native(false)
-                            ->required(),
-                        Forms\Components\TextInput::make(name: 'mes_ano')
-                            ->label(label: 'Mes e Ano')
-                            ->placeholder(placeholder: '01/2023')
-                            ->mask(mask: '99/9999')
-                            ->required(),
-                        Forms\Components\TextInput::make(name: 'descricao_simples')
-                            ->columnSpanfull()
-                            ->placeholder(placeholder: 'Ex.: Controle do mês de janeiro')
-                            ->required(),
-                    ])
-                    ->required(),
-                Forms\Components\Select::make(name: 'status_despesa_id')
-                    ->label(label: 'Status')
-                    ->relationship(name: 'statusDespesa', titleAttribute: 'nome')
-                    ->native(condition: false)
-                    ->createOptionForm([
-                        Forms\Components\TextInput::make('nome')
-                            ->required(),
-                    ])
-                    ->required(),
-                Forms\Components\Select::make(name: 'tipo_despesa_id')
-                    ->label(label: 'Categoria')
-                    ->relationship(name: 'tipoDespesa', titleAttribute: 'nome')
-                    ->createOptionForm([
-                        Forms\Components\TextInput::make('nome')
-                            ->required(),
-                    ])
-                    ->searchable()
-                    ->searchDebounce(100)
-                    ->native(condition: false)
-                    ->required(),
-                MyMoney::make(name: 'valor_documento')
-                    ->label(label: 'Valor do documento')
-                    ->required(),
-            ]);
+        return $schema->schema([
+            Forms\Components\TextInput::make('descricao')->required(),
+
+            Forms\Components\DatePicker::make('data_vencimento')
+                ->label('Data de vencimento')
+                ->required(),
+
+            Forms\Components\Select::make('plano_id')
+                ->label('Plano mensal')
+                ->relationship(
+                    'plano',
+                    'mes_ano',
+                    fn ($query) => $query->where('user_id', Auth::id())
+                )
+                ->native(false)
+                ->required(),
+
+            Forms\Components\Select::make('status_despesa_id')
+                ->label('Status')
+                ->relationship('statusDespesa', 'nome')
+                ->native(false)
+                ->required(),
+
+            Forms\Components\Select::make('tipo_despesa_id')
+                ->label('Categoria')
+                ->relationship('tipoDespesa', 'nome')
+                ->native(false)
+                ->searchable()
+                ->required(),
+
+            MyMoney::make('valor_documento')
+                ->label('Valor do documento')
+                ->required(),
+        ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make(name: 'descricao')
-                    ->label(label: 'Descrição')
+                Tables\Columns\TextColumn::make('descricao')
+                    ->label('Descrição')
                     ->searchable(),
-                Tables\Columns\TextColumn::make(name: 'statusDespesa.nome')
-                    ->label(label: 'Status')
+
+                Tables\Columns\TextColumn::make('statusDespesa.nome')
+                    ->label('Status')
                     ->badge()
-                    ->color(fn (string $state): string => StatusDespesaColor::getColor($state))
-                    ->formatStateUsing(fn (string $state): string => mb_strtoupper($state))
-                    ->searchable()
+                    ->color(fn ($state) => StatusDespesaColor::getColor($state))
+                    ->formatStateUsing(fn ($state) => mb_strtoupper($state))
                     ->sortable(),
-                Tables\Columns\TextColumn::make(name: 'tipoDespesa.nome')
-                    ->label(label: 'Categoria')
-                    ->formatStateUsing(fn (string $state): string => mb_strtoupper($state))
+
+                Tables\Columns\TextColumn::make('tipoDespesa.nome')
+                    ->label('Categoria')
+                    ->formatStateUsing(fn (?string $state) => mb_strtoupper($state))
                     ->sortable(),
-                Tables\Columns\TextColumn::make(name: 'plano.mes_ano')
-                    ->label(label: 'Plano mensal')
-                    ->formatStateUsing(fn (string $state): string => mb_strtoupper($state))
-                    ->tooltip(fn (Model $model): ?string => $model->plano?->descricao_simples)
-                    ->searchable()
+
+                Tables\Columns\TextColumn::make('plano.mes_ano')
+                    ->label('Plano mensal')
+                    ->formatStateUsing(fn (string $state) => mb_strtoupper($state))
                     ->sortable(),
-                Tables\Columns\TextColumn::make(name: 'data_vencimento')
+
+                Tables\Columns\TextColumn::make('data_vencimento')
                     ->label('Data de vencimento')
                     ->date('d/m/Y')
-                    ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make(name: 'valor_documento')
-                    ->label(label: 'Valor do documento')
-                    ->money(currency: 'BRL', locale: 'pt_BR')
-                    ->searchable()
+
+                Tables\Columns\TextColumn::make('valor_documento')
+                    ->label('Valor do documento')
+                    ->money('brl')
                     ->sortable(),
-                Tables\Columns\TextColumn::make(name: 'deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make(name: 'created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make(name: 'updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Filter::make('ocultar_pagos')
-                    ->label('Ocultar pagos')
-                    ->query(
-                        fn (Builder $query) =>
-                        $query->whereDoesntHave(
-                            'statusDespesa',
-                            fn (Builder $query) =>
-                            $query->where('nome', 'pago')
-                        )
-                    )
-                    ->default(),
+                Tables\Filters\SelectFilter::make('status_despesa_id')
+                    ->label('Status')
+                    ->multiple()
+                    ->options([
+                        StatusDespesa::PENDENTE => 'Pendente',
+                        StatusDespesa::ATRASADO => 'Atrasado',
+                        StatusDespesa::PAGO => 'Pago',
+                    ])
+                    ->default([
+                        StatusDespesa::PENDENTE,
+                        StatusDespesa::ATRASADO
+                    ])
+                    ->column('despesas.status_despesa_id'),
             ])
-        ->recordActions([
-            Actions\ActionGroup::make([
-                Actions\EditAction::make(),
-                Actions\DeleteAction::make(),
-                Actions\RestoreAction::make(),
-                Actions\ForceDeleteAction::make(),
-            ]),
-        ])
-        ->toolbarActions([
-            Actions\BulkAction::make('delete')
-            ->label('Deletar')
-            ->action(function (Collection $records) {
-                $records->each(function (Model $record) {
-                    $record->delete();
-                });
-            })
-        ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ManageDespesas::route('/'),
-        ];
+            ->recordActions([
+                Actions\ActionGroup::make([
+                    Actions\EditAction::make(),
+                    Actions\DeleteAction::make(),
+                    Actions\RestoreAction::make(),
+                    Actions\ForceDeleteAction::make(),
+                ]),
+            ])
+            ->toolbarActions([
+                Actions\BulkAction::make('delete')
+                    ->label('Deletar')
+                    ->action(
+                        fn (Collection $records) =>
+                        $records->each->delete()
+                    ),
+            ])
+            ->defaultPaginationPageOption(5);
     }
 
     public static function getEloquentQuery(): Builder
@@ -199,6 +149,21 @@ class DespesaResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ])
-            ->whereHas('plano', fn ($query) => $query->where('user_id', Auth::id()));
+            ->join('planos', 'despesas.plano_id', '=', 'planos.id')
+            ->where('planos.user_id', Auth::id())
+            ->whereIn('despesas.status_despesa_id', [
+                StatusDespesa::PENDENTE,
+                StatusDespesa::ATRASADO,
+                StatusDespesa::PAGO
+            ])
+            ->select('despesas.*')
+            ->distinct();
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ManageDespesas::route('/'),
+        ];
     }
 }

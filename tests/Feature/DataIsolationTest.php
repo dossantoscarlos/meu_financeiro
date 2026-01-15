@@ -10,6 +10,7 @@ use App\Filament\Resources\RendaResource;
 use App\Models\Despesa;
 use App\Models\Plano;
 use App\Models\Renda;
+use App\Models\StatusDespesa;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -19,6 +20,18 @@ class DataIsolationTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        foreach ([1 => 'pendente', 2 => 'atrasado', 3 => 'pago'] as $id => $nome) {
+            StatusDespesa::updateOrCreate(
+                ['id' => $id],
+                ['nome' => $nome]
+            );
+        }
+    }
+
     public function test_despesa_isolation(): void
     {
         $userA = User::factory()->create();
@@ -27,8 +40,8 @@ class DataIsolationTest extends TestCase
         $planoA = Plano::factory()->create(['user_id' => $userA->id]);
         $planoB = Plano::factory()->create(['user_id' => $userB->id]);
 
-        $despesaA = Despesa::factory()->create(['plano_id' => $planoA->id]);
-        $despesaB = Despesa::factory()->create(['plano_id' => $planoB->id]);
+        $despesaA = Despesa::factory()->create(['plano_id' => $planoA->id, 'status_despesa_id' => 1]);
+        $despesaB = Despesa::factory()->create(['plano_id' => $planoB->id, 'status_despesa_id' => 1]);
 
         Livewire::actingAs($userA)
             ->test(DespesaResource\Pages\ManageDespesas::class)

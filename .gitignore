@@ -26,6 +26,8 @@ rr
 .rr.yaml
 
 **/caddy
+PULL_*
+$url_param = array_assoc($var_param, $param);
 
 localhost+3.pem
 localhost+3-key.pem

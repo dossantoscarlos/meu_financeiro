@@ -9,10 +9,11 @@ use App\Models\Renda;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Date;
 
 class CustoWidget extends BaseWidget
 {
+    protected ?string $pollingInterval = '5s';
+
     private function brlMoeda(float $data): string
     {
         return 'R$ ' . number_format(floatval($data), 2, ',', '.');
@@ -37,24 +38,18 @@ class CustoWidget extends BaseWidget
 
     protected function getStats(): array
     {
-        $date = Date::now();
-        $mes = ($date->month >= 1 && $date->month <= 9) ? strval('0' . $date->month) : $date->month;
-        $ano = $date->year;
-        $mesAno = sprintf('%s/%d', $mes, $ano);
-
         $authId = Auth::user()->getAuthIdentifier();
         $renda = Renda::where([
             ['user_id', '=', $authId],
         ])->first();
 
         $plano = Plano::with('gastos')->where([
-            ['user_id', '=', $authId],
-            ['mes_ano', '>=', $mesAno],
-        ])->first()?->toArray() ?? [];
+            ['user_id', '=', $authId]
+        ])->latest('created_at')->first();
 
-        $total = floatval($plano['gastos']['valor'] ?? 0.0);
+        $total = floatval($plano?->gastos?->valor ?? 0.0);
         $saldo = $renda->saldo ?? 0.0;
-        $custo = $renda->custo ?? 0.0;
+        $custo = $saldo - $total;
 
         info(sprintf('%s | %s | %s', $total, $saldo, $custo));
 
