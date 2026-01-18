@@ -21,7 +21,9 @@ Marque o que se aplica:
 ## Problema relacionado
 
 - Issue relacionada: #___
-- Não existe issue prévia: [ ] Sim [ ] Não  
+- Não existe issue prévia:
+- [ ] Sim
+- [ ] Não  
   > PR grande sem issue pode ser fechado.
 
 ---
@@ -53,9 +55,15 @@ Confirme antes de pedir review:
 
 ## Impacto
 
-- Quebra compatibilidade? [ ] Sim [ ] Não  
-- Impacto em performance? [ ] Sim [ ] Não  
-- Impacto em segurança? [ ] Sim [ ] Não  
+- Quebra compatibilidade?
+- [ ] Sim
+- [ ] Não  
+- Impacto em performance?
+- [ ] Sim
+- [ ] Não  
+- Impacto em segurança?
+- [ ] Sim
+- [ ] Não  
 
 Explique se marcou "Sim".
 
