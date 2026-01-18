@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Widgets;
 
-use App\Models\StatusDespesa;
 use App\Models\Despesa;
 use App\Models\Plano;
+use App\Models\StatusDespesa;
 use App\Util\StatusDespesaColor;
 use Filament\Tables;
 use Filament\Tables\Table;
