@@ -30,6 +30,7 @@ Ao contribuir, você concorda em seguir estas regras.
 ## Escopo
 
 Este Código de Conduta se aplica a:
+
 - Issues
 - Pull Requests
 - Comentários em código
@@ -44,6 +45,7 @@ Os maintainers do projeto são responsáveis por interpretar e aplicar
 este Código de Conduta.
 
 Ações possíveis incluem:
+
 - Advertência
 - Fechamento de issues ou PRs
 - Bloqueio temporário ou permanente de contribuições

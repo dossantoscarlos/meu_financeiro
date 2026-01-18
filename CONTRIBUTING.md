@@ -10,6 +10,7 @@ Contribuições que não seguirem estas regras podem ser **fechadas sem review**
 ## Como contribuir
 
 Você pode contribuir de três formas:
+
 - Reportando bugs
 - Sugerindo melhorias ou novas funcionalidades
 - Enviando Pull Requests com código, testes ou documentação
@@ -28,6 +29,7 @@ Você pode contribuir de três formas:
 ## Reportando bugs
 
 Antes de abrir uma issue:
+
 1. Verifique se o problema já não foi reportado
 2. Use o **ISSUE_TEMPLATE**
 3. Forneça passos claros para reprodução
@@ -73,11 +75,13 @@ Se o projeto usa formatter ou linter, **eles são obrigatórios**.
 Commits devem ser claros e objetivos.
 
 Exemplos aceitáveis:
+
 - `fix: corrige validação de entrada`
 - `feat: adiciona suporte a múltiplos formatos`
 - `docs: atualiza instruções de instalação`
 
 Evite:
+
 - `ajustes`
 - `fix`
 - `update`
@@ -135,6 +139,7 @@ Não há SLA de resposta, mas contribuições de qualidade recebem prioridade.
 ## Considerações finais
 
 Se você chegou até aqui e concorda com as regras:
+
 - Seja bem-vindo
 - Contribuições bem feitas são valorizadas
 - Ruído será ignorado
