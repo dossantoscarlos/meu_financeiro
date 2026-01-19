@@ -41,7 +41,7 @@ class CustoWidget extends BaseWidget
         $authId = Auth::user()->getAuthIdentifier();
         $renda = Renda::where([
             ['user_id', '=', $authId],
-        ])->first();
+        ])->latest('created_at')->first();
 
         $plano = Plano::with('gastos')->where([
             ['user_id', '=', $authId]
