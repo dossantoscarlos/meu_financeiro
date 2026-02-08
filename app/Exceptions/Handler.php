@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use PDOException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -28,5 +29,12 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $throwable): void {
             //
         });
+    }
+
+    public function render($request, Throwable $exception) {
+        $error = str_contains($exception->getMessage(), 'could not find driver'); 
+        if ($exception instanceof PDOException && $error) { 
+            return response()->view('errors.database_error_driver', ['message' => 'Error ao conectar ao servidor.'], 500); 
+        } return parent::render($request, $exception); 
     }
 }
