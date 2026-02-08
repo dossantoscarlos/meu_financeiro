@@ -31,10 +31,11 @@ class Handler extends ExceptionHandler
         });
     }
 
-    public function render($request, Throwable $exception) {
-        $error = str_contains($exception->getMessage(), 'could not find driver'); 
-        if ($exception instanceof PDOException && $error) { 
-            return response()->view('errors.database_error_driver', ['message' => 'Error ao conectar ao servidor.'], 500); 
-        } return parent::render($request, $exception); 
+    public function render($request, Throwable $exception)
+    {
+        $error = str_contains($exception->getMessage(), 'could not find driver');
+        if ($exception instanceof PDOException && $error) {
+            return response()->view('errors.database_error_driver', ['message' => 'Error ao conectar ao servidor.'], 500);
+        } return parent::render($request, $exception);
     }
 }
