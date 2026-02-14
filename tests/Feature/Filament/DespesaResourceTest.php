@@ -20,6 +20,8 @@ class DespesaResourceTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,9 +34,8 @@ class DespesaResourceTest extends TestCase
             );
         }
 
-        /** @var User $user */
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
     }
 
     public function test_can_render_page(): void
@@ -45,7 +46,7 @@ class DespesaResourceTest extends TestCase
 
     public function test_can_list_records(): void
     {
-        $plano = Plano::factory()->create(['user_id' => auth()->id()]);
+        $plano = Plano::factory()->create(['user_id' => $this->user->id]);
         $despesas = Despesa::factory()->count(5)->create([
             'plano_id' => $plano->id,
             'status_despesa_id' => StatusDespesa::PENDENTE,
@@ -57,8 +58,7 @@ class DespesaResourceTest extends TestCase
 
     public function test_can_create_record(): void
     {
-        $status = StatusDespesa::find(1);
-        $plano = Plano::factory()->create(['user_id' => auth()->id()]);
+        $plano = Plano::factory()->create(['user_id' => $this->user->id]);
         $tipo = TipoDespesa::factory()->create();
 
         $form = [
@@ -86,7 +86,7 @@ class DespesaResourceTest extends TestCase
 
     public function test_default_filters_apply_on_load(): void
     {
-        $plano = Plano::factory()->create(['user_id' => auth()->id()]);
+        $plano = Plano::factory()->create(['user_id' => $this->user->id]);
 
         $pendente = Despesa::factory()->create([
             'plano_id' => $plano->id,

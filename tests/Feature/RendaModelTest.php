@@ -13,28 +13,37 @@ class RendaModelTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * Teste de criação de renda.
-     */
-    public function test_create_renda(): void
+    private User $user;
+
+    protected function setUp(): void
     {
-        $user = User::create([
+        parent::setUp();
+
+        $this->user = User::create([
             'name' => 'Teste',
             'email' => 'test@example.com',
             'password' => 'password',
         ]);
 
-        $this->actingAs($user);
+        $this->actingAs($this->user);
+    }
+
+    /**
+     * Teste de criação de renda.
+     */
+    public function test_create_renda(): void
+    {
+
         $saldo = 100;
         $custo = 0;
 
         $data = [
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'saldo' => $saldo,
             'custo' => $custo,
         ];
 
-        $renda = Renda::create($data);
+        Renda::create($data);
 
         $this->assertDatabaseHas('rendas', $data);
     }

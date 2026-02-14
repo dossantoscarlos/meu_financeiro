@@ -18,6 +18,8 @@ class DespesaTableTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -29,14 +31,13 @@ class DespesaTableTest extends TestCase
             );
         }
 
-        /** @var User $user */
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
     }
 
     public function test_table_can_filter_by_default_pendente_and_atrasado(): void
     {
-        $plano = Plano::factory()->create(['user_id' => auth()->id()]);
+        $plano = Plano::factory()->create(['user_id' => $this->user->id]);
 
         $pendente = Despesa::factory()->create([
             'plano_id' => $plano->id,
@@ -63,7 +64,7 @@ class DespesaTableTest extends TestCase
 
     public function test_table_can_filter_by_pago(): void
     {
-        $plano = Plano::factory()->create(['user_id' => auth()->id()]);
+        $plano = Plano::factory()->create(['user_id' => $this->user->id]);
 
         $pendente = Despesa::factory()->create([
             'plano_id' => $plano->id,
@@ -85,7 +86,7 @@ class DespesaTableTest extends TestCase
 
     public function test_table_can_filter_by_pendente_separately(): void
     {
-        $plano = Plano::factory()->create(['user_id' => auth()->id()]);
+        $plano = Plano::factory()->create(['user_id' => $this->user->id]);
 
         $pendente = Despesa::factory()->create([
             'plano_id' => $plano->id,
@@ -107,7 +108,7 @@ class DespesaTableTest extends TestCase
 
     public function test_table_can_filter_by_atrasado_separately(): void
     {
-        $plano = Plano::factory()->create(['user_id' => auth()->id()]);
+        $plano = Plano::factory()->create(['user_id' => $this->user->id]);
 
         $pendente = Despesa::factory()->create([
             'plano_id' => $plano->id,

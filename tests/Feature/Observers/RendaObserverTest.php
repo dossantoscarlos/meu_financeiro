@@ -17,22 +17,29 @@ class RendaObserverTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+
+        $this->actingAs($this->user);
+    }
+
     public function test_custo_is_updated_when_saldo_changes(): void
     {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
         // Create Renda
         $renda = Renda::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'saldo' => 5000,
             'custo' => 0,
         ]);
 
         // Create a Plano with some Despesas
         $plano = Plano::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'mes_ano' => now()->format('m/Y'),
         ]);
 

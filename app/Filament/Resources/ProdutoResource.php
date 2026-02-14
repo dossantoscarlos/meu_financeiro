@@ -20,7 +20,9 @@ use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
@@ -76,6 +78,42 @@ class ProdutoResource extends Resource
                     )
                     ->live()
                     ->maxLength(255),
+                Forms\Components\Select::make('previsao_compra_id')
+                    ->label(label: 'Previsão de compra')
+                    ->relationship(
+                        name: 'previsaoCompra',
+                        titleAttribute: 'descricao',
+                        modifyQueryUsing: fn ($query) => $query->where('user_id', Auth::id())
+                    )
+                    ->preload()
+                    ->createOptionForm([
+                        Forms\Components\Hidden::make('user_id')
+                            ->default(Auth::id()),
+                        Forms\Components\Select::make('planoCompra')
+                            ->relationship(
+                                name: 'planoCompra',
+                                titleAttribute: 'descricao',
+                                modifyQueryUsing: fn ($query) => $query->where('user_id', Auth::id())
+                            )->createOptionForm([
+                                Forms\Components\Hidden::make('user_id')
+                                    ->default(Auth::id()),
+                                Forms\Components\TextInput::make('descricao')
+                                    ->required()
+                                    ->maxLength(255),
+                            ])
+                            ->native(condition: false)
+                            ->required(),
+                        Forms\Components\TextInput::make('descricao')
+                            ->required()
+                            ->maxLength(255),
+                        MyMoney::make('valor')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\DatePicker::make('data_prevista_compra')
+                            ->required(),
+                    ])
+                    ->native(condition: false)
+                    ->required(),
                 Forms\Components\TextInput::make('quantidade')
                     ->integer()
                     ->columnSpan(3)
@@ -146,7 +184,7 @@ class ProdutoResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+
             ])->recordActions([
                 ActionGroup::make([
                     ViewAction::make(),
@@ -159,6 +197,16 @@ class ProdutoResource extends Resource
                     ->authorizeIndividualRecords('delete')
                     ->action(fn (Collection $records) => $records->each->delete())
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ])
+            ->where('produtos.user_id', Auth::id())
+            ->select('produtos.*');
     }
 
     public static function getRelations(): array

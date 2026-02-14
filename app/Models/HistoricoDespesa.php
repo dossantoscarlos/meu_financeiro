@@ -31,7 +31,7 @@ class HistoricoDespesa extends Model
         return $this->belongsTo(Despesa::class);
     }
 
-    public function status_despesa(): BelongsTo
+    public function statusDespesa(): BelongsTo
     {
         return $this->belongsTo(StatusDespesa::class);
     }

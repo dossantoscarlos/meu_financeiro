@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use Filament\Actions\Action;
+use Filament\Enums\UserMenuPosition;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -30,6 +32,11 @@ class AdminPanelProvider extends PanelProvider
 
         return $panel
             ->brandName('Meu Financeiro')
+            ->userMenu(position: UserMenuPosition::Sidebar)
+            ->userMenuItems([
+                'profile' => fn (Action $action) => $action->label('Edit profile'),
+                'logout' => fn (Action $action) => $action->label('Sair'),
+            ])
             ->default()
             ->id('admin')
             ->path('admin')
@@ -105,7 +112,8 @@ class AdminPanelProvider extends PanelProvider
             // ]),
             // )
             ->spa()
-            ->sidebarCollapsibleOnDesktop();
+            ->sidebarCollapsibleOnDesktop()
+        ;
     }
 
     protected function mutateFormDataBeforeFill(array $data): array

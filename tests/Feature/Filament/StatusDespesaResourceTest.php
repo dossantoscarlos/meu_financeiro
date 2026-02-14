@@ -16,12 +16,14 @@ class StatusDespesaResourceTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
     }
 
     public function test_can_render_page(): void
@@ -42,11 +44,11 @@ class StatusDespesaResourceTest extends TestCase
     {
         Livewire::test(StatusDespesaResource\Pages\ManageStatusDespesas::class)
             ->mountAction(CreateAction::class)
-            ->setActionData([
+            ->fillForm([
                 'nome' => 'Novo Status',
             ])
             ->callMountedAction()
-            ->assertHasNoActionErrors();
+            ->assertHasNoFormErrors();
 
         $this->assertDatabaseHas('status_despesas', [
             'nome' => 'Novo Status',

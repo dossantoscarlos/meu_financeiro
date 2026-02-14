@@ -31,7 +31,6 @@ class ListaDespesasFilteringTest extends TestCase
 
     public function test_it_filters_despesas_correctly(): void
     {
-        // Setup dates (mocking time not needed if we set mes_ano correctly)
         $now = \Illuminate\Support\Facades\Date::now();
         $currentMesAno = $now->format('m/Y');
         $pastMesAno = $now->copy()->subMonth()->format('m/Y');
@@ -39,20 +38,14 @@ class ListaDespesasFilteringTest extends TestCase
 
         $user = User::factory()->create();
 
-        // Create Plans
         $currentPlano = Plano::factory()->create(['user_id' => $user->id, 'mes_ano' => $currentMesAno]);
         $pastPlano = Plano::factory()->create(['user_id' => $user->id, 'mes_ano' => $pastMesAno]);
         $futurePlano = Plano::factory()->create(['user_id' => $user->id, 'mes_ano' => $futureMesAno]);
 
-        // Current Plan Despesas (Should show all)
-        $dCurrentPendente = Despesa::factory()->create(['plano_id' => $currentPlano->id, 'status_despesa_id' => 1, 'descricao' => 'Current Pendente']);
-
-        // Past Plan Despesas (Should show only Pendente/Atrasado)
-        $dPastPago = Despesa::factory()->create(['plano_id' => $pastPlano->id, 'status_despesa_id' => 3, 'descricao' => 'Past Pago']);
-        $dPastPendente = Despesa::factory()->create(['plano_id' => $pastPlano->id, 'status_despesa_id' => 1, 'descricao' => 'Past Pendente']);
-
-        // Future Plan Despesas (Should NOT show)
-        $dFuturePago = Despesa::factory()->create(['plano_id' => $futurePlano->id, 'status_despesa_id' => 3, 'descricao' => 'Future Pago']);
+        Despesa::factory()->create(['plano_id' => $currentPlano->id, 'status_despesa_id' => 1, 'descricao' => 'Current Pendente']);
+        Despesa::factory()->create(['plano_id' => $pastPlano->id, 'status_despesa_id' => 3, 'descricao' => 'Past Pago']);
+        Despesa::factory()->create(['plano_id' => $pastPlano->id, 'status_despesa_id' => 1, 'descricao' => 'Past Pendente']);
+        Despesa::factory()->create(['plano_id' => $futurePlano->id, 'status_despesa_id' => 3, 'descricao' => 'Future Pago']);
 
         Livewire::actingAs($user)
             ->test(ListaDespesasWidget::class)

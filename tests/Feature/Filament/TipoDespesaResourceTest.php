@@ -17,11 +17,14 @@ class TipoDespesaResourceTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->actingAs(User::factory()->create());
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
     }
 
     public function test_can_render_page(): void
@@ -47,7 +50,7 @@ class TipoDespesaResourceTest extends TestCase
             ->callAction(CreateAction::class, data: [
                 'nome' => $newData->nome,
             ])
-            ->assertHasNoActionErrors();
+            ->assertHasNoFormErrors();
 
         $this->assertDatabaseHas('tipo_despesas', [
             'nome' => mb_strtoupper((string) $newData->nome),
@@ -60,7 +63,7 @@ class TipoDespesaResourceTest extends TestCase
             ->callAction(CreateAction::class, data: [
                 'nome' => null,
             ])
-            ->assertHasActionErrors(['nome' => ['required']]);
+            ->assertHasFormErrors(['nome' => ['required']]);
     }
 
     public function test_name_is_unique(): void
@@ -71,6 +74,6 @@ class TipoDespesaResourceTest extends TestCase
             ->callAction(CreateAction::class, data: [
                 'nome' => $existingRecord->nome,
             ])
-            ->assertHasActionErrors(['nome' => ['unique']]);
+            ->assertHasFormErrors(['nome' => ['unique']]);
     }
 }

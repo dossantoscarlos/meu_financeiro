@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Enum\StatusDespesaEnum;
 use App\Filament\Resources\DespesaResource\Pages;
 use App\Livewire\Components\MyMoney;
 use App\Models\Despesa;
-use App\Models\StatusDespesa;
 use App\Util\StatusDespesaColor;
 use BackedEnum;
 use Filament\Actions;
@@ -52,20 +52,39 @@ class DespesaResource extends Resource
                     'mes_ano',
                     fn ($query) => $query->where('user_id', Auth::id())
                 )
-                ->native(false)
+                ->preload()
+                ->searchable()
+                ->createOptionForm([
+                    Forms\Components\TextInput::make('mes_ano')
+                        ->label('Mês ano')
+                        ->required(),
+                ])
                 ->required(),
 
             Forms\Components\Select::make('status_despesa_id')
                 ->label('Status')
                 ->relationship('statusDespesa', 'nome')
+                ->preload()
+                ->searchable()
+                ->createOptionForm([
+                    Forms\Components\TextInput::make('nome')
+                        ->label('Nome')
+                        ->required(),
+                ])
                 ->native(false)
                 ->required(),
 
             Forms\Components\Select::make('tipo_despesa_id')
                 ->label('Categoria')
                 ->relationship('tipoDespesa', 'nome')
-                ->native(false)
+                ->preload()
                 ->searchable()
+                ->createOptionForm([
+                    Forms\Components\TextInput::make('nome')
+                        ->label('Nome')
+                        ->required(),
+                ])
+                ->native(false)
                 ->required(),
 
             MyMoney::make('valor_documento')
@@ -113,16 +132,12 @@ class DespesaResource extends Resource
                 Tables\Filters\SelectFilter::make('status_despesa_id')
                     ->label('Status')
                     ->multiple()
-                    ->options([
-                        StatusDespesa::PENDENTE => 'Pendente',
-                        StatusDespesa::ATRASADO => 'Atrasado',
-                        StatusDespesa::PAGO => 'Pago',
-                    ])
+                    ->options(StatusDespesaEnum::class)
+                    ->attribute('status_despesa_id')
                     ->default([
-                        StatusDespesa::PENDENTE,
-                        StatusDespesa::ATRASADO
-                    ])
-                    ->column('despesas.status_despesa_id'),
+                        StatusDespesaEnum::PENDENTE->value,
+                        StatusDespesaEnum::ATRASADO->value,
+                    ]),
             ])
             ->recordActions([
                 Actions\ActionGroup::make([
@@ -136,8 +151,7 @@ class DespesaResource extends Resource
                 Actions\BulkAction::make('delete')
                     ->label('Deletar')
                     ->action(
-                        fn (Collection $records) =>
-                        $records->each->delete()
+                        fn (Collection $records) => $records->each->delete()
                     ),
             ])
             ->defaultPaginationPageOption(5);
@@ -151,11 +165,6 @@ class DespesaResource extends Resource
             ])
             ->join('planos', 'despesas.plano_id', '=', 'planos.id')
             ->where('planos.user_id', Auth::id())
-            ->whereIn('despesas.status_despesa_id', [
-                StatusDespesa::PENDENTE,
-                StatusDespesa::ATRASADO,
-                StatusDespesa::PAGO
-            ])
             ->select('despesas.*')
             ->distinct();
     }

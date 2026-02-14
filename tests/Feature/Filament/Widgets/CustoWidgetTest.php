@@ -16,18 +16,20 @@ class CustoWidgetTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
     }
 
     public function test_can_render_widget(): void
     {
-        Renda::factory()->create(['user_id' => auth()->id(), 'saldo' => 5000, 'custo' => 0]);
-        Plano::factory()->create(['user_id' => auth()->id(), 'mes_ano' => now()->format('m/Y')]);
+        Renda::factory()->create(['user_id' => $this->user->id, 'saldo' => 5000, 'custo' => 0]);
+        Plano::factory()->create(['user_id' => $this->user->id, 'mes_ano' => now()->format('m/Y')]);
 
         Livewire::test(CustoWidget::class)
             ->assertSuccessful()

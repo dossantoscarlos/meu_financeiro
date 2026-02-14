@@ -15,12 +15,14 @@ class ListaCategoriaTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
     }
 
     public function test_can_render_widget(): void

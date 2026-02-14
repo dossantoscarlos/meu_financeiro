@@ -18,6 +18,10 @@ class Gasto extends Model
 
     protected $fillable = ['plano_id', 'valor'];
 
+    protected $casts = [
+        'valor' => 'decimal:2',
+    ];
+
     public function plano(): BelongsTo
     {
         return $this->belongsTo(Plano::class);

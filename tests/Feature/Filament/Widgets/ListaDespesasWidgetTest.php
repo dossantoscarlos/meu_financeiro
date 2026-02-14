@@ -17,6 +17,8 @@ class ListaDespesasWidgetTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -28,14 +30,13 @@ class ListaDespesasWidgetTest extends TestCase
             );
         }
 
-        /** @var User $user */
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
     }
 
     public function test_can_render_widget(): void
     {
-        $plano = Plano::factory()->create(['user_id' => auth()->id(), 'mes_ano' => now()->format('m/Y')]);
+        $plano = Plano::factory()->create(['user_id' => $this->user->id, 'mes_ano' => now()->format('m/Y')]);
         $despesas = Despesa::factory()->count(3)->create([
             'plano_id' => $plano->id,
             'status_despesa_id' => 1
@@ -54,7 +55,7 @@ class ListaDespesasWidgetTest extends TestCase
             'status_despesa_id' => 1
         ]);
 
-        $myPlano = Plano::factory()->create(['user_id' => auth()->id(), 'mes_ano' => now()->format('m/Y')]);
+        $myPlano = Plano::factory()->create(['user_id' => $this->user->id, 'mes_ano' => now()->format('m/Y')]);
         $myDespesa = Despesa::factory()->create([
             'plano_id' => $myPlano->id,
             'status_despesa_id' => 1

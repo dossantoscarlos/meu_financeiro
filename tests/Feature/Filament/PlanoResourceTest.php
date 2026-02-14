@@ -16,12 +16,14 @@ class PlanoResourceTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
     }
 
     public function test_can_render_page(): void
@@ -32,7 +34,7 @@ class PlanoResourceTest extends TestCase
 
     public function test_can_list_records(): void
     {
-        $planos = Plano::factory()->count(5)->create(['user_id' => auth()->id()]);
+        $planos = Plano::factory()->count(5)->create(['user_id' => $this->user->id]);
 
         Livewire::test(PlanoResource\Pages\ManagePlanos::class)
             ->assertCanSeeTableRecords($planos);
@@ -42,17 +44,17 @@ class PlanoResourceTest extends TestCase
     {
         Livewire::test(PlanoResource\Pages\ManagePlanos::class)
             ->mountAction(CreateAction::class)
-            ->setActionData([
-                'user_id' => auth()->id(),
+            ->fillForm([
+                'user_id' => $this->user->id,
                 'mes_ano' => '12/2025',
                 'descricao_simples' => 'Plano Dezembro',
             ])
             ->callMountedAction()
-            ->assertHasNoActionErrors();
+            ->assertHasNoFormErrors();
 
         $this->assertDatabaseHas('planos', [
             'mes_ano' => '12/2025',
-            'user_id' => auth()->id(),
+            'user_id' => $this->user->id,
         ]);
     }
 }

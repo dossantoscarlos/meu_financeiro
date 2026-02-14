@@ -15,12 +15,14 @@ class ProdutoResourceTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
     }
 
     public function test_can_render_page(): void
@@ -31,7 +33,7 @@ class ProdutoResourceTest extends TestCase
 
     public function test_can_list_records(): void
     {
-        $produtos = Produto::factory()->count(5)->create(['user_id' => auth()->id()]);
+        $produtos = Produto::factory()->count(5)->create(['user_id' => $this->user->id]);
 
         Livewire::test(ProdutoResource\Pages\ListProdutos::class)
             ->assertCanSeeTableRecords($produtos);
@@ -52,14 +54,14 @@ class ProdutoResourceTest extends TestCase
                 'quantidade' => '5',
                 'tipo_medida' => 'unidade',
                 'data_compra' => now()->toDateString(),
-                'user_id' => auth()->id(),
+                'user_id' => $this->user->id,
             ])
             ->call('create')
             ->assertHasNoFormErrors();
 
         $this->assertDatabaseHas('produtos', [
             'descricao_curta' => 'Novo Produto',
-            'user_id' => auth()->id(),
+            'user_id' => $this->user->id,
         ]);
     }
 }

@@ -16,12 +16,15 @@ class RendaResourceTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        /** @var User $user */
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
     }
 
     public function test_can_render_page(): void
@@ -32,7 +35,7 @@ class RendaResourceTest extends TestCase
 
     public function test_can_list_records(): void
     {
-        $rendas = Renda::factory()->count(5)->create(['user_id' => auth()->id()]);
+        $rendas = Renda::factory()->count(5)->create(['user_id' => $this->user->id]);
 
         Livewire::test(RendaResource\Pages\ManageRendas::class)
             ->assertCanSeeTableRecords($rendas);
@@ -42,16 +45,16 @@ class RendaResourceTest extends TestCase
     {
         Livewire::test(RendaResource\Pages\ManageRendas::class)
             ->mountAction(CreateAction::class)
-            ->setActionData([
-                'user_id' => auth()->id(),
+            ->fillForm([
+                'user_id' => $this->user->id,
                 'saldo' => '5000,00',
                 'custo' => '100,00',
             ])
             ->callMountedAction()
-            ->assertHasNoActionErrors();
+            ->assertHasNoFormErrors();
 
         $this->assertDatabaseHas('rendas', [
-            'user_id' => auth()->id(),
+            'user_id' => $this->user->id,
         ]);
     }
 }

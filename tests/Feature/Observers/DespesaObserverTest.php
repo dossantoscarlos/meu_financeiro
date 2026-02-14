@@ -17,9 +17,15 @@ class DespesaObserverTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->user = User::factory()->create();
+
+        $this->actingAs($this->user);
 
         foreach ([1 => 'pendente', 2 => 'atrasado', 3 => 'pago'] as $id => $nome) {
             StatusDespesa::updateOrCreate(
@@ -34,14 +40,10 @@ class DespesaObserverTest extends TestCase
      */
     public function test_historico_is_created_when_despesa_is_created(): void
     {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
         $tipoDespesa = TipoDespesa::create(['nome' => 'Alimentação']);
 
         $plano = Plano::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
         ]);
 
         // Verifica que não há histórico antes
@@ -71,14 +73,10 @@ class DespesaObserverTest extends TestCase
      */
     public function test_each_status_change_creates_new_historico_row(): void
     {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
         $tipoDespesa = TipoDespesa::create(['nome' => 'Alimentação']);
 
         $plano = Plano::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
         ]);
 
         // Cria a despesa com status Pendente
@@ -136,14 +134,10 @@ class DespesaObserverTest extends TestCase
      */
     public function test_historico_is_created_when_status_remains_same_but_other_fields_change(): void
     {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
         $tipoDespesa = TipoDespesa::create(['nome' => 'Alimentação']);
 
         $plano = Plano::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
         ]);
 
         // Cria a despesa
@@ -185,14 +179,10 @@ class DespesaObserverTest extends TestCase
      */
     public function test_multiple_despesas_have_independent_historicos(): void
     {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
         $tipoDespesa = TipoDespesa::create(['nome' => 'Alimentação']);
 
         $plano = Plano::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
         ]);
 
         // Cria primeira despesa

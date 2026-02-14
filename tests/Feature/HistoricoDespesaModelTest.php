@@ -17,20 +17,26 @@ class HistoricoDespesaModelTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
+    }
+
     /**
      * Teste de criação de histórico de despesa.
      */
     public function test_create_historico_despesa(): void
     {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
         $statusDespesa = StatusDespesa::create(['nome' => 'Pendente']);
         $tipoDespesa = TipoDespesa::create(['nome' => 'Alimentação']);
 
         $plano = Plano::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
         ]);
 
         $despesa = Despesa::create([
@@ -60,15 +66,11 @@ class HistoricoDespesaModelTest extends TestCase
      */
     public function test_historico_belongs_to_despesa(): void
     {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
         $statusDespesa = StatusDespesa::create(['nome' => 'Pendente']);
         $tipoDespesa = TipoDespesa::create(['nome' => 'Alimentação']);
 
         $plano = Plano::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
         ]);
 
         $despesa = Despesa::create([
@@ -95,15 +97,11 @@ class HistoricoDespesaModelTest extends TestCase
      */
     public function test_historico_belongs_to_status_despesa(): void
     {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
         $statusDespesa = StatusDespesa::create(['nome' => 'Pendente']);
         $tipoDespesa = TipoDespesa::create(['nome' => 'Alimentação']);
 
         $plano = Plano::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
         ]);
 
         $despesa = Despesa::create([
@@ -121,7 +119,7 @@ class HistoricoDespesaModelTest extends TestCase
             'data' => now()->format('Y-m-d'),
         ]);
 
-        $this->assertInstanceOf(StatusDespesa::class, $historico->status_despesa);
-        $this->assertEquals($statusDespesa->id, $historico->status_despesa->id);
+        $this->assertInstanceOf(StatusDespesa::class, $historico->statusDespesa);
+        $this->assertEquals($statusDespesa->id, $historico->statusDespesa->id);
     }
 }

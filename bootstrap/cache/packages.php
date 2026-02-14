@@ -6,13 +6,6 @@
       'EloquentSerialize' => 'AnourValar\\EloquentSerialize\\Facades\\EloquentSerializeFacade',
     ),
   ),
-  'archtechx/money' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'ArchTech\\Money\\MoneyServiceProvider',
-    ),
-  ),
   'barryvdh/laravel-debugbar' => 
   array (
     'aliases' => 
@@ -221,24 +214,6 @@
     'providers' => 
     array (
       0 => 'Laravel\\Tinker\\TinkerServiceProvider',
-    ),
-  ),
-  'laravellegends/pt-br-validator' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'LaravelLegends\\PtBrValidator\\ValidatorProvider',
-    ),
-  ),
-  'leandrocfe/filament-ptbr-form-fields' => 
-  array (
-    'aliases' => 
-    array (
-      'FilamentPtbrFormFields' => 'Leandrocfe\\FilamentPtbrFormFields\\Facades\\FilamentPtbrFormFields',
-    ),
-    'providers' => 
-    array (
-      0 => 'Leandrocfe\\FilamentPtbrFormFields\\FilamentPtbrFormFieldsServiceProvider',
     ),
   ),
   'livewire/livewire' => 

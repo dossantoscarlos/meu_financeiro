@@ -10,23 +10,30 @@ use Tests\TestCase;
 
 class ProdutoModelTest extends TestCase
 {
+    private User $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
+    }
+
     /**
      * A basic feature test example.
      */
     public function test_create_produto(): void
     {
-        $user = User::factory()->create();
 
-        $this->actingAs($user);
-
-        $produto = Produto::create([
+        Produto::create([
             'descricao_curta' => 'Teste',
             'preco' => 100,
             'quantidade' => 1,
             'tipo_medida' => 'unidade',
             'total' => 100,
             'data_compra' => now()->format('Y-m-d'),
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
         ]);
 
         $this->assertDatabaseHas('produtos', [
@@ -36,7 +43,7 @@ class ProdutoModelTest extends TestCase
             'tipo_medida' => 'unidade',
             'total' => 100,
             'data_compra' => now()->format('Y-m-d'),
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
         ]);
     }
 }
