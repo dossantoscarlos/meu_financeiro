@@ -9,7 +9,7 @@
         "@tailwindcss/forms": "^0.5.2",
         "@tailwindcss/typography": "^0.5.12",
         "autoprefixer": "^10.4.2",
-        "axios": "^1.16.0",
+        "axios": "^1.18.0",
         "chokidar": "^3.6.0",
         "esbuild": "^0.28.1",
         "laravel-vite-plugin": "^3.1.0",
