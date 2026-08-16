@@ -16,7 +16,7 @@ class RendaObserver
      */
     public function created(Renda $renda): void
     {
-        $this->controleCusto();
+        $this->controleCusto(null, $renda->user_id);
     }
 
     /**
@@ -24,7 +24,7 @@ class RendaObserver
      */
     public function updated(Renda $renda): void
     {
-        $this->controleCusto();
+        $this->controleCusto(null, $renda->user_id);
     }
 
     /**
@@ -32,6 +32,7 @@ class RendaObserver
      */
     public function deleted(Renda $renda): void
     {
+        $this->controleCusto(null, $renda->user_id);
     }
 
     /**
@@ -39,6 +40,7 @@ class RendaObserver
      */
     public function restored(Renda $renda): void
     {
+        $this->controleCusto(null, $renda->user_id);
     }
 
     /**
@@ -46,5 +48,6 @@ class RendaObserver
      */
     public function forceDeleted(Renda $renda): void
     {
+        $this->controleCusto(null, $renda->user_id);
     }
 }

@@ -53,6 +53,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasOne(Renda::class);
     }
 
+    public function caixinhas(): HasMany
+    {
+        return $this->hasMany(Caixinha::class);
+    }
+
     public function produtos(): HasMany
     {
         return $this->hasMany(Produto::class);

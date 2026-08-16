@@ -13,22 +13,24 @@ use Illuminate\Support\Facades\Auth;
 
 trait ControleCusto
 {
-    private function controleCusto(?Plano $plano = null): void
+    private function controleCusto(?Plano $plano = null, ?int $userId = null): void
     {
         /** @var \Illuminate\Contracts\Auth\Authenticatable|null|\App\Models\User $user */
         $user = Auth::user();
 
-        if (!$user) {
+        /** @var int|null $authId */
+        $authId = $userId ?? $user?->getAuthIdentifier();
+
+        if ($plano && !$authId) {
+            $authId = $plano->user_id;
+        }
+
+        if (!$authId) {
             return;
         }
 
-        /** @var int $authId */
-        $authId = $user->getAuthIdentifier();
-
         if (!$plano) {
-            $plano = Plano::where([
-                ['user_id', $authId],
-            ])->latest('created_at')->first();
+            $plano = Plano::query()->where('user_id', '=', $authId)->latest('created_at')->first();
         }
 
         if (!$plano) {
@@ -36,22 +38,19 @@ trait ControleCusto
         }
 
         /** @var float $total */
-        $total = 0.0;
-
-        $total = Despesa::whereIn(
-            'status_despesa_id',
-            [StatusDespesa::PENDENTE, StatusDespesa::ATRASADO]
-        )
+        $total = (float) Despesa::query()
+            ->where('plano_id', '=', $plano->id)
+            ->whereIn('status_despesa_id', [StatusDespesa::PENDENTE, StatusDespesa::ATRASADO])
             ->sum('valor_documento');
 
-        $gasto = Gasto::updateOrCreate(
+        Gasto::query()->updateOrCreate(
             ['plano_id' => $plano->id],
             ['valor' => (string) $total]
         );
 
-        $renda = Renda::where('user_id', $authId)->first();
-        if ($renda) {
-            $renda->update(['custo' => (float) $total]);
+        $renda = Renda::query()->where('user_id', '=', $authId)->first();
+        if ($renda && (float) $renda->custo !== $total) {
+            $renda->updateQuietly(['custo' => $total]);
         }
     }
 }

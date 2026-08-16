@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Models\Despesa;
 use App\Models\HistoricoDespesa;
 
 trait HistoricoStatusDespesa
 {
-    private function registerHistoricoStatusDespesa($despesa): void
+    private function registerHistoricoStatusDespesa(Despesa $despesa): void
     {
-        $historico = HistoricoDespesa::whereDespesaId($despesa->id)->whereStatusDespesaId($despesa->status_despesa_id)->first();
+        $historico = HistoricoDespesa::query()
+            ->where('despesa_id', '=', $despesa->id)
+            ->where('status_despesa_id', '=', $despesa->status_despesa_id)
+            ->first();
 
         if ($historico) {
             return;
