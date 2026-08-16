@@ -24,7 +24,6 @@ use UnitEnum;
 
 class DespesaResource extends Resource
 {
-
     protected static ?string $model = Despesa::class;
 
     protected static ?string $modelLabel = 'Despesa';
@@ -51,7 +50,7 @@ class DespesaResource extends Resource
                 ->relationship(
                     'plano',
                     'mes_ano',
-                    fn($query) => $query->where('user_id', Auth::id())
+                    fn ($query) => $query->where('user_id', Auth::id())
                 )
                 ->preload()
                 ->searchable()
@@ -105,18 +104,18 @@ class DespesaResource extends Resource
                 Tables\Columns\TextColumn::make('statusDespesa.nome')
                     ->label('Status')
                     ->badge()
-                    ->color(fn($state) => StatusDespesaColor::getColor($state))
-                    ->formatStateUsing(fn($state) => mb_strtoupper($state))
+                    ->color(fn ($state) => StatusDespesaColor::getColor($state))
+                    ->formatStateUsing(fn ($state) => mb_strtoupper($state))
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('tipoDespesa.nome')
                     ->label('Categoria')
-                    ->formatStateUsing(fn(?string $state) => mb_strtoupper($state))
+                    ->formatStateUsing(fn (?string $state) => mb_strtoupper($state))
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('plano.mes_ano')
                     ->label('Plano mensal')
-                    ->formatStateUsing(fn(string $state) => mb_strtoupper($state))
+                    ->formatStateUsing(fn (string $state) => mb_strtoupper($state))
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('data_vencimento')
@@ -145,7 +144,7 @@ class DespesaResource extends Resource
                     ->relationship('tipoDespesa', 'nome'),
                 Tables\Filters\SelectFilter::make('plano_id')
                     ->label('Plano Mensal')
-                    ->relationship('plano', 'mes_ano', fn($query) => $query->where('user_id', Auth::id())),
+                    ->relationship('plano', 'mes_ano', fn ($query) => $query->where('user_id', Auth::id())),
             ])
             ->recordActions([
                 Actions\ActionGroup::make([
@@ -159,7 +158,7 @@ class DespesaResource extends Resource
                 Actions\BulkAction::make('delete')
                     ->label('Deletar')
                     ->action(
-                        fn(Collection $records) => $records->each->delete()
+                        fn (Collection $records) => $records->each->delete()
                     ),
             ])
             ->defaultPaginationPageOption(5);

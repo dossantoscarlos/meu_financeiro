@@ -74,7 +74,7 @@ class RendaController extends Controller
     public function destroy(Request $request, int $id): JsonResponse
     {
         $renda = Renda::query()
-            ->where(fn($q) => $q->where('user_id', '=', $request->user()->id)->orWhereNull('user_id'))
+            ->where(fn ($q) => $q->where('user_id', '=', $request->user()->id)->orWhereNull('user_id'))
             ->findOrFail($id);
 
         $renda->deleteOrFail();

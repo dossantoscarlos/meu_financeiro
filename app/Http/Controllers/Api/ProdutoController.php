@@ -69,7 +69,7 @@ class ProdutoController extends Controller
     public function destroy(Request $request, int $id): JsonResponse
     {
         $produto = Produto::query()
-            ->where(fn($q) => $q->where('user_id', '=', $request->user()->id)->orWhereNull('user_id'))
+            ->where(fn ($q) => $q->where('user_id', '=', $request->user()->id)->orWhereNull('user_id'))
             ->findOrFail($id);
 
         $produto->deleteOrFail();
