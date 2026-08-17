@@ -2,9 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Models\Plano;
-use App\Models\StatusDespesa;
-use App\Models\TipoDespesa;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +16,7 @@ return new class () extends Migration {
             $blueprint->bigIncrements('id');
             $blueprint->string('descricao');
             $blueprint->string('data_vencimento');
-         
+
             $blueprint->string('valor_documento');
             $blueprint->softDeletes();
             $blueprint->timestamps();
