@@ -19,7 +19,7 @@ export function clearAuthToken() {
   }
 }
 
-export async function apiFetch<T = any>(
+export async function apiFetch<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
