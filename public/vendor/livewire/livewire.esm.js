@@ -1677,7 +1677,8 @@ var require_module_cjs = __commonJS({
         return acc;
       }, {});
     }
-    function initInterceptors(data2) {
+    function initInterceptors(data2, cleanup = () => {
+    }) {
       let isObject22 = (val) => typeof val === "object" && !Array.isArray(val) && val !== null;
       let recurse = (obj, basePath = "") => {
         Object.entries(Object.getOwnPropertyDescriptors(obj)).forEach(([key, { value, enumerable }]) => {
@@ -1687,7 +1688,7 @@ var require_module_cjs = __commonJS({
             return;
           let path = basePath === "" ? key : `${basePath}.${key}`;
           if (typeof value === "object" && value !== null && value._x_interceptor) {
-            obj[key] = value.initialize(data2, path, key);
+            obj[key] = value.initialize(data2, path, key, cleanup);
           } else {
             if (isObject22(value) && value !== obj && !(value instanceof Element)) {
               recurse(value, path);
@@ -1702,18 +1703,18 @@ var require_module_cjs = __commonJS({
       let obj = {
         initialValue: void 0,
         _x_interceptor: true,
-        initialize(data2, path, key) {
-          return callback(this.initialValue, () => get(data2, path), (value) => set(data2, path, value), path, key);
+        initialize(data2, path, key, cleanup) {
+          return callback(this.initialValue, () => get(data2, path), (value) => set(data2, path, value), path, key, cleanup);
         }
       };
       mutateObj(obj);
       return (initialValue) => {
         if (typeof initialValue === "object" && initialValue !== null && initialValue._x_interceptor) {
           let initialize = obj.initialize.bind(obj);
-          obj.initialize = (data2, path, key) => {
-            let innerValue = initialValue.initialize(data2, path, key);
+          obj.initialize = (data2, path, key, cleanup) => {
+            let innerValue = initialValue.initialize(data2, path, key, cleanup);
             obj.initialValue = innerValue;
-            return initialize(data2, path, key);
+            return initialize(data2, path, key, cleanup);
           };
         } else {
           obj.initialValue = initialValue;
@@ -2719,8 +2720,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         }
       } else if (el.tagName === "SELECT") {
         updateSelect(el, value);
+      } else if (el.tagName === "OPTION") {
+        bindAttribute(el, "value", value);
       } else {
-        if (el.value === value)
+        if (el.value === value && (typeof value !== "object" || value === null))
           return;
         el.value = value === void 0 ? "" : value;
       }
@@ -2745,6 +2748,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       } else {
         if (isBooleanAttr(name))
           value = name;
+        if (isObjectAttr(value))
+          value = JSON.stringify(value);
         setIfChanged(el, name, value);
       }
     }
@@ -2815,6 +2820,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
     function attributeShouldntBePreservedIfFalsy(name) {
       return !["aria-pressed", "aria-checked", "aria-expanded", "aria-selected"].includes(name);
+    }
+    function isObjectAttr(value) {
+      return typeof value === "object" && value !== null;
     }
     function getBinding(el, name, fallback2) {
       if (el._x_bindings && el._x_bindings[name] !== void 0)
@@ -2918,7 +2926,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return stores[name];
       }
       stores[name] = value;
-      initInterceptors(stores[name]);
+      if (typeof value === "object" && value !== null && value._x_interceptor) {
+        stores[name] = value.initialize(stores, name, name, () => {
+        });
+      } else {
+        initInterceptors(stores[name]);
+      }
       if (typeof value === "object" && value !== null && value.hasOwnProperty("init") && typeof value.init === "function") {
         stores[name].init();
       }
@@ -3006,7 +3019,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       get transaction() {
         return transaction;
       },
-      version: "3.15.12",
+      version: "3.16.0",
       flushAndStopDeferringMutations,
       dontAutoEvaluateFunctions,
       disableEffectScheduling,
@@ -3549,6 +3562,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           }
         });
       };
+      if (el.tagName === "SELECT") {
+        let observer2 = new MutationObserver(() => {
+          el._x_forceModelUpdate(getValue());
+        });
+        observer2.observe(el, { childList: true });
+        cleanup(() => observer2.disconnect());
+      }
       effect3(() => {
         let value = getValue();
         if (modifiers.includes("unintrusive") && document.activeElement.isSameNode(el))
@@ -3696,8 +3716,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       el._x_keyExpression = expression;
     }
     addRootSelector(() => `[${prefix("data")}]`);
+    var dataForReconciliation = Symbol();
     directive2("data", (el, { expression }, { cleanup }) => {
       if (shouldSkipRegisteringDataDuringClone(el))
+        return;
+      let dataToReconcile = el[dataForReconciliation];
+      if ((dataToReconcile == null ? void 0 : dataToReconcile.expression) === expression)
         return;
       expression = expression === "" ? "{}" : expression;
       let magicContext = {};
@@ -3708,15 +3732,51 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       if (data2 === void 0 || data2 === true)
         data2 = {};
       injectMagics(data2, el);
-      let reactiveData = reactive(data2);
-      initInterceptors(reactiveData);
+      let reactiveData;
+      if (dataToReconcile == null ? void 0 : dataToReconcile.reactiveData) {
+        reactiveData = dataToReconcile.reactiveData;
+        reconcileData(reactiveData, data2);
+        let initialized = { expression };
+        el[dataForReconciliation] = initialized;
+        queueMicrotask(() => {
+          if (el[dataForReconciliation] === initialized) {
+            delete el[dataForReconciliation];
+          }
+        });
+      } else {
+        reactiveData = reactive(data2);
+      }
+      initInterceptors(reactiveData, cleanup);
       let undo = addScopeToNode(el, reactiveData);
       reactiveData["init"] && evaluate(el, reactiveData["init"]);
       cleanup(() => {
         reactiveData["destroy"] && evaluate(el, reactiveData["destroy"]);
         undo();
+        let removed = { reactiveData };
+        el[dataForReconciliation] = removed;
+        queueMicrotask(() => {
+          if (el[dataForReconciliation] === removed) {
+            delete el[dataForReconciliation];
+          }
+        });
       });
     });
+    function reconcileData(target, source) {
+      Object.keys(source).forEach((key) => {
+        let descriptor = Object.getOwnPropertyDescriptor(source, key);
+        let existingDescriptor = Object.getOwnPropertyDescriptor(target, key);
+        if (descriptor.get || descriptor.set || (existingDescriptor == null ? void 0 : existingDescriptor.get) || (existingDescriptor == null ? void 0 : existingDescriptor.set)) {
+          if (existingDescriptor)
+            delete target[key];
+          if (!existingDescriptor)
+            target[key] = void 0;
+          descriptor.get || descriptor.set ? Object.defineProperty(target, key, descriptor) : target[key] = source[key];
+        } else {
+          target[key] = source[key];
+        }
+      });
+      Object.keys(target).filter((key) => !Object.prototype.hasOwnProperty.call(source, key)).forEach((key) => delete target[key]);
+    }
     interceptClone((from, to) => {
       if (from._x_dataStack) {
         to._x_dataStack = from._x_dataStack;
@@ -3779,7 +3839,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         firstTime = false;
       }));
     });
-    directive2("for", (el, { expression }, { effect: effect3, cleanup }) => {
+    directive2("for", skipDuringClone((el, { expression }, { effect: effect3, cleanup }) => {
       let iteratorNames = parseForExpression(expression);
       let evaluateItems = evaluateLater(el, iteratorNames.items);
       let evaluateKey = evaluateLater(
@@ -3796,8 +3856,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           })
         );
         delete el._x_lookup;
+        delete el._x_lastRenderedEl;
       });
-    });
+    }));
     function refreshScope(scope2) {
       return (newScope) => {
         Object.entries(newScope).forEach(([key, value]) => {
@@ -3870,7 +3931,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             prev.after(clone2);
             prev = clone2;
           });
-          skipDuringClone(() => added.forEach((clone2) => initTree(clone2)))();
+          added.forEach((clone2) => initTree(clone2));
+          if (prev !== templateEl) {
+            templateEl._x_lastRenderedEl = prev;
+          } else {
+            delete templateEl._x_lastRenderedEl;
+          }
         });
       });
     }
@@ -3935,7 +4001,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       cleanup(() => delete root._x_refs[expression]);
     };
     directive2("ref", handler3);
-    directive2("if", (el, { expression }, { effect: effect3, cleanup }) => {
+    directive2("if", skipDuringClone((el, { expression }, { effect: effect3, cleanup }) => {
       if (el.tagName.toLowerCase() !== "template")
         warn("x-if can only be used on a <template> tag", el);
       let evaluate2 = evaluateLater(el, expression);
@@ -3946,15 +4012,17 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         addScopeToNode(clone2, {}, el);
         mutateDom(() => {
           el.after(clone2);
-          skipDuringClone(() => initTree(clone2))();
+          initTree(clone2);
         });
         el._x_currentIfEl = clone2;
+        el._x_lastRenderedEl = clone2;
         el._x_undoIf = () => {
           mutateDom(() => {
             destroyTree(clone2);
             clone2.remove();
           });
           delete el._x_currentIfEl;
+          delete el._x_lastRenderedEl;
         };
         return clone2;
       };
@@ -3968,7 +4036,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         value ? show() : hide();
       }));
       cleanup(() => el._x_undoIf && el._x_undoIf());
-    });
+    }));
     directive2("id", (el, { expression }, { evaluate: evaluate2 }) => {
       let names = evaluate2(expression);
       names.forEach((name) => setIdRoot(el, name));
@@ -5781,7 +5849,8 @@ var require_module_cjs4 = __commonJS({
         let evaluate = evaluateLater(expression);
         let options = {
           rootMargin: getRootMargin(modifiers),
-          threshold: getThreshold(modifiers)
+          threshold: getThreshold(modifiers),
+          root: modifiers.includes("parent") ? el.parentElement : null
         };
         let observer = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
@@ -8873,6 +8942,9 @@ var require_module_cjs8 = __commonJS({
           }
           let currentFromNext = currentFrom && getNextSibling(from, currentFrom);
           context.patch(currentFrom, currentTo);
+          if (currentFrom._x_lastRenderedEl) {
+            currentFromNext = getNextSibling(from, currentFrom._x_lastRenderedEl);
+          }
           currentTo = currentTo && getNextSibling(to, currentTo);
           currentFrom = currentFromNext;
         }
@@ -9075,6 +9147,10 @@ var require_module_cjs9 = __commonJS({
             }
             let updater = el._x_forceModelUpdate;
             el._x_forceModelUpdate = (value2) => {
+              if (value2 === void 0) {
+                lastInputValue = "";
+                return updater(value2);
+              }
               value2 = String(value2);
               let template = templateFn(value2);
               if (template && template !== "false") {
@@ -9595,7 +9671,7 @@ function handleFileUpload(el, property, component, cleanup) {
     }
   };
   el.addEventListener("change", eventHandler);
-  component.$wire.$watch(property, (value) => {
+  let unwatch = component.$wire.$watch(property, (value) => {
     if (!el.isConnected)
       return;
     if (value === null || value === "") {
@@ -9613,6 +9689,8 @@ function handleFileUpload(el, property, component, cleanup) {
   cleanup(() => {
     el.removeEventListener("change", eventHandler);
     el.removeEventListener("click", clearFileInputValue);
+    el.removeEventListener("livewire-upload-cancel", clearFileInputValue);
+    unwatch();
   });
 }
 var UploadManager = class {
@@ -9970,7 +10048,8 @@ function coordinateNetworkInteractions(messageBus2) {
     if (isRenderless) {
       action.metadata.renderless = true;
     }
-    let message = messageBus2.activeMessageMatchingScope(action);
+    let activeMessages = messageBus2.activeMessagesMatchingScope(action);
+    let message = activeMessages[0];
     if (message) {
       if (message.isAsync() || action.isAsync())
         return;
@@ -9980,8 +10059,12 @@ function coordinateNetworkInteractions(messageBus2) {
       if (Array.from(message.actions).every((action2) => action2.metadata.type === "poll")) {
         return message.cancel();
       }
-      if (Array.from(message.actions).every((action2) => action2.metadata.type === "model.live")) {
-        if (action.metadata.type === "model.live") {
+      let bothAreModelLive = action.metadata.type === "model.live" && Array.from(message.actions).every((action2) => action2.metadata.type === "model.live");
+      if (bothAreModelLive) {
+        let incomingHasBoundChildren = componentHasBoundChildren(action.component);
+        let outgoingHasBoundChildren = Array.from(message.actions).some((activeAction) => componentHasBoundChildren(activeAction.component));
+        if (!incomingHasBoundChildren && !outgoingHasBoundChildren) {
+          activeMessages.filter((message2) => Array.from(message2.actions).every((action2) => action2.metadata.type === "model.live")).forEach((message2) => action.supersedes.add(message2));
           return;
         }
       }
@@ -9991,6 +10074,13 @@ function coordinateNetworkInteractions(messageBus2) {
       });
     }
   });
+}
+function componentHasBoundChildren(component) {
+  let hasBoundChildren = false;
+  component.getDeepChildrenWithBindings(() => {
+    hasBoundChildren = true;
+  });
+  return hasBoundChildren;
 }
 
 // js/request/request.js
@@ -10351,7 +10441,10 @@ var MessageBus = class {
     });
   }
   activeMessageMatchingScope(action) {
-    return Array.from(this.activeMessages).find((message) => this.matchesScope(message, action));
+    return this.activeMessagesMatchingScope(action)[0];
+  }
+  activeMessagesMatchingScope(action) {
+    return Array.from(this.activeMessages).filter((message) => this.matchesScope(message, action));
   }
   matchesScope(message, action) {
     return message.scope === scopeSymbolFromAction(action);
@@ -10379,6 +10472,7 @@ var Message = class {
   interceptors = [];
   cancelled = false;
   skipped = false;
+  superseded = false;
   request = null;
   _scope = null;
   get scope() {
@@ -10511,8 +10605,14 @@ var Message = class {
         onRender: (callback) => interceptor.onRender = callback
       });
     });
-    this.pendingReturns = this.responsePayload.effects["returns"] || [];
-    this.pendingReturnsMeta = this.responsePayload.effects["returnsMeta"] || {};
+    this.pendingReturns = [];
+    this.pendingReturnsMeta = {};
+    if (Object.prototype.hasOwnProperty.call(this.responsePayload.effects, "returns") && this.responsePayload.effects["returns"]) {
+      this.pendingReturns = this.responsePayload.effects["returns"];
+    }
+    if (Object.prototype.hasOwnProperty.call(this.responsePayload.effects, "returnsMeta") && this.responsePayload.effects["returnsMeta"]) {
+      this.pendingReturnsMeta = this.responsePayload.effects["returnsMeta"];
+    }
   }
   invokeOnSync() {
     this.interceptors.forEach((interceptor) => interceptor.onSync());
@@ -10577,6 +10677,7 @@ var Message = class {
 // js/request/action.js
 var Action = class {
   squashedActions = /* @__PURE__ */ new Set();
+  supersedes = /* @__PURE__ */ new Set();
   onSendCallbacks = [];
   onCancelCallbacks = [];
   onSuccessCallbacks = [];
@@ -11075,6 +11176,12 @@ function sendMessages() {
           ) && window.location.reload();
           return;
         }
+        if (response.ok && responseBody.trim() === "") {
+          confirm(
+            "The server returned an empty response.\nWould you like to refresh the page?"
+          ) && window.location.reload();
+          return;
+        }
         if (response.aborted)
           return;
         showHtmlModal(responseBody);
@@ -11103,6 +11210,9 @@ function sendMessages() {
               return;
             if (payload.skip) {
               if (payload.id === message.component.id) {
+                if (discardIfSuperseded(message))
+                  return;
+                supersedeOlderMessages(message);
                 message.responsePayload = payload;
                 message.markSkipped();
                 message.invokeOnSkipped();
@@ -11114,10 +11224,14 @@ function sendMessages() {
             let { snapshot: snapshotEncoded, effects } = payload;
             let snapshot = JSON.parse(snapshotEncoded);
             if (snapshot.memo.id === message.component.id) {
+              if (discardIfSuperseded(message))
+                return;
+              supersedeOlderMessages(message);
               message.responsePayload = { snapshot, effects };
               message.invokeOnSuccess();
               if (message.isCancelled())
                 return;
+              let morphed = false;
               Alpine.transaction(async () => {
                 message.component.mergeNewSnapshot(snapshotEncoded, effects, message.updates);
                 message.invokeOnSync();
@@ -11128,7 +11242,8 @@ function sendMessages() {
                 if (message.isCancelled())
                   return;
                 await message.invokeOnMorph();
-              }).then(() => {
+                morphed = true;
+              }).finally(() => {
                 if (!message.isCancelled()) {
                   message.resolveActionPromises(
                     message.pendingReturns,
@@ -11136,6 +11251,8 @@ function sendMessages() {
                   );
                   message.invokeOnFinish();
                 }
+                if (!morphed)
+                  return;
                 requestAnimationFrame(() => {
                   if (message.isCancelled())
                     return;
@@ -11147,6 +11264,18 @@ function sendMessages() {
         });
       }
     });
+  });
+}
+function discardIfSuperseded(message) {
+  if (!message.superseded)
+    return false;
+  message.resolveActionPromises([], []);
+  message.invokeOnFinish();
+  return true;
+}
+function supersedeOlderMessages(message) {
+  message.actions.forEach((action) => {
+    action.supersedes.forEach((olderMessage) => olderMessage.superseded = true);
   });
 }
 async function sendRequest(request, handlers) {
@@ -11183,6 +11312,13 @@ async function sendRequest(request, handlers) {
   }
   if (response.redirected) {
     handlers.redirect(response.url);
+    handlers.finish();
+    return;
+  }
+  if (responseBody.trim() === "") {
+    handlers.error({ response, responseBody });
+    handlers.finish();
+    return;
   }
   if (contentIsFromDump(responseBody)) {
     let dump;
@@ -11615,7 +11751,10 @@ function dirtyTargets(el) {
 // js/features/supportJsModules.js
 var pendingComponentAssets = /* @__PURE__ */ new WeakMap();
 on("effect", ({ component, effects }) => {
-  let scriptModuleHash = effects.scriptModule;
+  let scriptModuleHash;
+  if (Object.prototype.hasOwnProperty.call(effects, "scriptModule")) {
+    scriptModuleHash = effects.scriptModule;
+  }
   if (scriptModuleHash) {
     let encodedName = component.name.replace(/\./g, "--").replace(/::/g, "---").replace(/:/g, "----");
     let path = `${getModuleUrl()}/js/${encodedName}.js?v=${scriptModuleHash}`;
@@ -11847,8 +11986,11 @@ wireProperty("$watch", (component) => (path, callback) => {
     return dataGet(component.reactive, path);
   };
   let unwatch = import_alpinejs3.default.watch(getter, callback);
-  component.addCleanup(unwatch);
-  return unwatch;
+  let removeCleanup = component.addCleanup(unwatch);
+  return () => {
+    removeCleanup();
+    unwatch();
+  };
 });
 wireProperty("$effect", (component) => (callback) => {
   let effect = import_alpinejs3.default.effect(callback);
@@ -11939,7 +12081,6 @@ var Component = class {
     this.$wire = generateWireObject(this, this.reactive);
     el.$wire = this.$wire;
     this.cleanups = [];
-    this.processEffects(this.effects);
   }
   addActionContext(context) {
     if (context.el || context.directive) {
@@ -12077,11 +12218,14 @@ var Component = class {
   inscribeSnapshotAndEffectsOnElement() {
     let el = this.el;
     el.setAttribute("wire:snapshot", this.snapshotEncoded);
-    let effects = this.originalEffects.listeners ? { listeners: this.originalEffects.listeners } : {};
-    if (this.originalEffects.url) {
+    let effects = {};
+    if (Object.prototype.hasOwnProperty.call(this.originalEffects, "listeners") && this.originalEffects.listeners) {
+      effects.listeners = this.originalEffects.listeners;
+    }
+    if (Object.prototype.hasOwnProperty.call(this.originalEffects, "url") && this.originalEffects.url) {
       effects.url = this.originalEffects.url;
     }
-    if (this.originalEffects.scripts) {
+    if (Object.prototype.hasOwnProperty.call(this.originalEffects, "scripts") && this.originalEffects.scripts) {
       effects.scripts = this.originalEffects.scripts;
     }
     el.setAttribute("wire:effects", JSON.stringify(effects));
@@ -12113,6 +12257,12 @@ var Component = class {
   }
   addCleanup(cleanup) {
     this.cleanups.push(cleanup);
+    return () => {
+      let index = this.cleanups.indexOf(cleanup);
+      if (index === -1)
+        return;
+      this.cleanups.splice(index, 1);
+    };
   }
   cleanup() {
     delete this.el.__livewire;
@@ -12271,6 +12421,7 @@ function initComponent(el) {
   let cleanup = (i) => component.addCleanup(i);
   trigger("component.init", { component, cleanup });
   components[component.id] = component;
+  component.processEffects(component.effects);
   return component;
 }
 function destroyComponent(id) {
@@ -12417,15 +12568,16 @@ function src_default(Alpine25) {
         setItem: dummy.set.bind(dummy)
       };
     }
-    return Alpine25.interceptor((initialValue, getter, setter, path, key) => {
+    return Alpine25.interceptor((initialValue, getter, setter, path, key, cleanup) => {
       let lookup = alias || `_x_${path}`;
       let initial = storageHas(lookup, storage) ? storageGet(lookup, storage) : initialValue;
       setter(initial);
-      Alpine25.effect(() => {
+      let effect = Alpine25.effect(() => {
         let value = getter();
         storageSet(lookup, value, storage);
         setter(value);
       });
+      cleanup(() => Alpine25.release(effect));
       return initial;
     }, (func) => {
       func.as = (key) => {
@@ -12534,7 +12686,7 @@ var HistoryCoordinator = class {
     });
   }
   writeToHistory(method, url, callback) {
-    let state = window.history.state || {};
+    let state = window.history.state ? { ...window.history.state } : {};
     if (!state.alpine)
       state.alpine = {};
     state = callback(state);
@@ -12746,7 +12898,8 @@ function fetchHtml(destination, callback, errorCallback) {
   }, errorCallback);
 }
 function performFetch(uri, callback, errorCallback) {
-  sendNavigateRequest(uri, callback, errorCallback);
+  sendNavigateRequest(uri, callback, errorCallback).catch(() => {
+  });
 }
 
 // js/plugins/navigate/prefetch.js
@@ -12756,13 +12909,16 @@ function prefetchHtml(destination, callback, errorCallback) {
   let uri = getUriStringFromUrlObject(destination);
   if (prefetches[uri])
     return;
-  prefetches[uri] = { finished: false, html: null, whenFinished: () => setTimeout(() => delete prefetches[uri], cacheDuration) };
+  prefetches[uri] = { finished: false, html: null, whenFinished: () => setTimeout(() => delete prefetches[uri], cacheDuration), whenFailed: () => {
+  } };
   performFetch(uri, (html, routedUri, status) => {
     storeCurrentPageStatus(status);
     callback(html, routedUri);
   }, () => {
+    let whenFailed = prefetches[uri].whenFailed;
     delete prefetches[uri];
     errorCallback();
+    whenFailed();
   });
 }
 function storeThePrefetchedHtmlForWhenALinkIsClicked(html, destination, finalDestination) {
@@ -12788,6 +12944,7 @@ function getPretchedHtmlOr(destination, receive, ifNoPrefetchExists) {
       delete prefetches[uri];
       receive(html, finalDestination);
     };
+    prefetches[uri].whenFailed = ifNoPrefetchExists;
   }
 }
 
@@ -13278,8 +13435,13 @@ function navigate_default(Alpine25) {
           });
         });
       });
-    }, () => {
+    }, (error2) => {
       showProgressBar && finishAndHideProgressBar();
+      if (requestWasCancelled(error2))
+        return;
+      if (navigator.onLine)
+        return;
+      window.location.href = destination.href;
     });
   }
   whenTheBackOrForwardButtonIsClicked(
@@ -13343,6 +13505,9 @@ function fetchHtmlOrUsePrefetchedHtml(fromDestination, callback, errorCallback) 
   getPretchedHtmlOr(fromDestination, callback, () => {
     fetchHtml(fromDestination, callback, errorCallback);
   });
+}
+function requestWasCancelled(error2) {
+  return error2?.name === "AbortError";
 }
 function preventAlpineFromPickingUpDomChanges(Alpine25, callback) {
   Alpine25.stopObservingMutations();
@@ -13551,10 +13716,12 @@ function fromQueryString(search, queryKey) {
     return {};
   let insertDotNotatedValueIntoData = (key, value, data2) => {
     let [first2, second, ...rest] = key.split(".");
+    if (first2 === "__proto__" || first2 === "constructor" || first2 === "prototype")
+      return;
     if (!second)
       return data2[key] = value;
-    if (data2[first2] === void 0) {
-      data2[first2] = isNaN(second) ? {} : [];
+    if (!Object.prototype.hasOwnProperty.call(data2, first2)) {
+      data2[first2] = isNaN(second) ? /* @__PURE__ */ Object.create(null) : [];
     }
     insertDotNotatedValueIntoData([second, ...rest].join("."), value, data2[first2]);
   };
@@ -13669,7 +13836,11 @@ var import_alpinejs23 = __toESM(require_module_cjs());
 
 // js/features/supportListeners.js
 on("effect", ({ component, effects }) => {
-  registerListeners(component, effects.listeners || []);
+  let listeners2 = [];
+  if (Object.prototype.hasOwnProperty.call(effects, "listeners") && effects.listeners) {
+    listeners2 = effects.listeners;
+  }
+  registerListeners(component, listeners2);
 });
 function registerListeners(component, listeners2) {
   listeners2.forEach((name) => {
@@ -13721,12 +13892,16 @@ function getAlpineScopeKeys(el) {
 function evaluateExpression(el, expression, options = {}) {
   if (!expression || expression.trim() === "")
     return;
-  let result = import_alpinejs7.default.evaluateRaw(el, expression, options);
-  if (result instanceof Promise) {
-    result.catch(() => {
-    });
+  try {
+    let result = import_alpinejs7.default.evaluateRaw(el, expression, options);
+    if (result instanceof Promise) {
+      result.catch(() => {
+      });
+    }
+    return result;
+  } catch (error2) {
+    reportExpressionError(error2, expression, el);
   }
-  return result;
 }
 function evaluateActionExpression(el, expression, options = {}) {
   if (!expression || expression.trim() === "")
@@ -13740,11 +13915,14 @@ function evaluateActionExpression(el, expression, options = {}) {
     }
     return result;
   } catch (error2) {
-    console.warn(`Livewire Expression Error: ${error2.message}
+    reportExpressionError(error2, expression, el);
+  }
+}
+function reportExpressionError(error2, expression, el) {
+  console.warn(`Livewire Expression Error: ${error2.message}
 
 ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
-    console.error(error2);
-  }
+  console.error(error2);
 }
 function contextualizeExpression(expression, el) {
   let SKIP = ["JSON", "true", "false", "null", "undefined", "this", "$wire", "$event"];
@@ -13789,7 +13967,10 @@ on("component.init", ({ component }) => {
   }
 });
 on("effect", ({ component, effects }) => {
-  let scripts = effects.scripts;
+  let scripts;
+  if (Object.prototype.hasOwnProperty.call(effects, "scripts")) {
+    scripts = effects.scripts;
+  }
   if (scripts) {
     Object.entries(scripts).forEach(([key, content]) => {
       onlyIfScriptHasntBeenRunAlreadyForThisComponent(component, key, () => {
@@ -13872,8 +14053,14 @@ import_alpinejs9.default.magic("js", (el) => {
   return component.$wire.js;
 });
 on("effect", ({ component, effects }) => {
-  let js = effects.js;
-  let xjs = effects.xjs;
+  let js;
+  let xjs;
+  if (Object.prototype.hasOwnProperty.call(effects, "js")) {
+    js = effects.js;
+  }
+  if (Object.prototype.hasOwnProperty.call(effects, "xjs")) {
+    xjs = effects.xjs;
+  }
   if (js) {
     Object.entries(js).forEach(([method, body]) => {
       overrideMethod(component, method, () => {
@@ -14011,7 +14198,10 @@ async function morph2(component, el, html) {
       child.replaceWith(existingComponent.cloneNode(true));
     }
   });
-  let transitionOptions = component.effects.transition || {};
+  let transitionOptions = {};
+  if (Object.prototype.hasOwnProperty.call(component.effects, "transition") && component.effects.transition) {
+    transitionOptions = component.effects.transition;
+  }
   await transitionDomMutation(el, to, () => {
     import_alpinejs10.default.morph(el, to, getMorphConfig(component));
   }, transitionOptions);
@@ -14036,7 +14226,10 @@ async function morphFragment(component, startNode, endNode, toHTML) {
     parentProviderWrapper.__livewire = parentComponent;
   }
   trigger("island.morph", { startNode, endNode, component });
-  let transitionOptions = component.effects.transition || {};
+  let transitionOptions = {};
+  if (Object.prototype.hasOwnProperty.call(component.effects, "transition") && component.effects.transition) {
+    transitionOptions = component.effects.transition;
+  }
   let islandHasTransition = false;
   let node = startNode.nextSibling;
   while (node && node !== endNode) {
@@ -14134,7 +14327,10 @@ function getTagName(el) {
 interceptMessage(({ message, onSuccess }) => {
   onSuccess(({ payload, onMorph }) => {
     onMorph(async () => {
-      let html = payload.effects.html;
+      let html;
+      if (Object.prototype.hasOwnProperty.call(payload.effects, "html")) {
+        html = payload.effects.html;
+      }
       if (!html)
         return;
       await morph2(message.component, message.component.el, html);
@@ -14147,7 +14343,11 @@ on("effect", ({ component, effects }) => {
   queueMicrotask(() => {
     queueMicrotask(() => {
       queueMicrotask(() => {
-        dispatchEvents(component, effects.dispatches || []);
+        let dispatches = [];
+        if (Object.prototype.hasOwnProperty.call(effects, "dispatches") && effects.dispatches) {
+          dispatches = effects.dispatches;
+        }
+        dispatchEvents(component, dispatches);
       });
     });
   });
@@ -14244,7 +14444,10 @@ function markReadOnly(el) {
 // js/features/supportFileDownloads.js
 on("commit", ({ succeed }) => {
   succeed(({ effects }) => {
-    let download = effects.download;
+    let download;
+    if (Object.prototype.hasOwnProperty.call(effects, "download")) {
+      download = effects.download;
+    }
     if (!download)
       return;
     let urlObject = window.webkitURL || window.URL;
@@ -14282,7 +14485,10 @@ function base64toBlob(b64Data, contentType = "", sliceSize = 512) {
 // js/features/supportQueryString.js
 var import_alpinejs12 = __toESM(require_module_cjs());
 on("effect", ({ component, effects, cleanup }) => {
-  let queryString = effects["url"];
+  let queryString;
+  if (Object.prototype.hasOwnProperty.call(effects, "url")) {
+    queryString = effects["url"];
+  }
   if (!queryString)
     return;
   Object.entries(queryString).forEach(([key, value]) => {
@@ -14349,7 +14555,10 @@ on("request", ({ options }) => {
   }
 });
 on("effect", ({ component, effects }) => {
-  let listeners2 = effects.listeners || [];
+  let listeners2 = [];
+  if (Object.prototype.hasOwnProperty.call(effects, "listeners") && effects.listeners) {
+    listeners2 = effects.listeners;
+  }
   listeners2.forEach((event) => {
     if (event.startsWith("echo")) {
       if (typeof window.Echo === "undefined") {
@@ -14453,7 +14662,10 @@ function forwardEvent(name, original) {
   }
 }
 function shouldRedirectUsingNavigateOr(effects, url, or) {
-  let forceNavigate = effects.redirectUsingNavigate;
+  let forceNavigate;
+  if (Object.prototype.hasOwnProperty.call(effects, "redirectUsingNavigate")) {
+    forceNavigate = effects.redirectUsingNavigate;
+  }
   if (forceNavigate) {
     Alpine.navigate(url);
   } else {
@@ -14470,7 +14682,7 @@ function shouldHideProgressBar() {
 
 // js/features/supportRedirects.js
 on("effect", ({ effects, request }) => {
-  if (!effects["redirect"])
+  if (!Object.prototype.hasOwnProperty.call(effects, "redirect") || !effects["redirect"])
     return;
   let preventDefault = false;
   request.invokeOnRedirect({ url: effects["redirect"], preventDefault: () => preventDefault = true });
@@ -14522,7 +14734,10 @@ interceptMessage(({ message, onSuccess, onStream }) => {
   });
   onSuccess(({ payload, onMorph }) => {
     onMorph(async () => {
-      let fragments = payload.effects.islandFragments || [];
+      let fragments = [];
+      if (Object.prototype.hasOwnProperty.call(payload.effects, "islandFragments") && payload.effects.islandFragments) {
+        fragments = payload.effects.islandFragments;
+      }
       fragments.forEach(async (fragmentHtml) => {
         await renderIsland(message.component, fragmentHtml);
       });
@@ -14562,7 +14777,10 @@ async function renderIsland(component, islandHtml) {
 interceptMessage(({ message, onSuccess, onStream }) => {
   onSuccess(({ payload, onMorph }) => {
     onMorph(async () => {
-      let fragments = payload.effects.slotFragments || [];
+      let fragments = [];
+      if (Object.prototype.hasOwnProperty.call(payload.effects, "slotFragments") && payload.effects.slotFragments) {
+        fragments = payload.effects.slotFragments;
+      }
       fragments.forEach(async (fragmentHtml) => {
         await renderSlot(message.component, fragmentHtml);
       });
@@ -14832,7 +15050,7 @@ import_alpinejs16.default.interceptInit((el) => {
 // js/features/supportCssModules.js
 var loadedStyles = /* @__PURE__ */ new Set();
 on("effect", ({ component, effects }) => {
-  if (effects.styleModule) {
+  if (Object.prototype.hasOwnProperty.call(effects, "styleModule") && effects.styleModule) {
     let encodedName = component.name.replace(/\./g, "--").replace(/::/g, "---").replace(/:/g, "----");
     let path = `${getModuleUrl()}/css/${encodedName}.css?v=${effects.styleModule}`;
     if (!loadedStyles.has(path)) {
@@ -14840,7 +15058,7 @@ on("effect", ({ component, effects }) => {
       injectStylesheet(path);
     }
   }
-  if (effects.globalStyleModule) {
+  if (Object.prototype.hasOwnProperty.call(effects, "globalStyleModule") && effects.globalStyleModule) {
     let encodedName = component.name.replace(/\./g, "--").replace(/::/g, "---").replace(/:/g, "----");
     let path = `${getModuleUrl()}/css/${encodedName}.global.css?v=${effects.globalStyleModule}`;
     if (!loadedStyles.has(path)) {
@@ -15177,6 +15395,7 @@ var import_alpinejs19 = __toESM(require_module_cjs());
 directive("model", ({ el, directive: directive2, component, cleanup }) => {
   component = findComponentByEl(el);
   let { expression, modifiers } = directive2;
+  modifiers = modifiers.filter((m) => m !== "renderless");
   if (!expression) {
     return console.warn("Livewire: [wire:model] is missing a value.", el);
   }
@@ -15219,7 +15438,7 @@ directive("model", ({ el, directive: directive2, component, cleanup }) => {
     expression.startsWith("$parent") ? component.$wire.$parent.$commit() : component.$wire.$commit();
   };
   let debouncedUpdate = update;
-  if (shouldSendNetwork && !hasNetworkTriggers && isRealtimeInput(el) || isDebounced) {
+  if (shouldSendNetwork && !hasNetworkTriggers && isRealtimeInput(el) && !isDebounced && !isThrottled || isDebounced) {
     debouncedUpdate = debounce(debouncedUpdate, parseModifierDuration(networkModifiers, "debounce") || 150);
   }
   if (isThrottled) {
@@ -15227,7 +15446,14 @@ directive("model", ({ el, directive: directive2, component, cleanup }) => {
   }
   let bindings = {};
   if (shouldSendNetwork && networkOnBlur) {
-    bindings["@blur"] = () => update();
+    bindings["@blur"] = () => {
+      queueMicrotask(() => {
+        let target = expression.startsWith("$parent") ? component.parent : component;
+        if (target && !checkDirty(target))
+          return;
+        update();
+      });
+    };
   }
   if (shouldSendNetwork && networkOnChange) {
     bindings["@change"] = () => update();

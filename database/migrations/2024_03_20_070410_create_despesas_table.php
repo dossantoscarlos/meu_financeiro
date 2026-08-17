@@ -19,18 +19,7 @@ return new class () extends Migration {
             $blueprint->bigIncrements('id');
             $blueprint->string('descricao');
             $blueprint->string('data_vencimento');
-            $blueprint->foreignIdFor(StatusDespesa::class)
-                ->index()
-                ->constrained()
-                ->cascadeOnDelete();
-            $blueprint->foreignIdFor(TipoDespesa::class)
-                ->index()
-                ->constrained()
-                ->cascadeOnDelete();
-            $blueprint->foreignIdFor(Plano::class)
-                ->index()
-                ->constrained()
-                ->cascadeOnDelete();
+         
             $blueprint->string('valor_documento');
             $blueprint->softDeletes();
             $blueprint->timestamps();
